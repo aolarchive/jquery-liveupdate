@@ -17,7 +17,7 @@
                     options = $.extend(true, {}, defaultOptions, customOptions),
                     fetch = function () {
                         // Fetch data from API
-                        var callback = 'foobar_' + count,
+                        var callback = options.callbackPrefix + count,
                             apiUrl = options.url + 'live-update/' + options.postId + '/' + lastUpdate;
 
                         $.ajax({
