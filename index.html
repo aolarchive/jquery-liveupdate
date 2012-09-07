@@ -1,19 +1,23 @@
 <html>
-
-    <div id="myLiveBlog">
-    </div>
-
-    <script src="http://code.jquery.com/jquery-1.5.2.js"></script>
-    <script src="src/jquery.liveblog.js"></script>
-    <script src="src/jquery.liveblogwidget.js"></script>
-
-    <script>
-        $(document).ready(function () {
-            var $myLiveBlog = $('#myLiveBlog').liveBlogWidget({
-	            postId: '20317028',
-	            url: 'http://bootcamp.aol.com/'
-            });
-        });
-    </script>
-
+    <head>
+        <title>LiveBlogWidget</title>
+        <link rel="stylesheet" href="assets/jquery.liveblogwidget.css" />
+    </head>
+    <body>
+	    <div id="myLiveBlog">
+	    </div>
+	
+	    <script src="http://code.jquery.com/jquery-1.5.2.js"></script>
+	    <script src="src/jquery.liveblog.js"></script>
+	    <script src="src/jquery.liveblogwidget.js"></script>
+	
+	    <script>
+	        $(document).ready(function () {
+	            var $myLiveBlog = $('#myLiveBlog').liveBlogWidget({
+	                postId: '20317028',
+	                url: 'http://bootcamp.aol.com/'
+	            });
+	        });
+	    </script>
+    </body>
 </html>

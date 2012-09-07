@@ -14,20 +14,47 @@
                 if ($.fn.liveBlog) {
                 
                     var options = $.extend(true, {}, defaultOptions, customOptions),
-                
-                        createItem = function (item) {
+                        
+                        buildItem = function (item, element) {
                             var data = item.d,
                                 type = item.type,
                                 id = item.id,
-                                $item = null;
-        
+                                metaData = item.md;
+
                             console.log('type', type);
-                            if (type === 1) {
-                                $item = $('<p />', {
-                                    text: data,
-                                    id: 'p'+id
-                                });
+                            
+                            if (!element) {
+                                element = $('<p />', {id: 'p'+id});
+                            } else {
+                                element.empty();
                             }
+                            
+                            if (type === 1 || type == 4) {
+                                element.append( 
+                                    $('<span />', {
+                                        text:data, 
+                                        'class': 'lb-post-text'
+                                    }) 
+                                );
+                                
+                            } else if (type == 2) {
+                                element.append( 
+                                    $('<span />', {
+                                        text: metaData.caption, 
+                                        'class': 'lb-post-text'
+                                    }), 
+                                    $('<img />', {
+                                        src: data
+                                    }) 
+                                );
+                            }
+                            
+                            return element;
+                        },
+                        
+                        addItem = function (item) {
+                            
+                            var $item = buildItem(item);
                             
                             if ($item) {
                                 $item.hide()
@@ -37,21 +64,28 @@
                         },
                         
                         updateItem = function (item) {
-                            var data = item.d,
-                                type = item.type,
-                                id = item.id,
-                                $item = $('#p'+id, $this);
+                            
+                            var $item = $('#p'+item.id, $this);
                             
                             if ($item.length) {
-                                if (type === 1) {
-                                    $item.html(data);
-                                }
+                                $item = buildItem(item, $item);
                                 
                                 if ($item) {
                                     // TODO: Show update animation effect here instead of fadeIn
                                     $item.hide()
                                         .fadeIn(400);
                                 }
+                            }
+                        },
+                        
+                        deleteItem = function (item) {
+                            
+                            var $item = $('#p'+item.id, $this);
+                            
+                            if ($item.length) {
+                                $item.fadeOut(400, 'swing', function (){
+                                   $item.remove(); 
+                                });
                             }
                         };
     
@@ -61,11 +95,15 @@
                         console.log('update', event, data);
                         
                         $(data.updates).each(function (i, item) {
-                            createItem(item);
+                            addItem(item);
                         });
                         
                         $(data.changes).each(function (i, item) {
                             updateItem(item);
+                        });
+                        
+                        $(data.deletes).each(function (i, item) {
+                            deleteItem(item);
                         });
                     });
                     
