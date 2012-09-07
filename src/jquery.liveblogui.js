@@ -22,7 +22,7 @@
                                 metaData = item.md,
                                 timestamp = new Date(item.t * 1000),
                                 memberId = item.m,
-                                timestampString = timestamp.toString() + ' by ' + memberId;
+                                timestampString = getFormattedDateTime(timestamp) + ' by ' + memberId;
 
                             console.log('type', type);
 
@@ -112,6 +112,45 @@
                                    $item.remove();
                                 });
                             }
+                        },
+                        
+                        getFormattedDateTime = function (dateObj) {
+                            dateObj = new Date(dateObj);
+                            
+                            var ampm = 'am',
+                                hours = dateObj.getHours(),
+                                minutes = dateObj.getMinutes(),
+                                timeStr = '',
+                                dateStr = '',
+                                dateTimeStr = '',
+                                now = new Date(),
+                                yesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                            
+                            if (hours >= 12) {
+                                ampm = 'pm';
+                            }
+                            
+                            if (hours == 0) {
+                                hours = 12;
+                            } else if (hours > 12) {
+                                hours = hours - 12;
+                            }
+                            
+                            if (minutes < 10) {
+                                minutes = '0' + minutes;
+                            }
+                            
+                            timeStr = hours + ':' + minutes + ampm;
+                            
+                            dateStr = (dateObj.getMonth()+1) + '/' + dateObj.getDate() + '/' + dateObj.getFullYear();
+                            
+                            if (dateObj.getTime() >= yesterday.getTime()) {
+                                dateTimeStr = timeStr;
+                            } else {
+                                dateTimeStr = dateStr + ', ' + timeStr;
+                            }
+                            
+                            return dateTimeStr;
                         };
 
                     $this.liveBlogApi(options);
