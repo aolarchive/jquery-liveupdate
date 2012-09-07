@@ -25,7 +25,7 @@
                                 memberId = item.memberId,
                                 timestampString = getFormattedDateTime(timestamp) + ' by ' + item.memberName;
 
-                            console.log('type', type);
+                            //console.log('type', type);
 
                             if (!element) {
                                 element = $('<p />', {
@@ -157,7 +157,7 @@
                     $this.liveBlogApi(options);
 
                     $this.bind('update', function (event, data) {
-                        console.log('update', event, data);
+                        //console.log('update', event, data);
 
                         $(data.updates).each(function (i, item) {
                             addItem(item);
