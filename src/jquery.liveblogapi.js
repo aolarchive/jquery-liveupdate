@@ -28,7 +28,7 @@
                             success: function (response) {
                                 lastUpdate = response.last_update;
 
-                                console.log('response', response);
+                                //console.log('response', response);
 
                                 // Call fetch again after the API-recommended
                                 // number of seconds
