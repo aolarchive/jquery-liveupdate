@@ -19,12 +19,18 @@
                             var data = item.d,
                                 type = item.type,
                                 id = item.id,
-                                metaData = item.md;
+                                metaData = item.md,
+                                timestamp = new Date(item.t * 1000),
+                                memberId = item.m,
+                                timestampString = timestamp.toString() + ' by ' + memberId;
 
                             console.log('type', type);
 
                             if (!element) {
-                                element = $('<p />', {id: 'p'+id});
+                                element = $('<p />', {
+                                    id: 'p'+id,
+                                    'class': 'lb-post'
+                                });
                             } else {
                                 element.empty();
                             }
@@ -34,17 +40,30 @@
                                     $('<span />', {
                                         text:data,
                                         'class': 'lb-post-text'
+                                    }),
+                                    $('<span />', {
+                                        text: timestampString,
+                                        'class': 'lb-post-timestamp'
                                     })
                                 );
+                                
+                                if (type == 4) {
+                                    element.addClass('lb-comment');
+                                }
 
                             } else if (type == 2) {
                                 element.append(
                                     $('<span />', {
                                         text: metaData.caption,
-                                        'class': 'lb-post-text'
+                                        'class': 'lb-post-caption'
                                     }),
                                     $('<img />', {
-                                        src: data
+                                        src: data,
+                                        height: 100
+                                    }),
+                                    $('<span />', {
+                                        text: timestampString,
+                                        'class': 'lb-post-timestamp'
                                     })
                                 );
                             }
@@ -57,9 +76,15 @@
                             var $item = buildItem(item);
 
                             if ($item) {
-                                $item.hide()
-                                    .prependTo($this)
-                                    .fadeIn(400);
+                                $item.hide();
+                                
+                                if (item.type == 4 && item.p) {
+                                    $item.insertAfter($('#p'+item.p));
+                                } else {
+                                    $item.prependTo($this);
+                                }
+                                
+                                $item.fadeIn(400);
                             }
                         },
 

@@ -1,0 +1,36 @@
+body {
+	font-family: 'Lucida Grande', Arial, Helvetica, sans-serif;
+	padding: 0 20px;
+}
+
+.lb-post {
+	border-bottom: 1px dotted #AAAAAA;
+	padding: 30px 0;
+	margin: 0;
+}
+.lb-post.lb-comment {
+	padding-left: 50px;
+	background-color: #EEEEEE;
+}
+
+.lb-post-text {
+	display: block;
+	clear: both;
+}
+
+.lb-post img {
+	float: left;
+	margin-right: 15px;
+	margin-bottom: 15px;
+}
+.lb-post-caption {
+    
+}
+
+.lb-post-timestamp {
+    display: block;
+    clear: both;
+    font-size: 0.7em;
+    margin-top: 15px;
+    color: #999999;
+}
