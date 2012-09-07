@@ -49,7 +49,7 @@
                         var i, length, item, items, member,
                             members = {},
                             normalizedData = data,
-                            types = { 1: "text", 2: "image", 4: "comment" };
+                            types = { 1: 'text', 2: 'image', 4: 'comment' };
 
                         // Create a members object
                         for (i = 0, length = membersArray.length; i < length; i += 1) {

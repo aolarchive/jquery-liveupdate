@@ -36,10 +36,10 @@
                                 element.empty();
                             }
 
-                            if (type === 'text' || type == 'comment') {
+                            if (type === 'text' || type === 'comment') {
                                 element.append(
                                     $('<span />', {
-                                        text:data,
+                                        text: data,
                                         'class': 'lb-post-text'
                                     }),
                                     $('<span />', {
@@ -80,7 +80,7 @@
                                 $item.hide();
 
                                 if (item.type === 'comment' && item.p) {
-                                    $item.insertAfter($('#p'+item.p));
+                                    $item.insertAfter($('#p' + item.p));
                                 } else {
                                     $item.prependTo($this);
                                 }
@@ -91,7 +91,7 @@
 
                         updateItem = function (item) {
 
-                            var $item = $('#p'+item.id, $this);
+                            var $item = $('#p' + item.id, $this);
 
                             if ($item.length) {
                                 $item = buildItem(item, $item);
@@ -106,11 +106,11 @@
 
                         deleteItem = function (item) {
 
-                            var $item = $('#p'+item.id, $this);
+                            var $item = $('#p' + item.id, $this);
 
                             if ($item.length) {
-                                $item.fadeOut(400, 'swing', function (){
-                                   $item.remove();
+                                $item.fadeOut(400, 'swing', function () {
+                                    $item.remove();
                                 });
                             }
                         },
@@ -131,7 +131,7 @@
                                 ampm = 'pm';
                             }
 
-                            if (hours == 0) {
+                            if (hours === 0) {
                                 hours = 12;
                             } else if (hours > 12) {
                                 hours = hours - 12;
@@ -143,7 +143,7 @@
 
                             timeStr = hours + ':' + minutes + ampm;
 
-                            dateStr = (dateObj.getMonth()+1) + '/' + dateObj.getDate() + '/' + dateObj.getFullYear();
+                            dateStr = (dateObj.getMonth() + 1) + '/' + dateObj.getDate() + '/' + dateObj.getFullYear();
 
                             if (dateObj.getTime() >= yesterday.getTime()) {
                                 dateTimeStr = timeStr;
