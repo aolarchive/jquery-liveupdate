@@ -156,8 +156,10 @@
 
                     $this.liveBlogApi(options);
 
+                    $this.addClass('lb');
+
                     $this.bind('update', function (event, data) {
-                        //console.log('update', event, data);
+                        console.log('update', event, data);
 
                         $(data.updates).each(function (i, item) {
                             addItem(item);

@@ -17,10 +17,10 @@
     var tidEnabled = "false";
     var tidUrl = "https://tacoda.at.atwola.com/atx/sync/hmpg/hp1id/default";
     var tidCookieTimeout = "600000";
-    
+
         var getTidNoRdrBsDmnLstApnd = "www.aol.com";
-    
-    var tidRdrCkiBsNm = ""; 
+
+    var tidRdrCkiBsNm = "";
 </script>
 <script type="text/javascript">
 var segUserId = "0", segSegId="u", segColIds = "";
@@ -32,7 +32,7 @@ bN_cfg = {h:"aol.com, www.aol.com,www.aol.ca,aol.ca,w.main.welcomescreen.aol.com
 
 
 parStripList = ['aLk','impref,itime'];
-    
+
 Aol.getJS("http://portal.aolcdn.com/p5/_v71.24/js/beacon.min.js",function(){bN.extractIds=function(e,c){var f=e.className,d=f&&f.match(/[a-z]{1,3}id-[^ ]+/g),k,b,g,h,j=encodeURIComponent,m,o=f&&f.match(/d_clk+/g);rebuildMethodNm=f&&f.match(/rufnc-[^ ]+/g);var a=null;if(f){a=f.match(/src-[^ ]+/)}if(a!=null){if(d!=null){d.push(a[0])}else{d=a}}if(typeof c!="undefined"){m=c}else{bN.set([["plid","",1],["mnid","",1],["mpid","",1],["mlid","",1],["lnid","",1],["icid","",1],["ncid","",1],["dtid","",1],["anid","",1],["apnIcidGlb","",1],["vid_series","",1],["vid_autoplay","",1],["vid_id","",1],["cid","",1],["src","",1],["d_clk","",1]]);m=""}if(o!=null&&o.length>0){bN.set("d_clk",1,1)}if(d){l=d.length;while(l--){k=d[l];g=k.indexOf("-");k=[k.substring(0,g),k.substr(g+1)];if(m.indexOf("|"+k[0]+"|")==-1){m+="|"+k[0]+"|";bN.set(k[0],k[1],1);if(k[0].match(/[in]cid/g)!=null){var n=k[1];if(typeof(p_c_n)!="undefined"&&n.indexOf(p_c_n)===-1){n=n+"_"+p_c_n}k=j(k[0])+"="+j(n);if((b=e.href)&&b.indexOf(k)===-1&&b.substring(0,6)!="aol://"){e.href=b+((b.indexOf("?")===-1)?"?":"&")+k}}}}}(h=e.parentNode)&&bN.extractIds(h,m)};bN.rebuildHrefWithIcid=function(c,a){var b="";var d="";if(c.indexOf("?")==-1){return c+"?"+a}if(c.indexOf("icid=")>=0){urlParts=c.split("?");params=new Array();if(c.indexOf("&")==-1){params[0]=urlParts[1]}for(i=0;i<params.length;i++){param=params[i];if(param.indexOf("icid=")>=0){d=d+a+"&";continue}d=d+param+"&"}return urlParts[0]+"?"+d.substr(0,d.length-1)}else{return c+"&"+a}};Aol.bind(document,"mouseup",function(h){var f=h.srcElement||h.target;bN.extractIds(f);var j=f.nodeName;if(j!="A"){if(j.match(/IMG|TABLE|TD/)){var c=1;var d=f;while(c<=6){d=d.parentNode;if(d.nodeName=="A"){f=d;break}c++}}else{return}}methNm=bN.get("ruid",1);if(methNm!=null&&methNm.length>0&&f.href!=null&&f.href.length>0){ruFunc=rebuildUrlFuncs[methNm];newUrl=ruFunc(f.href);if(newUrl!=null&&newUrl.length>0){bN.set("subUrl",newUrl,1)}}if(typeof dsblApnIcid!="undefined"&&dsblApnIcid==true){return}var b=f.className;var g=bN.get("anid",1)==1?true:false;var a=bN.get("apnIcidGlb")=="true"?true:false;if(g||a){evNdHref=f.href;if(!evNdHref.match(/(.*)?video\//)){return}tmp=bN.get("template");cob=bN.get("cobrand");mid=bN.get("mnid",1);lid=bN.get("lnid",1);pid=bN.get("plid",1);newIcidParam="icid="+encodeURIComponent(tmp+"|"+cob+"|"+mid+"|"+lid+"|"+pid);newHref=bN.rebuildHrefWithIcid(f.href,newIcidParam);f.href=newHref}})});</script>
 <script type="text/javascript">
 function PortalRightAdWrapper(){
@@ -84,7 +84,7 @@ div.feedback {margin-bottom:25px}
         this.campaignId = "";
         this.mtmhpPrefix = "home-";
         this.mtmhpSuffix = "-hp";
-                
+
     this.mtmhpPrefix = "home-";this.mtmhpSuffix = "-hp";
                 this.constructor = function(){
                     if (self.campaignId != ""){
@@ -94,8 +94,8 @@ div.feedback {margin-bottom:25px}
                 this.ieIsHomepage = function(){
                     return false; // Return false since this is not IE
                 }
-        
-                    
+
+
             self.constructor();
         }
 
@@ -107,87 +107,87 @@ div.feedback {margin-bottom:25px}
             var cl_account='aolsvc';
             var psz='';
             var segment='';
-            
-            
+
+
             var p23 = "";
             var p23_mol = p23;
             var homestr = "";
             var mtmhpPrefix = "";
             var mtmhpSuffix = "";
-            
+
                         var global_cl_report_suite="aolsvc";
-            
+
                         var cl_disable=new Object();
-                
+
                                 cl_disable.dlfwd='true';
-                
+
                                 cl_disable.dlpause='true';
-                
+
                                 cl_disable.dlplay='true';
-                
+
                                 cl_disable.mailpreview='true';
-                
+
                                 cl_disable.dlbwd='true';
-                
+
                                 cl_disable.om_hnav_='true';
-                               
+
             var p_t_n = "grid7";
-            var p_c_n = "maing8";                
-                
-            
+            var p_c_n = "maing8";
+
+
                     //--></script><script type="text/javascript" src="http://o.aolcdn.com/omniunih.js"></script><script type="text/javascript"><!--
-            
-    
+
+
             if (typeof s_265 != "undefined" && s_265 != null) {
                 s_265.channel="us.aolportal";
                 s_265.linkInternalFilters="javascript:,aol.com,mapquest.com,#dl";
-                    
+
                 s_265.linkTrackVars="prop20";
                 s_265.pageName="acm : s394a maing8 AOL.com 5.0 Main";
                 s_265.pfxID="acm";
                 s_265.prop1="s394a maing8 AOL.com 5.0 Main";
                 s_265.prop2="";
                 s_265.prop20="s394a maing8 AOL.com 5.0 Main";
-                s_265.prop12=document.URL;        
+                s_265.prop12=document.URL;
                 s_265.prop16="location";
                 s_265.prop17="theme_default-lady_maing8";
-                        
+
             }
-        
+
                 try {
                     mtmhpPrefix = MTMHP.mtmhpPrefix;
                     mtmhpSuffix = MTMHP.mtmhpSuffix;
                 }catch(e){}
-        
-                  
+
+
                         try{
                             if (MTMHP.ieIsHomepage()){
                                 homestr = MTMHP.campaignId;
                             }
-                        }catch(e){}    
-                    
+                        }catch(e){}
+
                 if (typeof s_265 != "undefined" && s_265 != null) {
                     if (p23_mol.length > 0 && p23.indexOf(",") == -1){
                     s_265.prop23 = homestr + "," + p23;
                 }else{
                     s_265.prop23 = p23 + homestr;
                 }
-                s_265.campaign = homestr; 
+                s_265.campaign = homestr;
                           }
-        
-                  
+
+
                           if (typeof s_265 != "undefined" && s_265 != null) {
-                  
+
                       var s_265_user_authenticated=false;
                   s_265.eVar14=s_265.pfxID+':45';
 s_265.mmxgo=true;
                       var s_code=s_265.t();
-                  
+
 
                           }
-                      
-                          
-                  
+
+
+
                   //-->
             </script>
             </div><!-- Using template grid7 -->
@@ -252,7 +252,7 @@ s_265.mmxgo=true;
 
                                 <i class="ruleGreeting dn" trigger="mbc:">Welcome <a style="font-weight:bold" href="https://bill.aol.com/SPortal/jsp/mybenefits.jsp?icid=acm50greetingdetectname"></a> -- <a style="font-weight:bold" href="https://bill.aol.com/SPortal/jsp/mybenefits.jsp?icid=acm50greetingdetectbenefits">Visit AOL MyBenefits Today</a></i>
 
-                                <i class="ruleGreetingDefault dn">Welcome <a style="font-weight:bold" href="https://bill.aol.com/SPortal/jsp/mybenefits.jsp?icid=acm50greetingdetectname"></a> -- <a style="font-weight:bold" href="http://aolheroes.com/?icid=acm50greetingdetecthero">Help a Hero Find Work</a></i>  
+                                <i class="ruleGreetingDefault dn">Welcome <a style="font-weight:bold" href="https://bill.aol.com/SPortal/jsp/mybenefits.jsp?icid=acm50greetingdetectname"></a> -- <a style="font-weight:bold" href="http://aolheroes.com/?icid=acm50greetingdetecthero">Help a Hero Find Work</a></i>
                                 <b id="rulewun" class="dn">&nbsp;&nbsp;New Here? <a style="font-weight:bold" href="https://new.aol.com/productsweb/?promocode=825345&ncid=txtlnkuswebr00000106" name="om_signup">Sign Up</a></b>
                                     </b>
                         </p>
@@ -278,10 +278,10 @@ s_265.mmxgo=true;
     <a id="aol-header-logo" title="Click here to refresh" name="om_hdrlogo" class="lnid-sec1_lnk1 " href="?icid=aolcomlogorefresh5&dlact=dl1"><img alt="Click here to refresh" src="http://portal.aolcdn.com/p5/forms/326/7116f573-7cda-4e8f-b2ec-b0d272075b69.png"/></a></div></div>
                 <div class="mpid-6">
                         <div class="mnid-header-search plid-133733">
- 
+
 <form id="aol-header-search" action="http://search.aol.com/aol/search" method="get" class="search search-3 tabs-0">
     <input type="hidden" id="header-ghostText" value=""/>
-    
+
     <input type="hidden" id="header-enabledTerms" name="enabled_terms" value=""/>
     <input type="hidden" id="header-s_it" name="s_it" value="comsearch50ct16"/>
     <input type="hidden" id="header-s_it_h" value="comsearch50ct16"/>
@@ -515,8 +515,8 @@ s_265.mmxgo=true;
                 <div class="mpid-1">
                         <div id="dailyvjmod_video-module" class="anid-1 gmod">
     <div class="dailyvj slot-video-module mnid-video-module plid-202458 vj-v2">
-        
-        
+
+
         <a name="om_video-modulevideo_image" class="vjvideo lnid-sec2_lnk1" href="http://www.aol.com/video/late-night-jeff-probst-talks-lisa-whelchel-on-survivor/517472441/"><img height="155" width="233" class="vjimg" src="http://i.huffpost.com/gen/762914/thumbs/a-BLAIR-233x155.jpg"/><div class="vbpos-bottom-right videobutton" style="width:41px; height:41px; ">
     <img src="http://portal.aolcdn.com/p5/forms/4335/97221ba0-aab6-4fd6-b8db-aa2d22fbd728.png" alt="" class="playbutton" title="Play Video"/><img src="http://portal.aolcdn.com/p5/forms/4335/5534901d-5f39-4f43-a119-adbb286d996d.png" alt="" class="playbutton-over" title="Play Video"/><div class="vbtext" title="Play Video"><table style="width:0px; height:0px;"><tr><td></td></tr></table></div>
 </div>
@@ -535,46 +535,46 @@ Still Adorable at Age 49</a></h2></div>
             <h2>Daily Buzz</h2>
                 <div class="gmod photo-lede mnid-daily-buzz1 plid-202589">
     <a title="Oreos" name="om_daily-buzz_image_1" class="photo-link lnid-sec2_lnk1" href="http://www.huffingtonpost.com/2012/09/07/candy-corn-oreos_n_1865397.html"><img alt="Oreos" src="http://portal.aolcdn.com/p5/forms/656/02a0d99e-99da-4263-b167-bc542ef031ad.jpg"/></a><span class="credit">Nabisco</span>
-    <h3><a name="om_daily-buzz_headline1" href="http://www.huffingtonpost.com/2012/09/07/candy-corn-oreos_n_1865397.html" class=" lnid-sec2_lnk2">Oreo Introduces Divisive New Fall Flavor 
+    <h3><a name="om_daily-buzz_headline1" href="http://www.huffingtonpost.com/2012/09/07/candy-corn-oreos_n_1865397.html" class=" lnid-sec2_lnk2">Oreo Introduces Divisive New Fall Flavor
 
 </a></h3>
         </div>
-    
-    
+
+
 <div class="gmod photo-lede mnid-daily-buzz2 plid-202586">
     <a title="Mom" name="om_daily-buzz_image_2" class="photo-link lnid-sec3_lnk1" href="http://www.huffingtonpost.com/2012/09/07/sleepwalking-mom-reacts-tomato-cage-video_n_1864317.html"><img alt="Mom" src="http://portal.aolcdn.com/p5/forms/3944/6bbbdd96-c373-493c-9111-26731ffb9245.jpg"/></a><span class="credit">YouTube.com</span>
     <h3><a name="om_daily-buzz_headline2" href="http://www.huffingtonpost.com/2012/09/07/sleepwalking-mom-reacts-tomato-cage-video_n_1864317.html" class=" lnid-sec3_lnk2">Mom Has Just Seen Surprising Video Of Herself
 
 </a></h3>
         </div>
-    
-    
+
+
 <div class="gmod photo-lede mnid-daily-buzz3 plid-202588">
     <a title="Close Up" name="om_daily-buzz_image_3" class="photo-link lnid-sec4_lnk1" href="http://www.huffingtonpost.com/2012/09/06/macro-photos-laser-pointer-lens_n_1861856.html"><img alt="Close Up" src="http://portal.aolcdn.com/p5/forms/2559/447d50ab-3f63-4430-8e26-ada3f838f5d3.jpg"/></a><span class="credit">imgur</span>
     <h3><a name="om_daily-buzz_headline3" href="http://www.huffingtonpost.com/2012/09/06/macro-photos-laser-pointer-lens_n_1861856.html" class=" lnid-sec4_lnk2">'Alien' Photo Is Much More Familiar Than You Think
 
 </a></h3>
         </div>
-    
-    
+
+
 <div class="gmod photo-lede mnid-daily-buzz4 plid-202590">
     <a title="Bub" name="om_daily-buzz_image_4" class="photo-link lnid-sec5_lnk1" href="http://www.pawnation.com/2012/09/07/lil-bub-is-getting-her-own-movie/"><img alt="Bub" src="http://portal.aolcdn.com/p5/forms/2560/19a7962b-aacd-411e-98d3-f324e27ff265.jpg"/></a><span class="credit">David Woodruff</span>
-    <h3><a name="om_daily-buzz_headline4" href="http://www.pawnation.com/2012/09/07/lil-bub-is-getting-her-own-movie/" class=" lnid-sec5_lnk2">Famous Cat Taking Big Leap  
+    <h3><a name="om_daily-buzz_headline4" href="http://www.pawnation.com/2012/09/07/lil-bub-is-getting-her-own-movie/" class=" lnid-sec5_lnk2">Famous Cat Taking Big Leap
 
 
 
 </a></h3>
         </div>
-    
-    
+
+
 <div class="gmod photo-lede mnid-daily-buzz5 plid-202547">
     <a title="Football" name="om_daily-buzz_image_5" class="photo-link lnid-sec6_lnk1" href="http://aol.sportingnews.com/ncaa-football/story/2012-09-07/dematha-football-players-prostitutes-dismissed-hillside-nc"><img alt="Football" src="http://portal.aolcdn.com/p5/forms/616/e3d62993-fca7-4c10-a139-2b6e2ed84d63.jpg"/></a><span class="credit">Getty Images</span>
     <h3><a name="om_daily-buzz_headline5" href="http://aol.sportingnews.com/ncaa-football/story/2012-09-07/dematha-football-players-prostitutes-dismissed-hillside-nc" class=" lnid-sec6_lnk2">Catholic School Rocked By Prostitution Scandal
 
 </a></h3>
         </div>
-    
-    
+
+
 <div class="gmod photo-lede mnid-daily-buzz6 plid-202544">
     <a title="Jeanette" name="om_daily-buzz_image_6" class="photo-link lnid-sec7_lnk1" href="http://newsone.com/2034391/jeanette-colantonio-south-carolina/?omcamp=aolhomepage"><img alt="Jeanette" src="http://portal.aolcdn.com/p5/forms/2561/1926821c-c9f9-4771-901c-af8b4900d108.jpg"/></a><span class="credit">Jeanette Colantonio</span>
     <h3><a name="om_daily-buzz_headline6" href="http://newsone.com/2034391/jeanette-colantonio-south-carolina/?omcamp=aolhomepage" class=" lnid-sec7_lnk2">400-Lb. Woman Drops Half Her Weight
@@ -588,23 +588,23 @@ Still Adorable at Age 49</a></h2></div>
 
 </a></h3>
         </div>
-    
-    
+
+
 <div class="gmod photo-lede mnid-daily-buzz7 plid-202543">
     <a title="Wedding" name="om_daily-buzz_image_7" class="photo-link lnid-sec8_lnk1" href="http://www.comicsalliance.com/2012/09/06/cosplayers-married-astonishing-x-men-cover-recreation-dragon-con-video/"><img alt="Wedding" src="http://portal.aolcdn.com/p5/forms/615/dbf3aebb-946d-4e2f-8471-90fc25209ab5.jpg"/></a><span class="credit">Pat Loika</span>
     <h3><a name="om_daily-buzz_headline7" href="http://www.comicsalliance.com/2012/09/06/cosplayers-married-astonishing-x-men-cover-recreation-dragon-con-video/" class=" lnid-sec8_lnk2">Won't Believe What's Behind Wedding Couple
 </a></h3>
         </div>
-    
-    
+
+
 <div class="gmod photo-lede mnid-daily-buzz8 plid-202546">
     <a title="Hope" name="om_daily-buzz_image_8" class="photo-link lnid-sec9_lnk1" href="http://www.huffingtonpost.com/2012/09/07/shepard-fairey-sentenced_n_1864785.html"><img alt="Hope" src="http://portal.aolcdn.com/p5/forms/878/e2986643-ff6d-4ecc-b0f2-fc3ec83d5236.jpg"/></a><span class="credit">Flickr: Cliff1066</span>
     <h3><a name="om_daily-buzz_headline8" href="http://www.huffingtonpost.com/2012/09/07/shepard-fairey-sentenced_n_1864785.html" class=" lnid-sec9_lnk2">'Hope' Artist Sentenced In Federal Court
 
 </a></h3>
         </div>
-    
-    
+
+
 <div class="gmod photo-lede mnid-daily-buzz9 plid-202501">
     <a title="Pitt" name="om_daily-buzz_image_9" class="photo-link lnid-sec10_lnk1" href="http://www.aol.com/video/brad-pitt-disappointed-by-presidential-candidates/517472754/"><img alt="Pitt" src="http://portal.aolcdn.com/p5/forms/1781/9ed353c9-2235-460f-9c55-5d2992759d2d.jpg"/><div class="vbpos-bottom-right videobutton" style="width:41px; height:41px; ">
     <img src="http://portal.aolcdn.com/p5/forms/3963/c99fbfd4-b6ab-43f7-944e-78b50fc88ac1.png" alt="" class="playbutton" title=""/><img src="http://portal.aolcdn.com/p5/forms/3963/607b1233-64e4-4513-a6cb-a228cb1ce784.png" alt="" class="playbutton-over" title=""/><div class="vbtext" title=""><table style="width:0px; height:0px;"><tr><td></td></tr></table></div>
@@ -614,22 +614,22 @@ Still Adorable at Age 49</a></h2></div>
     <h3><a name="om_daily-buzz_headline9" href="http://www.aol.com/video/brad-pitt-disappointed-by-presidential-candidates/517472754/" class=" lnid-sec10_lnk2">Brad Pitt 'Disgusted' By Political Issue
 </a></h3>
         </div>
-    
-    
+
+
 <div class="gmod photo-lede mnid-daily-buzz10 plid-202500">
     <a title="Model" name="om_daily-buzz_image_10" class="photo-link lnid-sec11_lnk1" href="http://www.huffingtonpost.com/2012/09/06/lane-bryant-photoshop-disaster_n_1862452.html"><img alt="Model" src="http://portal.aolcdn.com/p5/forms/657/2eb515bc-3943-45f0-bc9b-c3b9bec29c8e.jpg"/></a><span class="credit">PSD</span>
     <h3><a name="om_daily-buzz_headline10" href="http://www.huffingtonpost.com/2012/09/06/lane-bryant-photoshop-disaster_n_1862452.html" class=" lnid-sec11_lnk2">Model Loses Leg In Apparent Photoshop FAIL
 </a></h3>
         </div>
-    
-    
+
+
 <div class="gmod photo-lede mnid-daily-buzz11 plid-202419">
     <a title="Rihanna" name="om_daily-buzz_image_11" class="photo-link lnid-sec12_lnk1" href="http://blog.music.aol.com/2012/09/06/mtv-vma-winners-2012/"><img alt="Rihanna" src="http://portal.aolcdn.com/p5/forms/5088/05f381a4-86e0-4235-8308-7e67ecca873d.jpg"/></a><span class="credit">AP</span>
     <h3><a name="om_daily-buzz_headline11" href="http://blog.music.aol.com/2012/09/06/mtv-vma-winners-2012/" class=" lnid-sec12_lnk2">Stars Who Won Big at The MTV VMA's
 </a></h3>
         </div>
-    
-    
+
+
 </div></div>
                 </div>
 
@@ -647,7 +647,7 @@ Still Adorable at Age 49</a></h2></div>
         <span class="text-ad">
                 <div id="fi_460254805" class="di refreshNO"></div>
             <script type="text/javascript">
-            
+
                     htmlAdWH('93307381', '61', '21', 'text', 'fi_460254805');
                 </script>
 
@@ -666,13 +666,13 @@ Still Adorable at Age 49</a></h2></div>
                 <span class="content">
                     <div id="fi_460254806" class="di refreshNO"></div>
             <script type="text/javascript">
-            
+
                     adSetType('F');
                     htmlAdWH('93307889', '300', '75');
                     adSetType('');
                 </script>
 
-            </span> 
+            </span>
                 </div>
                 </div></div>
                 <div class="mpid-3">
@@ -707,19 +707,12 @@ Still Adorable at Age 49</a></h2></div>
     </div>
 </div>
 <div class="mpid-5">
-<h2><a name="om_featured-blog-posts_title" class="lnid-sec1_lnk1" href="http://www.huffingtonpost.com/theblog/index/">iPhone 5 Live Coverage</a></h2>    
+<h2><a name="om_featured-blog-posts_title" class="lnid-sec1_lnk1" href="http://www.huffingtonpost.com/theblog/index/">iPhone 5 Live Coverage</a></h2>
 <div style="height: 250px; overflow: auto" id="myLiveBlog">
 </div>
 
-<script src="http://code.jquery.com/jquery-1.5.2.js"></script>
-<script src="src/jquery.liveblogapi.js"></script>
-<script src="src/jquery.liveblogui.js"></script>
-<script>
-var $myLiveBlog = $('#myLiveBlog').liveBlogUi({
-    postId: '20317028',
-    url: 'http://bootcamp.aol.com/'
-});
-</script>
+<!--<script src="http://code.jquery.com/jquery-1.7.2.js"></script>-->
+<!--<script src="lib/jquery-1.5.2.min.js"></script>-->
 
 </div>
 
@@ -734,7 +727,7 @@ var $myLiveBlog = $('#myLiveBlog').liveBlogUi({
 
 </a><div class='vidItemDetails'>
                         <div class='vidTitle'><a href="http://on.aol.com/video/517472648/?hp=1" name="om_popular-videos-5min-main_title_1" class="lnid-sec1_lnk2" title="Woman Breaks Up With Barack Obama in New GOP Ad" >Woman Breaks Up With Barack Obama in New GOP...</a></div>
-                        <div class='vidLen'>(1:09)</div>   
+                        <div class='vidLen'>(1:09)</div>
                         <div class='vidChan'>Buzz60</div>
                         </div>
                 </li>
@@ -745,7 +738,7 @@ var $myLiveBlog = $('#myLiveBlog').liveBlogUi({
 
 </a><div class='vidItemDetails'>
                         <div class='vidTitle'><a href="http://on.aol.com/video/517472763/?hp=1" name="om_popular-videos-5min-main_title_2" class="lnid-sec2_lnk2" title="Economy Adds 96K Jobs, Rate Falls to 8.1 Pct." >Economy Adds 96K Jobs, Rate Falls to 8.1 Pct.</a></div>
-                        <div class='vidLen'>(2:07)</div>   
+                        <div class='vidLen'>(2:07)</div>
                         <div class='vidChan'>Associated Press</div>
                         </div>
                 </li>
@@ -756,7 +749,7 @@ var $myLiveBlog = $('#myLiveBlog').liveBlogUi({
 
 </a><div class='vidItemDetails'>
                         <div class='vidTitle'><a href="http://on.aol.com/video/517472123/?hp=1" name="om_popular-videos-5min-main_title_3" class="lnid-sec3_lnk2" title="Amy Poehler and Will Arnett Split" >Amy Poehler and Will Arnett Split</a></div>
-                        <div class='vidLen'>(0:36)</div>   
+                        <div class='vidLen'>(0:36)</div>
                         <div class='vidChan'>E!</div>
                         </div>
                 </li>
@@ -767,7 +760,7 @@ var $myLiveBlog = $('#myLiveBlog').liveBlogUi({
 
 </a><div class='vidItemDetails'>
                         <div class='vidTitle'><a href="http://on.aol.com/video/517472395/?hp=1" name="om_popular-videos-5min-main_title_4" class="lnid-sec4_lnk2" title="Rihanna, One Direction Win Big at VMAs" >Rihanna, One Direction Win Big at VMAs</a></div>
-                        <div class='vidLen'>(2:29)</div>   
+                        <div class='vidLen'>(2:29)</div>
                         <div class='vidChan'>Associated Press</div>
                         </div>
                 </li>
@@ -778,7 +771,7 @@ var $myLiveBlog = $('#myLiveBlog').liveBlogUi({
 
 </a><div class='vidItemDetails'>
                         <div class='vidTitle'><a href="http://on.aol.com/video/517472126/?hp=1" name="om_popular-videos-5min-main_title_5" class="lnid-sec5_lnk2" title="Giffords Leads Pledge of Allegiance at DNC" >Giffords Leads Pledge of Allegiance at DNC</a></div>
-                        <div class='vidLen'>(1:51)</div>   
+                        <div class='vidLen'>(1:51)</div>
                         <div class='vidChan'>WSJLive</div>
                         </div>
                 </li>
@@ -879,7 +872,7 @@ var $myLiveBlog = $('#myLiveBlog').liveBlogUi({
 	   <input name="email" class="nlEmail" type="text" value="Enter Your Email to Sign Up"/>
 	   <a class="lnid-sec2_lnk1 nlSubmit" name="om_newsletter_submit" >Submit</a>
 	   </form>
-	
+
 </div></div>
                 <div class="mpid-10">
                    <img src="http://leadback.advertising.com/adcedge/lb?site=695501&srvc=1&betr=aolcom_cs=1&betq=13668=438747" width="1" height="1" border="0" /> </div>
@@ -915,7 +908,7 @@ var $myLiveBlog = $('#myLiveBlog').liveBlogUi({
                         <span class="fcb"></span>
                     </div>
                     </div>
-    
+
     </div>
 
         <div class="rectip">
@@ -963,16 +956,16 @@ newsBodySlotName=trending-stories
 <b id="fao"><font color='#000000'>Follow AOL On:   </font><a href="http://bit.ly/btxTZj" class="fb lnid-sec1_lnk10" target="_blank" name="om_followme1">Facebook</a> | <a href=" http://bit.ly/9BAHOm" class="tw lnid-sec1_lnk11" target="_blank" name="om_followme2">Twitter</a> | <a href="http://bit.ly/cCSb2K" class="rss lnid-sec1_lnk12" target="_blank" name="om_followme3">RSS</a> | <a href="http://mobile.aol.com/?icid=homepagefootermobile" class="mb lnid-sec1_lnk13" target="_blank" name="om_followme4">Mobile</a> | <a href="http://blog.aol.com/
 ?icid=homepagefooterblog" class="blog  lnid-sec1_lnk14" target="_blank" name="om_followme5">Blog</a></b></div>
 <div id="aol-copyright">
-    
+
         &copy; 2012&nbsp; AOL Inc. All Rights Reserved | <a href="http://help.aol.com/">Help</a> | <a href="http://myaccount.aol.com" name="om_myaccount">My Account</a></div>
 </div>
 </div>
             <div class="mpid-3">
                         <div class="mnid-footer-search plid-133733">
- 
+
 <form id="aol-footer-search" action="http://search.aol.com/aol/search" method="get" class="search search-3 tabs-0">
     <input type="hidden" id="footer-ghostText" value=""/>
-    
+
     <input type="hidden" id="footer-enabledTerms" name="enabled_terms" value=""/>
     <input type="hidden" id="footer-s_it" name="s_it" value="comsearch50ct16"/>
     <input type="hidden" id="footer-s_it_h" value="comsearch50ct16"/>
@@ -994,13 +987,13 @@ newsBodySlotName=trending-stories
     <fieldset>
         <input class="" type="text" value="" id="aol-footer-query" name="q"  maxlength="150" title="Search the Web"/>
         <input class="om_footer-searchbutton lnid-sec2_lnk1" type="submit" value="Search" id="aol-footer-search-button" onclick="omn.omo('footer-searchbutton');" title="Search"/>
-        
+
     </fieldset>
 </form>
 </div></div>
                 </div>
 </div>
-        
+
 <div class="mpid-1">
                         <div id="mail_prev_w">
             <div id="mail_prev" class="plid-53467 mnid-mailpreview">
@@ -1018,5 +1011,19 @@ var origUrl="http%3A%2F%2Fwww.aol.com%2F";
 var ae_url="https://www.aol.com/aimexpress.jsp";
 cookies.set("rrpmo1","rr1~7~1346429770205~0");</script>
 <script type="text/javascript">window.dpcms={};window.dpcms.track={};window.dpcms.track.recordImpr=function(a,b){};</script></div>
+
+<script src="src/jquery.liveblogapi.js"></script>
+<script src="src/jquery.liveblogui.js"></script>
+<script>
+$(document).ready(function () {
+    console.log('live blogging usa', $('#myLiveBlog'));
+    var $myLiveBlog = $('#myLiveBlog');
+
+    $myLiveBlog.liveBlogUi({
+        postId: '20317028',
+        url: 'http://bootcamp.aol.com/'
+    });
+});
+</script>
                 </body>
 </html>

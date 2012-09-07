@@ -4,7 +4,6 @@
 
         var defaultOptions = {
                 callbackPrefix: 'lb_',
-                namespace: 'lb',
                 url : null,
                 postId : null
             },
@@ -29,7 +28,7 @@
                             success: function (response) {
                                 lastUpdate = response.last_update;
 
-                                //console.log('response', response);
+                                console.log('response', response);
 
                                 // Call fetch again after the API-recommended
                                 // number of seconds
@@ -40,7 +39,7 @@
                                 //count += 1;
 
                                 if (response.data && response.members) {
-                                    $this.trigger('update.' + options.namespace, normalize(response.data, response.members));
+                                    $this.trigger('update', normalize(response.data, response.members));
                                 }
                             }
                         });
