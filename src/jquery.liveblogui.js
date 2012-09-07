@@ -11,7 +11,7 @@
 
             liveBlogUi = function (customOptions) {
 
-                if ($.fn.liveBlog) {
+                if ($.fn.liveBlogApi) {
 
                     var options = $.extend(true, {}, defaultOptions, customOptions),
 
@@ -89,7 +89,7 @@
                             }
                         };
 
-                    $this.liveBlog(options);
+                    $this.liveBlogApi(options);
 
                     $this.bind('update', function (event, data) {
                         console.log('update', event, data);
