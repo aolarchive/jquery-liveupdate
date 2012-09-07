@@ -1,6 +1,6 @@
 (function ($) {
 
-    $.fn.liveBlog = function (customOptions) {
+    $.fn.liveBlogApi = function (customOptions) {
 
         var defaultOptions = {
                 callbackPrefix: 'lb_',
@@ -10,7 +10,7 @@
 
             $this = $(this),
 
-            liveBlog = function (customOptions) {
+            liveBlogApi = function (customOptions) {
 
                 var lastUpdate = 0,
                     count = 0,
@@ -49,7 +49,7 @@
 
         return this.each(function () {
             customOptions = customOptions || {};
-            liveBlog(customOptions);
+            liveBlogApi(customOptions);
         });
 
     };
