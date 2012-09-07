@@ -4,6 +4,7 @@
 
         var defaultOptions = {
                 callbackPrefix: 'lb_',
+                namespace: 'lb',
                 url : null,
                 postId : null
             },
@@ -39,7 +40,7 @@
                                 //count += 1;
 
                                 if (response.data && response.members) {
-                                    $this.trigger('update', normalize(response.data, response.members));
+                                    $this.trigger('update.' + options.namespace, normalize(response.data, response.members));
                                 }
                             }
                         });
