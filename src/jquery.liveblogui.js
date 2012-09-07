@@ -44,8 +44,9 @@
                                         'class': 'lb-post-text'
                                     }),
                                     $('<img />', {
-                                        src: data
-                                    })
+                                        src: data,
+                                        height: 100
+                                    }) 
                                 );
                             }
 
