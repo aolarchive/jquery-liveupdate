@@ -12,8 +12,7 @@
 
             liveBlogApi = function (customOptions) {
 
-                var state = {},
-                    lastUpdate = 0,
+                var lastUpdate = 0,
                     count = 0,
                     options = $.extend(true, {}, defaultOptions, customOptions),
 
@@ -40,72 +39,56 @@
                                 //count += 1;
 
                                 if (response.data) {
-
-                                    updateState(response.data);
-                                    console.log('State:', state);
-
-                                    //$this.trigger('update', state);
-                                    $this.trigger('update', response.data);
+                                    $this.trigger('update', normalize(response.data));
                                 }
                             }
                         });
                     },
 
-                    alterState = function (data, difference) {
-                        var types = { 1: "text", 2: "image", 4: "comment" };
+                    normalize = function (data) {
+                        var i, length, item, items,
+                            normalizedData = data,
+                            types = { 1: "text", 2: "image", 4: "comment" };
 
-                        for (i = 0, length = data.length; i < length; i += 1) {
-                            update = data[i];
+                        for (items in normalizedData) {
+                            if (normalizedData.hasOwnProperty(items)) {
+                                for (i = 0, length = normalizedData[items].length; i < normalizedData[items].length; i += 1) {
+                                    item = normalizedData[items][i];
 
-                            // Normalize the property names
-                            normalizedUpdate = {
-                                memberId: update.m,
-                                date: new Date(update.t * 1000),
-                                difference: difference,
-                                type: types[update.type] || 'unknown',
-                                content: update.d,
-                                tags: update.md && update.md.tags || []
-                            };
+                                    if (item.m) {
+                                        item.memberId = item.m;
+                                        delete item.m;
+                                    }
 
-                            state[update.id] = normalizedUpdate;
-                        }
-                    },
+                                    if (item.t) {
+                                        item.date = new Date(item.t * 1000);
+                                        delete item.t;
+                                    }
 
-                    updateState = function (data) {
-                        var i, length, item, deletedItem, update, normalizedUpdate;
+                                    if (item.type) {
+                                        item.type = types[item.type] || 'unknown';
+                                    }
 
-                        // Reset the difference labels
-                        for (item in state) {
-                            if (state.hasOwnProperty(item)) {
-                                // If the item has been marked for deletion, delete it
-                                if (state[item].difference && state[item].difference === 'deleted') {
-                                    delete state[item];
-                                } else {
-                                    delete state[item].difference;
+                                    if (item.d) {
+                                        item.content = item.d;
+                                        delete item.d;
+                                    }
+
+                                    if (item.md && item.md.caption) {
+                                        item.caption = item.md.caption || '';
+                                        delete item.md.caption;
+                                    }
+
+                                    if (item.md && item.md.tags) {
+                                        item.tags = item.md.tags || [];
+                                        delete item.md.tags;
+                                    }
                                 }
                             }
                         }
 
-                        // Add new updates
-                        if (data.updates && $.isArray(data.updates)) {
-                            alterState(data.updates, 'new');
-                        }
-
-                        // Make changes
-                        if (data.changes && $.isArray(data.changes)) {
-                            alterState(data.changes, 'changed');
-                        }
-
-                        // Delete updates
-                        if (data.deletes && $.isArray(data.deletes)) {
-                            for (i = 0, length = data.deletes.length; i < length; i += 1) {
-                                deletedItem = data.deletes[i].id;
-
-                                if (state.hasOwnProperty(deletedItem)) {
-                                    state[deletedItem].difference = 'deleted';
-                                }
-                            }
-                        }
+                        console.log('normalizing', normalizedData);
+                        return normalizedData;
                     };
 
                 fetch();

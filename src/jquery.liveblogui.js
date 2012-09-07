@@ -16,26 +16,27 @@
                     var options = $.extend(true, {}, defaultOptions, customOptions),
 
                         buildItem = function (item, element) {
-                            var data = item.d,
+                            var data = item.content,
                                 type = item.type,
                                 id = item.id,
-                                metaData = item.md,
-                                timestamp = new Date(item.t * 1000),
-                                memberId = item.m,
+                                caption = item.caption,
+                                //metaData = item.md,
+                                timestamp = item.date,
+                                memberId = item.memberId,
                                 timestampString = timestamp.toString() + ' by ' + memberId;
 
                             console.log('type', type);
 
                             if (!element) {
                                 element = $('<p />', {
-                                    id: 'p'+id,
+                                    id: 'p' + id,
                                     'class': 'lb-post'
                                 });
                             } else {
                                 element.empty();
                             }
 
-                            if (type === 1 || type == 4) {
+                            if (type === 'text' || type == 'comment') {
                                 element.append(
                                     $('<span />', {
                                         text:data,
@@ -46,15 +47,15 @@
                                         'class': 'lb-post-timestamp'
                                     })
                                 );
-                                
-                                if (type == 4) {
+
+                                if (type === 'comment') {
                                     element.addClass('lb-comment');
                                 }
 
-                            } else if (type == 2) {
+                            } else if (type === 'image') {
                                 element.append(
                                     $('<span />', {
-                                        text: metaData.caption,
+                                        text: caption,
                                         'class': 'lb-post-caption'
                                     }),
                                     $('<img />', {
@@ -77,13 +78,13 @@
 
                             if ($item) {
                                 $item.hide();
-                                
-                                if (item.type == 4 && item.p) {
+
+                                if (item.type === 'comment' && item.p) {
                                     $item.insertAfter($('#p'+item.p));
                                 } else {
                                     $item.prependTo($this);
                                 }
-                                
+
                                 $item.fadeIn(400);
                             }
                         },
