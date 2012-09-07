@@ -28,7 +28,7 @@
                             success: function (response) {
                                 lastUpdate = response.last_update;
 
-                                //console.log('response', response);
+                                console.log('response', response);
 
                                 // Call fetch again after the API-recommended
                                 // number of seconds
@@ -38,17 +38,28 @@
                                 // name is necessary
                                 //count += 1;
 
-                                if (response.data) {
-                                    $this.trigger('update', normalize(response.data));
+                                if (response.data && response.members) {
+                                    $this.trigger('update', normalize(response.data, response.members));
                                 }
                             }
                         });
                     },
 
-                    normalize = function (data) {
-                        var i, length, item, items,
+                    normalize = function (data, membersArray) {
+                        var i, length, item, items, member,
+                            members = {},
                             normalizedData = data,
                             types = { 1: "text", 2: "image", 4: "comment" };
+
+                        // Create a members object
+                        for (i = 0, length = membersArray.length; i < length; i += 1) {
+                            member = membersArray[i];
+
+                            members[member.m] = {
+                                name: member.name,
+                                slug: member.slug
+                            };
+                        }
 
                         for (items in normalizedData) {
                             if (normalizedData.hasOwnProperty(items)) {
@@ -57,6 +68,8 @@
 
                                     if (item.m) {
                                         item.memberId = item.m;
+                                        item.memberName = members[item.memberId].name;
+                                        item.memberSlug = members[item.memberId].slug;
                                         delete item.m;
                                     }
 

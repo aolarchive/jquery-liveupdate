@@ -23,7 +23,7 @@
                                 //metaData = item.md,
                                 timestamp = item.date,
                                 memberId = item.memberId,
-                                timestampString = getFormattedDateTime(timestamp) + ' by ' + memberId;
+                                timestampString = getFormattedDateTime(timestamp) + ' by ' + item.memberName;
 
                             console.log('type', type);
 
