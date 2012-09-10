@@ -20,6 +20,7 @@
                                 type = item.type,
                                 id = item.id,
                                 caption = item.caption,
+                                tags = item.tags,
                                 //metaData = item.md,
                                 timestamp = item.date,
                                 memberId = item.memberId,
@@ -41,10 +42,6 @@
                                     $('<span />', {
                                         text: data,
                                         'class': 'lb-post-text'
-                                    }),
-                                    $('<span />', {
-                                        text: timestampString,
-                                        'class': 'lb-post-timestamp'
                                     })
                                 );
 
@@ -61,12 +58,30 @@
                                     $('<img />', {
                                         src: data,
                                         height: 100
-                                    }),
-                                    $('<span />', {
-                                        text: timestampString,
-                                        'class': 'lb-post-timestamp'
                                     })
                                 );
+                            }
+                            
+                            element.append(
+                                $('<span />', {
+                                    text: timestampString,
+                                    'class': 'lb-post-timestamp'
+                                })
+                            );
+                            
+                            if (item.tags && item.tags.length) {
+                                var tagsList = $('<ul />', {
+                                    'class': 'lb-post-tags'
+                                })
+                                .appendTo(element);
+                            
+                                $.each(item.tags, function(i, el){
+                                    tagsList.append(
+                                        $('<li />', {
+                                            text: el
+                                        })
+                                    );
+                                });
                             }
 
                             return element;
