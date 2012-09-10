@@ -41,6 +41,10 @@
                                 if (response.data && response.members) {
                                     $this.trigger('update', normalize(response.data, response.members));
                                 }
+                            },
+                            error: function (response) {
+                                // Try to restart things in 10 seconds
+                                setTimeout(fetch, 10000);
                             }
                         });
                     },
