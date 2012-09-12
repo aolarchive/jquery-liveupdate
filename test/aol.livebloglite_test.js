@@ -22,10 +22,18 @@
       raises(block, [expected], [message])
   */
 
-  module('jQuery#awesome', {
+  module('jQuery#livebloglite', {
     setup: function() {
       this.elems = $('#qunit-fixture').children();
     }
+  });
+
+  console.log('well hellooooooo!', $.fn.liveBlogLiteApi);
+
+  test('existence', function () {
+    ok($, 'jQuery exists');
+    ok($.fn.liveBlogLiteApi, '$.liveBlogApi exists');
+    ok($.fn.liveBlogLiteUi, '$.liveBlogUi exists');
   });
 
   //test('using jQuery 1.5.2', function () {
