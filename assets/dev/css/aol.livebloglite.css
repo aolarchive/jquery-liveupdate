@@ -1,39 +1,64 @@
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/nateeagle5\/Projects\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\000031}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\000031}}
 body {
   font-family: 'Lucida Grande', Arial, Helvetica, sans-serif;
   padding: 0 20px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/nateeagle5\/Projects\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\000037}}
-#myLiveBlog .lb {
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\000036}}
+.lb {
   padding-right: 10px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/nateeagle5\/Projects\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\0000310}}
-#myLiveBlog .lb .lb-post {
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\000039}}
+.lb .lb-post {
+  float: left;
+  clear: both;
+  width: 100%;
   border-bottom: 1px dotted #AAAAAA;
   padding: 0;
   margin-bottom: 1em;
+  padding-bottom: 1em;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/nateeagle5\/Projects\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\0000315}}
-#myLiveBlog .lb .lb-post img {
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\0000318}}
+.lb .lb-post img {
   float: left;
   margin-right: 15px;
   margin-bottom: 15px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/nateeagle5\/Projects\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\0000322}}
-#myLiveBlog .lb .lb-comment {
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\0000325}}
+.lb .lb-comment {
   padding-left: 50px;
   background-color: #EEEEEE;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/nateeagle5\/Projects\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\0000327}}
-#myLiveBlog .lb .lb-post-text {
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\0000330}}
+.lb .lb-post-text {
+  float: left;
   display: block;
   clear: both;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/nateeagle5\/Projects\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\0000335}}
-#myLiveBlog .lb .lb-post-timestamp {
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\0000339}}
+.lb .lb-post-timestamp {
+  float: left;
   display: block;
   clear: both;
   font-size: 0.7em;
   color: #999999;
+  line-height: 17px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\0000348}}
+.lb .lb-post-tags {
+  float: left;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.7em;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\0000355}}
+.lb .lb-post-tags li {
+  float: left;
+  list-style: none;
+  margin: 0 0 0 1em;
+  padding: 0px 3px;
+  background-color: #AAAAAA;
+  color: #FFFFFF;
+  border-radius: 2px;
 }
