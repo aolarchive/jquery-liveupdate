@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+    <head>
+        <title>LiveBlogLite</title>
+        <link rel="stylesheet" href="assets/dev/css/aol.livebloglite.css" />
+    </head>
+    <body>
+	    <div id="myLiveBlog">
+	    </div>
+
+	    <script src="libs/jquery/jquery-1.5.2.js"></script>
+	    <script src="dist/aol.livebloglite.js"></script>
+
+	    <script>
+	        $(document).ready(function () {
+	            var $myLiveBlog = $('#myLiveBlog').liveBlogUi({
+	                postId: '20317028',
+	                url: 'http://bootcamp.aol.com/'
+	            });
+	        });
+	    </script>
+    </body>
+</html>

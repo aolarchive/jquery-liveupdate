@@ -1,0 +1,43 @@
+body {
+	font-family: 'Lucida Grande', Arial, Helvetica, sans-serif;
+	padding: 0 20px;
+}
+
+#myLiveBlog {
+    .lb {
+        padding-right: 10px;
+
+        .lb-post {
+            border-bottom: 1px dotted #AAAAAA;
+            padding: 0;
+            margin-bottom: 1em;
+
+            img {
+                float: left;
+                margin-right: 15px;
+                margin-bottom: 15px;
+            }
+        }
+
+        .lb-comment {
+            padding-left: 50px;
+            background-color: #EEEEEE;
+        }
+
+        .lb-post-text {
+            display: block;
+            clear: both;
+        }
+
+        .lb-post-caption {
+        }
+
+        .lb-post-timestamp {
+            display: block;
+            clear: both;
+            font-size: 0.7em;
+            color: #999999;
+        }
+    }
+
+}

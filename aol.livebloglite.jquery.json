@@ -1,0 +1,32 @@
+{
+  "name": "aol.livebloglite",
+  "title": "AOL Liveblog Lite",
+  "description": "A slim way to publish data from AOL liveblogs.",
+  "version": "0.1.0",
+  "homepage": "https://github.com/aol/liveblog-widget",
+  "author": {
+    "name": "Nate Eagle",
+    "email": "nate.eagle@teamaol.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/aol/liveblog-widget.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aol/liveblog-widget/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/aol/liveblog-widget/blob/master/LICENSE-MIT"
+    },
+    {
+      "type": "GPL",
+      "url": "https://github.com/aol/liveblog-widget/blob/master/LICENSE-GPL"
+    }
+  ],
+  "dependencies": {
+    "jquery": "1.5.2"
+  },
+  "keywords": []
+}
