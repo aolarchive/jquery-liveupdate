@@ -28,8 +28,6 @@
     }
   });
 
-  console.log('well hellooooooo!', $.fn.liveBlogLiteApi);
-
   test('existence', function () {
     ok($, 'jQuery exists');
     ok($.fn.liveBlogLiteApi, '$.liveBlogApi exists');
