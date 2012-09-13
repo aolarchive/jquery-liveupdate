@@ -1,5 +1,5 @@
 /*global module:false*/
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
   // Project configuration.
   grunt.initConfig({
@@ -13,7 +13,7 @@ module.exports = function(grunt) {
     },
     concat: {
       dist: {
-        src: ['src/liveblogliteapi.js', 'src/liveblogliteui.js'],
+        src: ['src/**/*.js'],
         dest: 'dist/<%= pkg.name %>.js'
       }
     },
@@ -31,44 +31,48 @@ module.exports = function(grunt) {
     },
     compass: {
       dev: {
-          src: 'assets/scss',
-          dest: 'assets/dev/css',
-          linecomments: true,
-          forcecompile: true,
-          debugsass: true,
-          relativeassets: true
+        src: 'assets/scss',
+        dest: 'assets/dev/css',
+        linecomments: true,
+        forcecompile: true,
+        debugsass: true,
+        relativeassets: true
       },
       prod: {
-          src: 'assets/scss',
-          dest: 'assets/prod/css',
-          outputstyle: 'compressed',
-          linecomments: false,
-          forcecompile: true,
-          debugsass: false,
-          relativeassets: true
+        src: 'assets/scss',
+        dest: 'assets/prod/css',
+        outputstyle: 'compressed',
+        linecomments: false,
+        forcecompile: true,
+        debugsass: false,
+        relativeassets: true
       }
     },
     watch: {
       files: '<config:lint.files>',
       tasks: 'lint qunit',
       compass: {
-          files: ['assets/scss/*.scss'],
-          tasks: ['compass:dev', 'compass:prod']
+        files: ['assets/scss/*.scss'],
+        tasks: ['compass:dev', 'compass:prod']
       }
     },
     jshint: {
+      // Specifying a jshint file will be possible in Grunt soon
       options: {
-        curly: true,
-        eqeqeq: true,
-        immed: true,
-        latedef: true,
-        newcap: true,
-        noarg: true,
-        sub: true,
-        undef: true,
-        boss: true,
-        eqnull: true,
-        browser: true
+        "curly": true,
+        "eqeqeq": true,
+        "immed": true,
+        "latedef": true,
+        "newcap": true,
+        "noarg": true,
+        "sub": true,
+        "undef": true,
+        "boss": true,
+        "eqnull": true,
+        "browser": true,
+        "white": true,
+        "devel": true,
+        "indent": 2
       },
       globals: {
         jQuery: true

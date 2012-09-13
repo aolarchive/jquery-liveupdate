@@ -7,122 +7,142 @@
 
 (function ($) {
 
-    $.fn.liveBlogLiteApi = function (customOptions) {
+  $.fn.liveBlogLiteApi = function (customOptions) {
 
-        var defaultOptions = {
-                callbackPrefix: 'lb_',
-                url : null,
-                postId : null
-            },
+    console.log('hey now');
+    var defaultOptions = {
+      callbackPrefix: 'lb_' + new Date().getTime() + '_',
+      // The domain of the blog, i.e. http://aol.com
+      url : null,
+      // The id of the live blog post, i.e. 20317028
+      postId : null
+    },
 
-            $this = $(this),
+      // Store a cached version of our jQuery object
+      $this = $(this),
 
-            liveBlogLiteApi = function (customOptions) {
+      liveBlogLiteApi = function (customOptions) {
 
-                var lastUpdate = 0,
-                    count = 0,
-                    options = $.extend(true, {}, defaultOptions, customOptions),
+        var lastUpdate = 0,
+          count = 0,
+          options = $.extend(true, {}, defaultOptions, customOptions),
 
-                    fetch = function () {
-                        // Fetch data from API
-                        var callback = options.callbackPrefix + count,
-                            apiUrl = options.url + 'live-update/' + options.postId + '/' + lastUpdate;
+          fetch = function () {
+            // Fetch data from API
+            var apiUrl,
+              callback = options.callbackPrefix + count;
 
-                        $.ajax({
-                            dataType: 'jsonp',
-                            jsonpCallback: callback,
-                            url: apiUrl,
-                            success: function (response) {
-                                lastUpdate = response.last_update;
+            // Make sure options.url has a trailing /
+            if (options.url.substring(options.url.length - 1) !== '/') {
+              options.url += '/';
+            }
 
-                                //console.log('response', response);
+            // The Blogsmith API uses the 'live-update' pattern,
+            // which needs to be defined in the blog's .htaccess
+            apiUrl = options.url + 'live-update/' + options.postId + '/' + lastUpdate;
 
-                                // Call fetch again after the API-recommended
-                                // number of seconds
-                                setTimeout(fetch, response.int * 1000);
+            $.ajax({
+              dataType: 'jsonp',
+              jsonpCallback: callback,
+              url: apiUrl,
+              success: function (response) {
+                lastUpdate = response.last_update;
 
-                                // TODO: Figure out why iterating the callback
-                                // name is necessary
-                                //count += 1;
+                // Call fetch again after the API-recommended
+                // number of seconds
+                setTimeout(fetch, response.int * 1000);
 
-                                if (response.data && response.members) {
-                                    $this.trigger('update', normalize(response.data, response.members));
-                                }
-                            },
-                            error: function (response) {
-                                // Try to restart things in 10 seconds
-                                setTimeout(fetch, 10000);
-                            }
-                        });
-                    },
+                count += 1;
 
-                    normalize = function (data, membersArray) {
-                        var i, length, item, items, member,
-                            members = {},
-                            normalizedData = data,
-                            types = { 1: 'text', 2: 'image', 4: 'comment' };
+                if (response.data && response.members) {
+                  $this.trigger('update', normalize(response.data, response.members));
+                }
+              },
+              error: function (response) {
+                // Try to restart things in 10 seconds
+                setTimeout(fetch, 10000);
+              }
+            });
+          },
 
-                        // Create a members object
-                        for (i = 0, length = membersArray.length; i < length; i += 1) {
-                            member = membersArray[i];
+          // The API's data has single-letter keys for bandwidth
+          // reasons. Let's manually normalize the data into a more
+          // human-readable structure.
+          normalize = function (data, membersArray) {
+              var i, length, item, items, member,
+                  members = {},
+                  normalizedData = data,
+                  // What the update type integer really means
+                  types = { 1: 'text', 2: 'image', 4: 'comment' };
 
-                            members[member.m] = {
-                                name: member.name,
-                                slug: member.slug
-                            };
-                        }
+              // Create a members object
+              for (i = 0, length = membersArray.length; i < length; i += 1) {
+                member = membersArray[i];
 
-                        for (items in normalizedData) {
-                            if (normalizedData.hasOwnProperty(items)) {
-                                for (i = 0, length = normalizedData[items].length; i < normalizedData[items].length; i += 1) {
-                                    item = normalizedData[items][i];
+                members[member.m] = {
+                  name: member.name,
+                  slug: member.slug
+                };
+              }
 
-                                    if (item.m) {
-                                        item.memberId = item.m;
-                                        item.memberName = members[item.memberId].name;
-                                        item.memberSlug = members[item.memberId].slug;
-                                        delete item.m;
-                                    }
+              for (items in normalizedData) {
+                if (normalizedData.hasOwnProperty(items)) {
+                  for (i = 0, length = normalizedData[items].length; i < normalizedData[items].length; i += 1) {
+                    item = normalizedData[items][i];
 
-                                    if (item.t) {
-                                        item.date = new Date(item.t * 1000);
-                                        delete item.t;
-                                    }
+                    // Transform m into a member object
+                    if (item.m) {
+                      item.memberId = item.m;
+                      item.memberName = members[item.memberId].name;
+                      item.memberSlug = members[item.memberId].slug;
+                      delete item.m;
+                    }
 
-                                    if (item.type) {
-                                        item.type = types[item.type] || 'unknown';
-                                    }
+                    // Transform t (time) into a date object
+                    if (item.t) {
+                      item.date = new Date(item.t * 1000);
+                      delete item.t;
+                    }
 
-                                    if (item.d) {
-                                        item.content = item.d;
-                                        delete item.d;
-                                    }
+                    // Give type a meaningful name with a default
+                    if (item.type) {
+                      item.type = types[item.type] || 'unknown';
+                    }
 
-                                    if (item.md && item.md.caption) {
-                                        item.caption = item.md.caption || '';
-                                        delete item.md.caption;
-                                    }
+                    // d (data) is our content
+                    if (item.d) {
+                      item.content = item.d;
+                      delete item.d;
+                    }
 
-                                    if (item.md && item.md.tags) {
-                                        item.tags = item.md.tags || [];
-                                        delete item.md.tags;
-                                    }
-                                }
-                            }
-                        }
+                    // Take caption from md (metadata) and
+                    // place it on our item
+                    if (item.md && item.md.caption) {
+                      item.caption = item.md.caption || '';
+                      delete item.md.caption;
+                    }
 
-                        //console.log('normalizing', normalizedData);
-                        return normalizedData;
-                    };
+                    // Take tags from md (metadata) and place
+                    // them on our item
+                    if (item.md && item.md.tags) {
+                      item.tags = item.md.tags || [];
+                      delete item.md.tags;
+                    }
+                  }
+                }
+              }
 
-                fetch();
+              return normalizedData;
             };
 
-        return this.each(function () {
-            customOptions = customOptions || {};
-            liveBlogLiteApi(customOptions);
-        });
+        fetch();
+      };
 
-    };
+    return this.each(function () {
+      customOptions = customOptions || {};
+      liveBlogLiteApi(customOptions);
+    });
+
+  };
 
 }(jQuery));
