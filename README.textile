@@ -2,11 +2,13 @@ h1. LiveBlogLite
 
 h2. A light-weight plugin for publishing Blogsmith liveblog content
 
-p. For the premiere, full-featured Liveblog Publisher, check out Joe Bartlett's "Liveblog Publisher":https://github.com/aoltech/liveblog-publisher".
+p. For the premiere, full-featured Liveblog Publisher, check out Joe Bartlett's "Liveblog Publisher":https://github.com/aoltech/liveblog-publisher.
 
 p. This is a light-weight adaptation built for use with jQuery 1.5.2 and below.
 
 p. LbL bundles two simple plugins. @$.liveBlogLiteApi@ fetches liveblog data using a postid and a domain and provides updates via a custom event. @$.liveBlogLiteUi@ is a simple, example implementation of the UI to respond to these updates that responds to new content, edits, comments, and deletions.
+
+p. *Credit where credit is due:* Liveblog Publisher (LbP) was heavily consulted in writing this lighter version. Some patterns were even copied entirely.
 
 h2. How to use
 
