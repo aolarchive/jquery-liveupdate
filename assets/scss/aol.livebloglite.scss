@@ -1,6 +1,6 @@
 body {
 	font-family: 'Lucida Grande', Arial, Helvetica, sans-serif;
-	padding: 0 20px;
+	padding: 20px;
 }
 
 .lb {
@@ -13,12 +13,13 @@ body {
         border-bottom: 1px dotted #AAAAAA;
         padding: 0;
         margin-bottom: 1em;
+        margin-top: 0;
         padding-bottom: 1em;
 
         img {
             float: left;
             margin-right: 15px;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
     }
 
@@ -31,6 +32,7 @@ body {
         float: left;
         display: block;
         clear: both;
+        margin-bottom: 5px;
     }
 
     .lb-post-caption {
@@ -56,7 +58,7 @@ body {
         float: left;
         list-style: none;
         margin: 0 0 0 1em;
-        padding: 0px 3px;
+        padding: 2px 5px;
         background-color: #AAAAAA;
         color: #FFFFFF;
         border-radius: 2px;
