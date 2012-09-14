@@ -14,6 +14,7 @@ h2. How to use
 
 # LbL requires jQuery 1.5.2 or higher. (It may work with even older versions of jQuery - we haven't tested how low it will go, yet.)
 # Download @dist/aol.livebloglite.min.js@ and add it to your project.
+# Add the CSS to your page: @assets/prod/css/aol.livebloglite.css@. (These are sample styles only - feel free to use the @.scss@ file as reference for creating your own: @assets/scss/aol.livebloglite.scss@.
 # Instantiate it using code along these lines:
 
 bc..  $(document).ready(function () {
