@@ -1,14 +1,14 @@
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\000031}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/nateeagle5\/Projects\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\000031}}
 body {
   font-family: 'Lucida Grande', Arial, Helvetica, sans-serif;
   padding: 0 20px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\000036}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/nateeagle5\/Projects\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\000036}}
 .lb {
   padding-right: 10px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\000039}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/nateeagle5\/Projects\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\000039}}
 .lb .lb-post {
   float: left;
   clear: both;
@@ -18,24 +18,24 @@ body {
   margin-bottom: 1em;
   padding-bottom: 1em;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\0000318}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/nateeagle5\/Projects\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\0000318}}
 .lb .lb-post img {
   float: left;
   margin-right: 15px;
   margin-bottom: 15px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\0000325}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/nateeagle5\/Projects\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\0000325}}
 .lb .lb-comment {
   padding-left: 50px;
   background-color: #EEEEEE;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\0000330}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/nateeagle5\/Projects\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\0000330}}
 .lb .lb-post-text {
   float: left;
   display: block;
   clear: both;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\0000339}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/nateeagle5\/Projects\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\0000339}}
 .lb .lb-post-timestamp {
   float: left;
   display: block;
@@ -44,7 +44,7 @@ body {
   color: #999999;
   line-height: 17px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\0000348}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/nateeagle5\/Projects\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\0000348}}
 .lb .lb-post-tags {
   float: left;
   list-style: none;
@@ -52,7 +52,7 @@ body {
   padding: 0;
   font-size: 0.7em;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\0000355}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/nateeagle5\/Projects\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\0000355}}
 .lb .lb-post-tags li {
   float: left;
   list-style: none;

@@ -9,7 +9,6 @@
 
   $.fn.liveBlogLiteApi = function (customOptions) {
 
-    console.log('hey now');
     var defaultOptions = {
       callbackPrefix: 'lb_' + new Date().getTime() + '_',
       // The domain of the blog, i.e. http://aol.com
