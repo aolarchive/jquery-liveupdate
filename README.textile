@@ -1,0 +1,25 @@
+h1. LiveBlogLite
+
+h2. A light-weight plugin for publishing Blogsmith liveblog content
+
+p. For the premiere, full-featured Liveblog Publisher, check out Joe Bartlett's "Liveblog Publisher":https://github.com/aoltech/liveblog-publisher".
+
+p. This is a light-weight adaptation built for use with jQuery 1.5.2 and below.
+
+p. LbL bundles two simple plugins. @$.liveBlogLiteApi@ fetches liveblog data using a postid and a domain and provides updates via a custom event. @$.liveBlogLiteUi@ is a simple, example implementation of the UI to respond to these updates that responds to new content, edits, comments, and deletions.
+
+h2. How to use
+
+# LbL requires jQuery 1.5.2 or higher. (It may work with even older versions of jQuery - we haven't tested how low it will go, yet.)
+# Download @dist/aol.livebloglite.min.js@ and add it to your project.
+# Instantiate it using code along these lines:
+
+bc..  $(document).ready(function () {
+  // <div id="myLiveBlog"></div> is the container element in the markup
+  var $myLiveBlog = $('#myLiveBlog').liveBlogLiteUi({
+    // This is an example post on the Bootcamp blog
+    postId: '20317028',
+    // This is the URL to the Bootcamp blog
+    url: 'http://bootcamp.aol.com/'
+  });
+});
