@@ -18,9 +18,17 @@ module.exports = function (grunt) {
       }
     },
     min: {
-      dist: {
+      bundle: {
         src: ['<banner:meta.banner>', '<config:concat.dist.dest>'],
         dest: 'dist/<%= pkg.name %>.min.js'
+      },
+      api: {
+        src: ['src/liveblogliteapi.js'],
+        dest: 'dist/jquery.aol.liveblogliteapi.min.js'
+      },
+      ui: {
+        src: ['src/liveblogliteui.js'],
+        dest: 'dist/jquery.aol.liveblogui.min.js'
       }
     },
     qunit: {
@@ -50,12 +58,16 @@ module.exports = function (grunt) {
     },
     watch: {
       files: '<config:lint.files>',
-      tasks: 'lint qunit',
-      compass: {
-        files: ['assets/scss/*.scss'],
-        tasks: ['compass:dev', 'compass:prod']
-      }
+      tasks: 'default'
     },
+    //watch: {
+      //files: '<config:lint.files>',
+      //tasks: 'lint qunit',
+      //compass: {
+        //files: ['assets/scss/*.scss'],
+        //tasks: ['compass:dev', 'compass:prod']
+      //}
+    //},
     jshint: {
       // Specifying a jshint file will be possible in Grunt soon
       options: {
