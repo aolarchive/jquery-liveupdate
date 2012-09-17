@@ -11,22 +11,31 @@
 
     var defaultOptions = {
         postId: null,
-        url: null
+        url: null,
+        toolbarEnabled: false
       },
 
       $this = $(this),
-
+      
       liveBlogLiteUi = function (customOptions) {
 
         if ($.fn.liveBlogLiteApi) {
+            
           var options = $.extend(true, {}, defaultOptions, customOptions),
+
+            paused = true,
+          
+            $posts = null,
+              
+            $toolbar = null,
+
             buildItem = function (item, element) {
+              
               var data = item.content,
                 type = item.type,
                 id = item.id,
                 caption = item.caption,
                 tags = item.tags,
-                //metaData = item.md,
                 timestamp = item.date,
                 memberId = item.memberId,
                 timestampString = getFormattedDateTime(timestamp) + ' by ' + item.memberName;
@@ -100,7 +109,7 @@
                 if (item.type === 'comment' && item.p) {
                   $item.insertAfter($('#p' + item.p));
                 } else {
-                  $item.prependTo($this);
+                  $item.prependTo($posts);
                 }
 
                 $item.fadeIn(400);
@@ -108,7 +117,7 @@
             },
 
             updateItem = function (item) {
-              var $item = $('#p' + item.id, $this);
+              var $item = $('#p' + item.id, $posts);
 
               if ($item.length) {
                 $item = buildItem(item, $item);
@@ -121,7 +130,7 @@
             },
 
             deleteItem = function (item) {
-              var $item = $('#p' + item.id, $this);
+              var $item = $('#p' + item.id, $posts);
 
               if ($item.length) {
                 $item.fadeOut(400, 'swing', function () {
@@ -167,12 +176,55 @@
               }
 
               return dateTimeStr;
+            },
+            
+            onPausedButtonClicked = function (event) {
+              var $button = $(event.target);
+                
+              if (paused) {
+                start();
+                $button.text('Pause');
+              } else {
+                stop();
+                $button.text('Play');
+              }
+            },
+            
+            start = function () {
+              $this.liveBlogLiteApi(options);
+              paused = false;
+            },
+            
+            stop = function () {
+              $this.liveBlogLiteApi('pause');
+              paused = true;
             };
 
-          $this.liveBlogLiteApi(options);
-
+          // Setup the UI structure
+            
           $this.addClass('lb');
+          
+          if (options.toolbarEnabled) {
+            $this.append(
+              $toolbar = $('<div />', {
+                'class': 'lb-toolbar'
+              })
+              .append(
+                $('<a />', {
+                  'class': 'lb-pause-button',
+                  'text': 'Pause'
+                })
+                .bind('click', $.proxy(onPausedButtonClicked, this))
+              )
+            );
+          }
+          
+          $posts = $('<div />', {
+            'class': 'lb-post-container'
+          })
+          .appendTo($this);
 
+          // Bind to API events
           $this.bind('update', function (event, data) {
               //console.log('update', event, data);
 
@@ -189,6 +241,9 @@
               });
             });
 
+          // Begin polling the API
+          start();
+          
         }
 
       };

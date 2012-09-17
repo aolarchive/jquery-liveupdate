@@ -9,14 +9,16 @@
 	    </div>
 
 	    <script src="../libs/jquery/jquery.js"></script>
-	    <script src="../dist/aol.livebloglite.js"></script>
+	    <script src="../src/liveblogliteapi.js"></script>
+	    <script src="../src/liveblogliteui.js"></script>
 
 	    <script>
 	        $(document).ready(function () {
 	            var $myLiveBlog = $('#myLiveBlog').liveBlogLiteUi({
                     // This is an example post on the Bootcamp blog
 	                postId: '20317028',
-	                url: 'http://bootcamp.aol.com/'
+	                url: 'http://bootcamp.aol.com/',
+	                toolbarEnabled: true
 	            });
 	        });
 	    </script>

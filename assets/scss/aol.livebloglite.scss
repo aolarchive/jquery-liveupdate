@@ -71,5 +71,25 @@ body {
         color: #FFFFFF;
         @include border-radius(2px);
     }
+    
+    .lb-toolbar {
+        padding: 20px;
+        margin-bottom: 20px;
+        background-color: #EEEEEE;
+        border-bottom: 1px solid #AAAAAA;
+        @include border-radius(8px);
+    }
+    
+    .lb-pause-button {
+        border: 1px solid #CCCCCC;
+        @include border-radius(3px);
+        background-color: #DDDDDD;
+        padding: 6px 8px;
+        cursor: pointer;
+        
+        &:hover {
+            background-color: #BBBBBB;
+        }
+    }
 
 }
