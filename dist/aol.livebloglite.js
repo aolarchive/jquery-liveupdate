@@ -200,7 +200,8 @@
     var defaultOptions = {
         postId: null,
         url: null,
-        toolbarEnabled: false
+        toolbarEnabled: false,
+        pageSize: 0
       },
 
       $this = $(this),
@@ -212,9 +213,9 @@
           var options = $.extend(true, {}, defaultOptions, customOptions),
 
             paused = true,
-
+            pageSize = options.pageSize,
+            viewSize = pageSize,
             $posts = null,
-
             $toolbar = null,
 
             buildItem = function (item, element) {
@@ -226,7 +227,7 @@
                 tags = item.tags,
                 timestamp = item.date,
                 memberId = item.memberId,
-                timestampString = getFormattedDateTime(timestamp) + ' by ' + item.memberName;
+                timestampString = '<a href="#p' + id + '">' + getFormattedDateTime(timestamp) + '</a> by ' + item.memberName;
 
               //console.log('type', type);
 
@@ -266,7 +267,7 @@
 
               element.append(
                 $('<span />', {
-                  text: timestampString,
+                  html: timestampString,
                   'class': 'lb-post-timestamp'
                 })
               );
@@ -289,18 +290,22 @@
             },
 
             addItem = function (item) {
-              var $item = buildItem(item);
-
-              if ($item) {
-                $item.hide();
-
-                if (item.type === 'comment' && item.p) {
-                  $item.insertAfter($('#p' + item.p));
-                } else {
-                  $item.prependTo($posts);
+              var $item = $('#p' + item.id, $posts);
+              
+              if (!$item.length) {
+                $item = buildItem(item);
+  
+                if ($item.length) {
+                  $item.hide();
+  
+                  if (item.type === 'comment' && item.p) {
+                    $item.insertAfter($('#p' + item.p));
+                  } else {
+                    $item.prependTo($posts);
+                  }
+  
+                  $item.fadeIn(400);
                 }
-
-                $item.fadeIn(400);
               }
             },
 
@@ -324,6 +329,52 @@
                 $item.fadeOut(400, 'swing', function () {
                   $item.remove();
                 });
+              }
+            },            
+            
+            addItems = function (items, count) {
+              console.log(count);
+              items = items || [];
+              count = count || 0;
+              var len = items.length,
+                start = 0;
+              
+              // If count > 0, show only a portion of the items
+              if (count > 0) {
+                start = Math.max(len - 1 - count, 0);
+              }
+              
+              for (var i = start; i < len; i++) {
+                addItem(items[i]);
+              }
+              
+              // Show more button if necessary
+              /*
+              if (start > 0) {
+                $posts.append($('<a />', {
+                  'class': 'lb-more-button',
+                  text: 'Show more'
+                }))
+                .bind('click', items, function (event) {
+                  event.stopPropagation();
+                  $(event.target).remove();
+                  
+                  viewSize = Math.min(viewSize + pageSize, len);
+                  
+                  addItems(event.data, viewSize);
+                });
+              } else {
+                $('.lb-more-button', $posts).remove();
+              }
+              */
+            },
+
+            goToItem = function (id) {
+              var $post = $('#p' + id, $posts);
+
+              if ($post.length) {
+                // Do something to go to the relevant post!
+                // Scrollto, etc.
               }
             },
 
@@ -414,20 +465,36 @@
 
           // Bind to API events
           $this.bind('update', function (event, data) {
-              //console.log('update', event, data);
+            //console.log('update', event, data);
+            var hash = window.location.hash;
 
-              $(data.updates).each(function (i, item) {
-                addItem(item);
-              });
+            addItems(data.updates, viewSize);
 
-              $(data.changes).each(function (i, item) {
-                updateItem(item);
-              });
-
-              $(data.deletes).each(function (i, item) {
-                deleteItem(item);
-              });
+            $(data.changes).each(function (i, item) {
+              updateItem(item);
             });
+
+            $(data.deletes).each(function (i, item) {
+              deleteItem(item);
+            });
+
+            // Allow permalinks to individual updates
+            // ie, #p19923
+            if (hash.length) {
+              var id,
+                start,
+                postPosition = hash.indexOf('p');
+
+              if (postPosition > -1) {
+                start = postPosition + 1;
+                // Note assumption that the hash ONLY contains an ID
+                id = hash.substring(start, hash.length);
+
+                goToItem(id);
+              }
+
+            }
+          });
 
           // Begin polling the API
           $this.liveBlogLiteApi(options);
