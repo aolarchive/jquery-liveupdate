@@ -38,7 +38,7 @@
                 tags = item.tags,
                 timestamp = item.date,
                 memberId = item.memberId,
-                timestampString = getFormattedDateTime(timestamp) + ' by ' + item.memberName;
+                timestampString = '<a href="#p' + id + '">' + getFormattedDateTime(timestamp) + '</a> by ' + item.memberName;
 
               //console.log('type', type);
 
@@ -78,7 +78,7 @@
 
               element.append(
                 $('<span />', {
-                  text: timestampString,
+                  html: timestampString,
                   'class': 'lb-post-timestamp'
                 })
               );
@@ -136,6 +136,15 @@
                 $item.fadeOut(400, 'swing', function () {
                   $item.remove();
                 });
+              }
+            },
+
+            goToItem = function (id) {
+              var $post = $('#p' + id, $posts);
+
+              if ($post.length) {
+                // Do something to go to the relevant post!
+                // Scrollto, etc.
               }
             },
 
@@ -226,20 +235,38 @@
 
           // Bind to API events
           $this.bind('update', function (event, data) {
-              //console.log('update', event, data);
+            //console.log('update', event, data);
+            var hash = window.location.hash;
 
-              $(data.updates).each(function (i, item) {
-                addItem(item);
-              });
-
-              $(data.changes).each(function (i, item) {
-                updateItem(item);
-              });
-
-              $(data.deletes).each(function (i, item) {
-                deleteItem(item);
-              });
+            $(data.updates).each(function (i, item) {
+              addItem(item);
             });
+
+            $(data.changes).each(function (i, item) {
+              updateItem(item);
+            });
+
+            $(data.deletes).each(function (i, item) {
+              deleteItem(item);
+            });
+
+            // Allow permalinks to individual updates
+            // ie, #p19923
+            if (hash.length) {
+              var id,
+                start,
+                postPosition = hash.indexOf('p');
+
+              if (postPosition > -1) {
+                start = postPosition + 1;
+                // Note assumption that the hash ONLY contains an ID
+                id = hash.substring(start, hash.length);
+
+                goToItem(id);
+              }
+
+            }
+          });
 
           // Begin polling the API
           $this.liveBlogLiteApi(options);
