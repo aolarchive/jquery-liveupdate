@@ -20,15 +20,19 @@
       },
       // Used to store plugin state
       state = $this.data('lbl-state') || {},
+      // Save the state object to this element's data
+      save = function () {
+        $this.data('lbl-state', state);
+      },
 
       methods = {
         init: function (customOptions) {
-          state.lastUpdate = 0;
-          state.count = 0;
+          state.lastUpdate = state.lastUpdate || 0;
+          state.count = state.count || 0;
           state.options = $.extend(true, {}, defaultOptions, customOptions);
 
           // Save state
-          $this.data('lbl-state', state);
+          save();
 
           methods.fetch();
         },
@@ -42,7 +46,7 @@
             // The API's data has single-letter keys for bandwidth
             // reasons. Let's manually normalize the data into a more
             // human-readable structure.
-            normalize = function (data, membersArray) {
+            normalize = function (data, membersArray) {//{{{
                 var i, length, item, items, member,
                     members = {},
                     normalizedData = data,
@@ -107,7 +111,7 @@
                 }
 
                 return normalizedData;
-              };
+              };//}}}
 
           // Make sure options.url has a trailing slash
           if (options.url.substring(options.url.length - 1) !== '/') {
@@ -127,7 +131,7 @@
 
               // Call fetch again after the API-recommended
               // number of seconds
-              $this.data('timer', setTimeout(methods.fetch, response.int * 1000));
+              state.timer = setTimeout(methods.fetch, response.int * 1000);
 
               state.count += 1;
 
@@ -136,11 +140,14 @@
               }
 
               // Save state
-              $this.data('lbl-state', state);
+              save();
             },
             error: function (response) {
               // Try to restart things in 10 seconds
-              $this.data('timer', setTimeout(methods.fetch, 10000));
+              state.timer = setTimeout(methods.fetch, 10000);
+
+              // Save state
+              save();
             }
           });
         },
@@ -148,19 +155,21 @@
         // Allow updates to be paused or unpaused
         // $('#somediv').liveBlogLiteApi('pause');
         pause: function () {
-          var paused = state.paused || false;
-
-          if (!paused) {
-            state.paused = true;
-            clearTimeout($this.data('timer'));
-          } else {
-            state.paused = false;
-            methods.fetch();
-          }
+          state.paused = true;
+          clearTimeout(state.timer);
 
           // Save state
-          $this.data('lbl-state', state);
+          save();
+        },
+
+        play: function () {
+          state.paused = false;
+          methods.fetch();
+
+          // Save state
+          save();
         }
+
       };
 
     return this.each(function () {

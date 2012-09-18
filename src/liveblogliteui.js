@@ -16,21 +16,21 @@
       },
 
       $this = $(this),
-      
+
       liveBlogLiteUi = function (customOptions) {
 
         if ($.fn.liveBlogLiteApi) {
-            
+
           var options = $.extend(true, {}, defaultOptions, customOptions),
 
             paused = true,
-          
+
             $posts = null,
-              
+
             $toolbar = null,
 
             buildItem = function (item, element) {
-              
+
               var data = item.content,
                 type = item.type,
                 id = item.id,
@@ -177,10 +177,10 @@
 
               return dateTimeStr;
             },
-            
+
             onPausedButtonClicked = function (event) {
               var $button = $(event.target);
-                
+
               if (paused) {
                 start();
                 $button.text('Pause');
@@ -189,21 +189,21 @@
                 $button.text('Play');
               }
             },
-            
+
             start = function () {
-              $this.liveBlogLiteApi(options);
+              $this.liveBlogLiteApi('play');
               paused = false;
             },
-            
+
             stop = function () {
               $this.liveBlogLiteApi('pause');
               paused = true;
             };
 
           // Setup the UI structure
-            
+
           $this.addClass('lb');
-          
+
           if (options.toolbarEnabled) {
             $this.append(
               $toolbar = $('<div />', {
@@ -218,7 +218,7 @@
               )
             );
           }
-          
+
           $posts = $('<div />', {
             'class': 'lb-post-container'
           })
@@ -242,8 +242,9 @@
             });
 
           // Begin polling the API
-          start();
-          
+          $this.liveBlogLiteApi(options);
+          paused = false;
+
         }
 
       };
