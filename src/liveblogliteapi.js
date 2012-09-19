@@ -47,6 +47,7 @@
             // reasons. Let's manually normalize the data into a more
             // human-readable structure.
             normalize = function (data, membersArray) {//{{{
+                membersArray = membersArray || [];
                 var i, length, item, items, member,
                     members = {},
                     normalizedData = data,
@@ -135,7 +136,7 @@
 
               state.count += 1;
 
-              if (response.data && response.members) {
+              if (response.data) {
                 $this.trigger('update', normalize(response.data, response.members));
               }
 

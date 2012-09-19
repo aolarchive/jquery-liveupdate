@@ -135,6 +135,9 @@
                   // TODO: Show update animation effect here instead of fadeIn
                   $item.hide().fadeIn(400);
                 }
+              } else {
+                // If item is pending, overwrite its object
+                modifyPendingUpdate(item.id, item);
               }
             },
 
@@ -145,6 +148,9 @@
                 $item.fadeOut(400, 'swing', function () {
                   $item.remove();
                 });
+              } else {
+                // If item is pending, delete it from the list
+                modifyPendingUpdate(item.id, null);
               }
             },            
             
@@ -242,6 +248,24 @@
 
               return dateTimeStr;
             },
+            
+            modifyPendingUpdate = function (id, item) {
+              if (pendingUpdates.length) {
+                for (var i = 0; i < pendingUpdates.length; i++) {
+                  if (pendingUpdates[i].id === id) {
+                    if (item) {
+                      // Update item
+                      pendingUpdates[i] = item;
+                    } else {
+                      // Delete item
+                      pendingUpdates[i] = null;
+                      pendingUpdates.splice(i, 1);
+                    }
+                    break;
+                  }
+                }
+              }
+            },
 
             onPausedButtonClicked = function (event) {
               var $button = $(event.target);
@@ -251,7 +275,7 @@
                 $button.text('Pause');
               } else {
                 stop();
-                $button.text('Play');
+                $button.text('Resume');
               }
             },
 
