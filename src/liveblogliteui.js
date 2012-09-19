@@ -26,7 +26,7 @@
 
             paused = true,
             pageSize = options.pageSize,
-            viewSize = pageSize,
+            pendingUpdates = [],
             $posts = null,
             $toolbar = null,
 
@@ -101,7 +101,7 @@
               return element;
             },
 
-            addItem = function (item) {
+            addItem = function (item, afterElement) {
               var $item = $('#p' + item.id, $posts);
               
               if (!$item.length) {
@@ -112,6 +112,10 @@
   
                   if (item.type === 'comment' && item.p) {
                     $item.insertAfter($('#p' + item.p));
+                    
+                  } else if (afterElement && afterElement.length) {
+                    $item.insertAfter(afterElement);
+                    
                   } else {
                     $item.prependTo($posts);
                   }
@@ -144,41 +148,51 @@
               }
             },            
             
-            addItems = function (items, count) {
-              console.log(count);
+            addItems = function (items) {
+              
               items = items || [];
-              count = count || 0;
+              
               var len = items.length,
                 start = 0;
               
-              // If count > 0, show only a portion of the items
-              if (count > 0) {
-                start = Math.max(len - 1 - count, 0);
-              }
-              
-              for (var i = start; i < len; i++) {
-                addItem(items[i]);
-              }
-              
-              // Show more button if necessary
-              /*
-              if (start > 0) {
+              // Queue up older updates, if pagination enabled and post container is empty
+              if (pageSize > 0 && len > pageSize && !pendingUpdates.length && !$posts.children('.lb-post').length) {
+                
+                pendingUpdates = items.splice(0, len - pageSize);
+                
                 $posts.append($('<a />', {
                   'class': 'lb-more-button',
-                  text: 'Show more'
+                  text: 'Show earlier posts'
                 }))
-                .bind('click', items, function (event) {
-                  event.stopPropagation();
-                  $(event.target).remove();
-                  
-                  viewSize = Math.min(viewSize + pageSize, len);
-                  
-                  addItems(event.data, viewSize);
-                });
-              } else {
-                $('.lb-more-button', $posts).remove();
+                .click($.proxy(onMoreButtonClicked, this));
               }
-              */
+              
+              $(items).each(function (i, item) {
+                addItem(item);
+              });
+            },
+            
+            onMoreButtonClicked = function (event) {
+              var button = $(event.target),
+                len = pendingUpdates.length,
+                lastItem = null,
+                start = 0,
+                nextPage = null;
+              
+              if (len) {
+                lastItem = $posts.children('.lb-post:last');
+                
+                start = Math.max(len - pageSize, 0);
+                nextPage = pendingUpdates.splice(start, pageSize);
+                
+                $(nextPage).each(function (i, item) {
+                  addItem(item, lastItem);
+                });
+              }
+              
+              if (!pendingUpdates.length) {
+                button.remove();
+              }
             },
 
             goToItem = function (id) {
@@ -280,7 +294,7 @@
             //console.log('update', event, data);
             var hash = window.location.hash;
 
-            addItems(data.updates, viewSize);
+            addItems(data.updates);
 
             $(data.changes).each(function (i, item) {
               updateItem(item);
