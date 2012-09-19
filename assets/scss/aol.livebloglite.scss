@@ -92,4 +92,18 @@ body {
         }
     }
 
+    .lb-more-button {
+        display: inline-block;
+        width: 100%;
+        text-align: center;
+        border: 1px solid #CCCCCC;
+        @include border-radius(3px);
+        background-color: #DDDDDD;
+        padding: 6px 0px;
+        cursor: pointer;
+        
+        &:hover {
+            background-color: #BBBBBB;
+        }
+    }
 }

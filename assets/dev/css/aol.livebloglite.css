@@ -96,3 +96,22 @@ body {
 .lb .lb-pause-button:hover {
   background-color: #BBBBBB;
 }
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\0000395}}
+.lb .lb-more-button {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  border: 1px solid #CCCCCC;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #DDDDDD;
+  padding: 6px 0px;
+  cursor: pointer;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\00003105}}
+.lb .lb-more-button:hover {
+  background-color: #BBBBBB;
+}
