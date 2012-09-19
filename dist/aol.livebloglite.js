@@ -291,7 +291,8 @@
             },
 
             addItem = function (item, afterElement) {
-              var $item = $('#p' + item.id, $posts);
+              var $item = $('#p' + item.id, $posts),
+                $parent = null;
               
               if (!$item.length) {
                 $item = buildItem(item);
@@ -300,7 +301,15 @@
                   $item.hide();
   
                   if (item.type === 'comment' && item.p) {
-                    $item.insertAfter($('#p' + item.p));
+                    $parent = $('#p' + item.p, $posts);
+                    
+                    if ($parent.length) {
+                      // Append comment directly after its parent post
+                      $item.insertAfter($parent);
+                    } else {
+                      // Parent post doesn't exist, so add comment to pendingUpdates array for processing in next page
+                      pendingUpdates.push(item);
+                    }
                     
                   } else if (afterElement && afterElement.length) {
                     $item.insertAfter(afterElement);
