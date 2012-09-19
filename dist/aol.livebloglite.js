@@ -216,8 +216,11 @@
             paused = true,
             pageSize = options.pageSize,
             pendingUpdates = [],
+            beginTime = null,
+            endTime = null,
             $posts = null,
             $toolbar = null,
+            $slider = null,
 
             buildItem = function (item, element) {
 
@@ -485,6 +488,26 @@
             stop = function () {
               $this.liveBlogLiteApi('pause');
               paused = true;
+            },
+            
+            updateSlider = function () {
+              if ($slider) {
+                $slider.slider('option', {
+                  min: beginTime,
+                  max: endTime
+                });
+              }
+            },
+            
+            updateSliderLabel = function (value) {
+              if ($slider) {
+                value = value || $slider.slider('value');
+                
+                var timeObj = new Date(value),
+                  timeStr = getFormattedDateTime(timeObj);
+              
+                $('.lb-timeline-label', $toolbar).text(timeStr);
+              }
             };
 
           // Setup the UI structure
@@ -501,9 +524,28 @@
                   'class': 'lb-pause-button',
                   'text': 'Pause'
                 })
-                .bind('click', $.proxy(onPausedButtonClicked, this))
+                .bind('click', $.proxy(onPausedButtonClicked, this)),
+                
+                $('<div />', {
+                  'class': 'lb-timeline'
+                })
+                .append(
+                  $('<p />', {
+                    'class': 'lb-timeline-label',
+                    text: ' '
+                  }),
+                  $slider = $('<div />', {
+                    'class': 'lb-timeline-slider'
+                  })
+                )
               )
             );
+            
+            $slider.slider({
+              slide: function (event, ui) {
+                updateSliderLabel(ui.value);
+              }
+            });
           }
 
           $posts = $('<div />', {
@@ -516,7 +558,21 @@
             //console.log('update', event, data);
             var hash = window.location.hash;
 
-            addItems(data.updates);
+            if (data.updates) {
+              var updates = data.updates,
+                updatesLen = data.updates.length;
+              
+              addItems(updates);
+
+              // Keep track of the data's begin and end times
+              if (!beginTime) {
+                beginTime = updates[0].date.getTime();
+              }
+              endTime = Math.max(endTime || 0, updates[updatesLen - 1].date.getTime());
+              
+              updateSlider();
+              updateSliderLabel();
+            }
 
             $(data.changes).each(function (i, item) {
               updateItem(item);

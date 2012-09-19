@@ -81,6 +81,7 @@ body {
     }
     
     .lb-pause-button {
+        display: inline-block;
         border: 1px solid #CCCCCC;
         @include border-radius(3px);
         background-color: #DDDDDD;
@@ -90,6 +91,25 @@ body {
         &:hover {
             background-color: #BBBBBB;
         }
+    }
+    
+    .lb-timeline {
+        display: inline-block;
+        margin-left: 25px;
+        vertical-align: middle;
+    }
+    
+    .lb-timeline-slider {
+        display: block;
+        font-size: 11px;
+        height: 10px;
+        width: 300px;
+    }
+    
+    .lb-timeline-label {
+        display: block;
+        font-size: 0.7em;
+        margin: 0 0 5px 0;
     }
 
     .lb-more-button {
@@ -106,4 +126,5 @@ body {
             background-color: #BBBBBB;
         }
     }
+    
 }
