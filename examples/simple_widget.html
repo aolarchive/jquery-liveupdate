@@ -3,16 +3,19 @@
     <head>
         <title>LiveBlogLite</title>
         <link rel="stylesheet" href="../assets/dev/css/aol.livebloglite.css" />
-        <link rel="stylesheet" href="../assets/resources/smoothness/jquery-ui-1.8.23.custom.css" />
+        <style>
+            .lb .lb-post-container {
+                height: 700px;
+                border-bottom: 2px solid #AAAAAA;
+            }
+        </style>
     </head>
     <body>
 	    <div id="myLiveBlog">
 	    </div>
 
 	    <script src="../libs/jquery/jquery.js"></script>
-	    <script src="../libs/jquery/jquery-ui-1.8.23.custom.min.js"></script>
-	    <script src="../src/liveblogliteapi.js"></script>
-	    <script src="../src/liveblogliteui.js"></script>
+	    <script src="../dist/aol.livebloglite.js"></script>
 
 	    <script>
 	        $(document).ready(function () {

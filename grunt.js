@@ -13,7 +13,7 @@ module.exports = function (grunt) {
     },
     concat: {
       dist: {
-        src: ['src/**/*.js'],
+        src: ['libs/jquery/jquery-ui*.js', 'src/**/*.js'],
         dest: 'dist/<%= pkg.name %>.js'
       }
     },

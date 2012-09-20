@@ -1,3 +1,4 @@
+@import "../../resources/smoothness/jquery-ui-1.8.23.custom.css";
 @import "compass/css3";
 
 body {
@@ -29,6 +30,10 @@ body {
                 right: 15px;
                 bottom: 10px;
             }
+        }
+        
+        &.lb-top {
+           /*background-color: yellow;*/ 
         }
     }
 
@@ -94,6 +99,8 @@ body {
 
     .lb-pause-button {
         display: inline-block;
+        width: 70px;
+        text-align: center;
         border: 1px solid #CCCCCC;
         @include border-radius(3px);
         background-color: #DDDDDD;
@@ -138,5 +145,11 @@ body {
             background-color: #BBBBBB;
         }
     }
-
+    
+    .lb-post-container {
+        overflow-y: auto;
+        overflow-x: hidden;
+        position: relative;
+    }
+    
 }

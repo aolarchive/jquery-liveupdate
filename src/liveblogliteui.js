@@ -53,7 +53,8 @@
                 element = $('<p />', {
                   id: 'p' + id,
                   'class': 'lb-post'
-                });
+                })
+                .data('date', item.date.getTime());
               } else {
                 element.empty();
               }
@@ -104,7 +105,8 @@
 
                   // Re-render tweet buttons
                   // https://dev.twitter.com/discussions/6860
-                  twttr.widgets.load();
+                  // FIXME: is twttr a vestigial reference maybe?
+                  //twttr.widgets.load();
                 });
 
               }
@@ -340,16 +342,25 @@
               $this.liveBlogLiteApi('pause');
               paused = true;
             },
-
-            updateSlider = function () {
+            
+            /**
+             * Setup the slider controls parameters, update position
+             */
+            initSlider = function () {
               if ($slider) {
+                // Set the min and max values
                 $slider.slider('option', {
                   min: beginTime,
                   max: endTime
                 });
+                // Update the slider based on latest scroll position 
+                $posts.scroll();
               }
             },
-
+            
+            /**
+             * Update the slider label's text 
+             */
             updateSliderLabel = function (value) {
               if ($slider) {
                 value = value || $slider.slider('value');
@@ -358,6 +369,55 @@
                   timeStr = getFormattedDateTime(timeObj);
 
                 $('.lb-timeline-label', $toolbar).text(timeStr);
+              }
+            },
+            
+            /**
+             * Set the slider's value, which set's its position, and update the label
+             */
+            setSliderValue = function (value) {
+              if ($slider) {
+                $slider.slider('value', value);
+                updateSliderLabel();
+              }
+            },
+            
+            /**
+             * Return the top most visible post item in the scrollable container
+             */
+            getTopVisibleItem = function (container) {
+              var $container = $(container || window),
+                $topItem = null;
+              
+              $container.children('.lb-post').each(function (i, el) {
+                var $el = $(el),
+                  height = $el.height(),
+                  positionTop = $el.position().top,
+                  positionBottom = positionTop + height;
+                
+                if (positionTop <= 0 && positionBottom > 0) {
+                  $topItem = $el;
+                  //console.log('Top scrolled item: (' + positionTop + ') ' + $el.find('.lb-post-text,.lb-post-caption').text());
+                  return false;
+                }
+              });
+              
+              return $topItem;
+            },
+            
+            /**
+             * On container scroll event, set slider value based on the top most visible post item
+             */
+            onContainerScroll = function (event) {
+              var $topItem = getTopVisibleItem($posts);
+              
+              if ($topItem) {
+                if (!$topItem.hasClass('lb-top')) {
+                  $posts.children('.lb-top').removeClass('lb-top');
+                  $topItem.addClass('lb-top');
+                }
+                
+                setSliderValue($topItem.data('date'));
               }
             };
 
@@ -402,7 +462,8 @@
           $posts = $('<div />', {
             'class': 'lb-post-container'
           })
-          .appendTo($this);
+          .appendTo($this)
+          .scroll(onContainerScroll);
 
           // Bind to API events
           $this.bind('update', function (event, data) {
@@ -412,7 +473,8 @@
             if (data.updates) {
               var updates = data.updates,
                 updatesLen = data.updates.length;
-
+              
+              // Add items to the DOM
               addItems(updates);
 
               // Keep track of the data's begin and end times
@@ -421,8 +483,8 @@
               }
               endTime = Math.max(endTime || 0, updates[updatesLen - 1].date.getTime());
 
-              updateSlider();
-              updateSliderLabel();
+              // Update the slider's range and position
+              initSlider();
             }
 
             $(data.changes).each(function (i, item) {
