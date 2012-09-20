@@ -13,5 +13,6 @@
     "white": true,
     "devel": true,
     "indent": 2,
-    "jquery": true
+    "jquery": true,
+    "predef": "twttr"
 }

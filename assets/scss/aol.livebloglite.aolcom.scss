@@ -1,52 +1,65 @@
 
 #myLiveBlog {
-    height: 250px; 
+    height: 250px;
     overflow-y: auto;
     overflow-x: hidden;
 
     &.lb {
-    
+
         padding-right: 10px;
-    
+
         .lb-post {
-            float: left;
-            clear: both;
-            width: 100%;
             border-bottom: 1px dotted #AAAAAA;
-            padding: 0;
+            clear: both;
+            display: block;
+            /*float: left;*/
             margin-bottom: 1em;
+            overflow: hidden;
             padding-bottom: 1em;
-    
+            padding: 0;
+
             img {
                 float: left;
                 margin-right: 10px;
                 margin-bottom: 5px;
             }
+
         }
-    
+
         .lb-comment {
             padding-left: 30px;
             background-color: #EEEEEE;
         }
-    
+
         .lb-post-text {
             float: left;
             display: block;
             clear: both;
         }
-    
+
         .lb-post-caption {
         }
-    
+
         .lb-post-timestamp {
-            float: left;
-            display: block;
             clear: both;
-            font-size: 0.8em;
             color: #777777;
+            display: block;
+            float: left;
+            font-size: 0.8em;
             line-height: 17px;
+            position: relative;
+
+            .twitter-share-button {
+                // Config
+                $tweetButtonWidth: 56px;
+                $leftPadding: 5px;
+
+                bottom: 0;
+                position: absolute;
+                right: ($tweetButtonWidth + $leftPadding) * -1;
+            }
         }
-        
+
         .lb-post-tags {
             float: left;
             list-style: none;
@@ -63,6 +76,6 @@
             color: #FFFFFF;
             border-radius: 2px;
         }
-            
+
     }
 }

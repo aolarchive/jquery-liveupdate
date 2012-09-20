@@ -87,7 +87,8 @@ module.exports = function (grunt) {
         "indent": 2
       },
       globals: {
-        jQuery: true
+        jQuery: true,
+        twttr: true
       }
     },
     uglify: {}

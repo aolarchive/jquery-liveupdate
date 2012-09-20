@@ -13,7 +13,8 @@
         postId: null,
         url: null,
         toolbarEnabled: false,
-        pageSize: 0
+        pageSize: 0,
+        tweetButtons: true
       },
 
       $this = $(this),
@@ -42,7 +43,9 @@
                 tags = item.tags,
                 timestamp = item.date,
                 memberId = item.memberId,
-                timestampString = '<a href="#p' + id + '">' + getFormattedDateTime(timestamp) + '</a> by ' + item.memberName;
+                timestampString = '<a href="#p' + id + '">' + getFormattedDateTime(timestamp) + '</a> by ' + item.memberName,
+                $tweetButton,
+                tweetText;
 
               //console.log('type', type);
 
@@ -87,6 +90,25 @@
                 })
               );
 
+              if (options.tweetButtons) {
+                // Make the tweet button
+                tweetText = caption || data;
+                $tweetButton = makeTweetButton(id, data);
+
+                // Bind a just-in-time load of the tweet button
+                element.bind('mouseenter', function (event) {
+                  // Unbind the load event once it's been triggered
+                  element.unbind('mouseenter');
+                  element.find('.lb-post-timestamp')
+                    .append($tweetButton);
+
+                  // Re-render tweet buttons
+                  // https://dev.twitter.com/discussions/6860
+                  twttr.widgets.load();
+                });
+
+              }
+
               if (item.tags && item.tags.length) {
                 var tagsList = $('<ul />', {
                   'class': 'lb-post-tags'
@@ -107,31 +129,32 @@
             addItem = function (item, afterElement) {
               var $item = $('#p' + item.id, $posts),
                 $parent = null;
-              
+
               if (!$item.length) {
                 $item = buildItem(item);
-  
+
                 if ($item.length) {
                   $item.hide();
-  
+
                   if (item.type === 'comment' && item.p) {
                     $parent = $('#p' + item.p, $posts);
-                    
+
                     if ($parent.length) {
                       // Append comment directly after its parent post
                       $item.insertAfter($parent);
                     } else {
-                      // Parent post doesn't exist, so add comment to pendingUpdates array for processing in next page
+                      // Parent post doesn't exist, so add comment to
+                      // pendingUpdates array for processing in next page
                       pendingUpdates.push(item);
                     }
-                    
+
                   } else if (afterElement && afterElement.length) {
                     $item.insertAfter(afterElement);
-                    
+
                   } else {
                     $item.prependTo($posts);
                   }
-  
+
                   $item.fadeIn(400);
                 }
               }
@@ -164,50 +187,51 @@
                 // If item is pending, delete it from the list
                 modifyPendingUpdate(item.id, null);
               }
-            },            
-            
+            },
+
             addItems = function (items) {
-              
+
               items = items || [];
-              
+
               var len = items.length,
                 start = 0;
-              
-              // Queue up older updates, if pagination enabled and post container is empty
+
+              // Queue up older updates, if pagination enabled and post
+              // container is empty
               if (pageSize > 0 && len > pageSize && !pendingUpdates.length && !$posts.children('.lb-post').length) {
-                
+
                 pendingUpdates = items.splice(0, len - pageSize);
-                
+
                 $posts.append($('<a />', {
                   'class': 'lb-more-button',
                   text: 'Show earlier posts'
                 }))
                 .click($.proxy(onMoreButtonClicked, this));
               }
-              
+
               $(items).each(function (i, item) {
                 addItem(item);
               });
             },
-            
+
             onMoreButtonClicked = function (event) {
               var button = $(event.target),
                 len = pendingUpdates.length,
                 lastItem = null,
                 start = 0,
                 nextPage = null;
-              
+
               if (len) {
                 lastItem = $posts.children('.lb-post:last');
-                
+
                 start = Math.max(len - pageSize, 0);
                 nextPage = pendingUpdates.splice(start, pageSize);
-                
+
                 $(nextPage).each(function (i, item) {
                   addItem(item, lastItem);
                 });
               }
-              
+
               if (!pendingUpdates.length) {
                 button.remove();
               }
@@ -260,7 +284,23 @@
 
               return dateTimeStr;
             },
-            
+
+            /* Return a Tweet Button according to the specs here:
+             * https://twitter.com/about/resources/buttons#tweet
+             */
+            makeTweetButton = function (id, text) {
+              var href = options.url + window.location.pathname.substring(1, window.location.pathname.length),
+                $tweetButton = $('<a />', {
+                  'data-count': 'none',
+                  'data-text': '"' + text + '"',
+                  'data-url': href + '#p' + id,
+                  'href': 'https://twitter.com/share',
+                  'class': 'twitter-share-button'
+                });
+
+              return $tweetButton;
+            },
+
             modifyPendingUpdate = function (id, item) {
               if (pendingUpdates.length) {
                 for (var i = 0; i < pendingUpdates.length; i++) {
@@ -300,7 +340,7 @@
               $this.liveBlogLiteApi('pause');
               paused = true;
             },
-            
+
             updateSlider = function () {
               if ($slider) {
                 $slider.slider('option', {
@@ -309,14 +349,14 @@
                 });
               }
             },
-            
+
             updateSliderLabel = function (value) {
               if ($slider) {
                 value = value || $slider.slider('value');
-                
+
                 var timeObj = new Date(value),
                   timeStr = getFormattedDateTime(timeObj);
-              
+
                 $('.lb-timeline-label', $toolbar).text(timeStr);
               }
             };
@@ -336,7 +376,7 @@
                   'text': 'Pause'
                 })
                 .bind('click', $.proxy(onPausedButtonClicked, this)),
-                
+
                 $('<div />', {
                   'class': 'lb-timeline'
                 })
@@ -351,7 +391,7 @@
                 )
               )
             );
-            
+
             $slider.slider({
               slide: function (event, ui) {
                 updateSliderLabel(ui.value);
@@ -372,7 +412,7 @@
             if (data.updates) {
               var updates = data.updates,
                 updatesLen = data.updates.length;
-              
+
               addItems(updates);
 
               // Keep track of the data's begin and end times
@@ -380,7 +420,7 @@
                 beginTime = updates[0].date.getTime();
               }
               endTime = Math.max(endTime || 0, updates[updatesLen - 1].date.getTime());
-              
+
               updateSlider();
               updateSliderLabel();
             }
@@ -410,6 +450,37 @@
 
             }
           });
+
+          // Set up show / hide of tweet buttons
+          if (options.tweetButtons) {
+
+            // Load Twitter Share JS
+            // Script taken from Twitter, but linted
+            // https://twitter.com/about/resources/buttons#tweet
+            (function (d, s, id) {
+              var js,
+                fjs = d.getElementsByTagName(s)[0];
+
+              if (!d.getElementById(id)) {
+                js = d.createElement(s);
+                js.id = id;
+                js.src = 'http://platform.twitter.com/widgets.js';
+                fjs.parentNode.insertBefore(js, fjs);
+              }
+            }(document, 'script', 'twitter-wjs'));
+
+            $this.delegate('.lb-post', 'mouseenter', function (event) {
+              $(event.currentTarget)
+                .find('.twitter-share-button')
+                .fadeIn('fast');
+            });
+
+            $this.delegate('.lb-post', 'mouseleave', function (event) {
+              $(event.currentTarget)
+                .find('.twitter-share-button')
+                .fadeOut('fast');
+            });
+          }
 
           // Begin polling the API
           $this.liveBlogLiteApi(options);

@@ -9,10 +9,11 @@ body {
     padding-right: 10px;
 
     .lb-post {
-        float: left;
+        /*float: left;*/
         clear: both;
-        width: 100%;
+        display: block;
         border-bottom: 1px dotted #AAAAAA;
+        overflow: hidden;
         padding: 0;
         margin: {
             bottom: 1em;
@@ -47,12 +48,23 @@ body {
     }
 
     .lb-post-timestamp {
-        float: left;
-        display: block;
         clear: both;
-        font-size: 0.7em;
         color: #999999;
+        display: block;
+        float: left;
+        font-size: 0.7em;
         line-height: 17px;
+        position: relative;
+
+        .twitter-share-button {
+            // Config
+            $tweetButtonWidth: 56px;
+            $leftPadding: 5px;
+
+            bottom: -3px;
+            position: absolute;
+            right: ($tweetButtonWidth + $leftPadding) * -1;
+        }
     }
 
     .lb-post-tags {
@@ -71,7 +83,7 @@ body {
         color: #FFFFFF;
         @include border-radius(2px);
     }
-    
+
     .lb-toolbar {
         padding: 20px;
         margin-bottom: 20px;
@@ -79,7 +91,7 @@ body {
         border-bottom: 1px solid #AAAAAA;
         @include border-radius(8px);
     }
-    
+
     .lb-pause-button {
         display: inline-block;
         border: 1px solid #CCCCCC;
@@ -87,25 +99,25 @@ body {
         background-color: #DDDDDD;
         padding: 6px 8px;
         cursor: pointer;
-        
+
         &:hover {
             background-color: #BBBBBB;
         }
     }
-    
+
     .lb-timeline {
         display: inline-block;
         margin-left: 25px;
         vertical-align: middle;
     }
-    
+
     .lb-timeline-slider {
         display: block;
         font-size: 11px;
         height: 10px;
         width: 300px;
     }
-    
+
     .lb-timeline-label {
         display: block;
         font-size: 0.7em;
@@ -121,10 +133,10 @@ body {
         background-color: #DDDDDD;
         padding: 6px 0px;
         cursor: pointer;
-        
+
         &:hover {
             background-color: #BBBBBB;
         }
     }
-    
+
 }
