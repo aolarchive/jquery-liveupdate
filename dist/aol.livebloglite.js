@@ -448,9 +448,25 @@
               var $post = $('#p' + id, $posts);
 
               if ($post.length) {
-                // Do something to go to the relevant post!
-                // Scrollto, etc.
+                // Scroll to top of this post
+                $posts.scrollTop($post.get(0).offsetTop);
               }
+            },
+            
+            getNearestItemByTime = function (timestamp) {
+              var $item = null;
+              
+              $posts.children('.lb-post').each(function (i, el) {
+                var $el = $(el);
+                
+                if ($el.data('date') === timestamp || 
+                    ($el.data('date') < timestamp && $el.prev().data('date') > timestamp)) {
+                  $item = $el;
+                  return false;
+                }
+              });
+              
+              return $item;
             },
 
             getFormattedDateTime = function (dateObj) {
@@ -624,6 +640,18 @@
                 
                 setSliderValue($topItem.data('date'));
               }
+            },
+            
+            /**
+             * As slider is moving, update the label and scroll position
+             */
+            onSliderMove = function (event, ui) {
+              updateSliderLabel(ui.value);
+              
+              var $item = getNearestItemByTime(ui.value);
+              if ($item) {
+                goToItem($item.attr('id').substr(1));
+              }
             };
 
           // Setup the UI structure
@@ -658,9 +686,7 @@
             );
 
             $slider.slider({
-              slide: function (event, ui) {
-                updateSliderLabel(ui.value);
-              }
+              slide: onSliderMove
             });
           }
 
