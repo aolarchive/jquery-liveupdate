@@ -105,8 +105,7 @@
 
                   // Re-render tweet buttons
                   // https://dev.twitter.com/discussions/6860
-                  // FIXME: is twttr a vestigial reference maybe?
-                  //twttr.widgets.load();
+                  twttr.widgets.load();
                 });
 
               }

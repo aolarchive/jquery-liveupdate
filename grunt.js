@@ -84,7 +84,9 @@ module.exports = function (grunt) {
         "browser": true,
         "white": true,
         "devel": true,
-        "indent": 2
+        "indent": 2,
+        "jquery": true,
+        "predef": "twttr"
       },
       globals: {
         jQuery: true,
