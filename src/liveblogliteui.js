@@ -143,7 +143,7 @@
                     if ($parent.length) {
                       // Give comment the timestamp of its parent post, for navigation
                       $item.data('date', $parent.data('date'));
-                      
+
                       // Append comment directly after its parent post
                       $item.insertAfter($parent);
                     } else {
@@ -216,7 +216,7 @@
               $(items).each(function (i, item) {
                 // Add item to the DOM
                 addItem(item);
-                
+
                 // Update the begin and end times
                 if (item.type !== 'comment' && item.date) {
                   var timestamp = item.date.getTime();
@@ -257,20 +257,20 @@
                 $posts.scrollTop($post.get(0).offsetTop);
               }
             },
-            
+
             getNearestItemByTime = function (timestamp) {
               var $item = null;
-              
+
               $posts.children('.lb-post:not(.lb-comment)').each(function (i, el) {
                 var $el = $(el);
-                
-                if ($el.data('date') === timestamp || 
+
+                if ($el.data('date') === timestamp ||
                     ($el.data('date') < timestamp && $el.prev().data('date') > timestamp)) {
                   $item = $el;
                   return false;
                 }
               });
-              
+
               return $item;
             },
 
@@ -368,7 +368,7 @@
               $this.liveBlogLiteApi('pause');
               paused = true;
             },
-            
+
             /**
              * Setup the slider controls parameters, update position
              */
@@ -379,13 +379,13 @@
                   min: beginTime,
                   max: endTime
                 });
-                // Update the slider based on latest scroll position 
+                // Update the slider based on latest scroll position
                 $posts.scroll();
               }
             },
-            
+
             /**
-             * Update the slider label's text 
+             * Update the slider label's text
              */
             updateSliderLabel = function (value) {
               if ($slider) {
@@ -397,7 +397,7 @@
                 $('.lb-timeline-label', $toolbar).text(timeStr);
               }
             },
-            
+
             /**
              * Set the slider's value, which set's its position, and update the label
              */
@@ -407,52 +407,52 @@
                 updateSliderLabel();
               }
             },
-            
+
             /**
              * Return the top most visible post item in the scrollable container
              */
             getTopVisibleItem = function (container) {
               var $container = $(container || window),
                 $topItem = null;
-              
+
               $container.children('.lb-post').each(function (i, el) {
                 var $el = $(el),
                   height = $el.height(),
                   positionTop = $el.position().top,
                   positionBottom = positionTop + height;
-                
+
                 if (positionTop <= 0 && positionBottom > 0) {
                   $topItem = $el;
                   //console.log('Top scrolled item: (' + positionTop + ') ' + $el.find('.lb-post-text,.lb-post-caption').text());
                   return false;
                 }
               });
-              
+
               return $topItem;
             },
-            
+
             /**
              * On container scroll event, set slider value based on the top most visible post item
              */
             onContainerScroll = function (event) {
               var $topItem = getTopVisibleItem($posts);
-              
+
               if ($topItem) {
                 if (!$topItem.hasClass('lb-top')) {
                   $posts.children('.lb-top').removeClass('lb-top');
                   $topItem.addClass('lb-top');
                 }
-                
+
                 setSliderValue($topItem.data('date'));
               }
             },
-            
+
             /**
              * As slider is moving, update the label and scroll position
              */
             onSliderMove = function (event, ui) {
               updateSliderLabel(ui.value);
-              
+
               var $item = getNearestItemByTime(ui.value);
               if ($item) {
                 goToItem($item.attr('id').substr(1));
@@ -511,10 +511,10 @@
               if (beginTime === 0) {
                 beginTime = (new Date()).getTime();
               }
-              
+
               // Add items to the DOM
               addItems(data.updates);
-              
+
               // Update the slider's range and position
               initSlider();
             }
@@ -552,17 +552,19 @@
             // Load Twitter Share JS
             // Script taken from Twitter, but linted
             // https://twitter.com/about/resources/buttons#tweet
-            (function (d, s, id) {
-              var js,
-                fjs = d.getElementsByTagName(s)[0];
+            if (typeof twttr === 'undefined') {
+              (function (d, s, id) {
+                var js,
+                  fjs = d.getElementsByTagName(s)[0];
 
-              if (!d.getElementById(id)) {
-                js = d.createElement(s);
-                js.id = id;
-                js.src = 'http://platform.twitter.com/widgets.js';
-                fjs.parentNode.insertBefore(js, fjs);
-              }
-            }(document, 'script', 'twitter-wjs'));
+                if (!d.getElementById(id)) {
+                  js = d.createElement(s);
+                  js.id = id;
+                  js.src = 'http://platform.twitter.com/widgets.js';
+                  fjs.parentNode.insertBefore(js, fjs);
+                }
+              }(document, 'script', 'twitter-wjs'));
+            }
 
             $this.delegate('.lb-post', 'mouseenter', function (event) {
               $(event.currentTarget)

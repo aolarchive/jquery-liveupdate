@@ -12,6 +12,13 @@
     var $this = this,
       args = arguments,
       defaultOptions = {
+        // Set a time for your liveblog to begin
+        begin: null,
+        // Set a time for your liveblog to end
+        end: null,
+        // Manually tell your liveblog to be live or not
+        // (Does not poll if it's not live)
+        alive: true,
         callbackPrefix: 'lb_' + new Date().getTime() + '_',
         // The domain of the blog, i.e. http://aol.com
         url : null,
@@ -35,6 +42,19 @@
           save();
 
           methods.fetch();
+        },
+
+        live: function () {
+          if (state.options.alive === false) {
+            methods.fetch();
+          }
+          state.options.alive = true;
+          save();
+        },
+
+        die: function () {
+          state.options.alive = false;
+          save();
         },
 
         fetch: function () {
@@ -128,11 +148,22 @@
             jsonpCallback: callback,
             url: apiUrl,
             success: function (response) {
+              // Set the default delay to 3 seconds
+              var delay = 3 * 1000;
+
+              // If response.int is greater than zero, use it as the
+              // recommended number of seconds to delay the poll
+              if (response.int > 0) {
+                delay = response.int * 1000;
+              }
+
               state.lastUpdate = response.last_update;
 
               // Call fetch again after the API-recommended
               // number of seconds
-              state.timer = setTimeout(methods.fetch, response.int * 1000);
+              if (state.options.alive) {
+                state.timer = setTimeout(methods.fetch, delay);
+              }
 
               state.count += 1;
 
@@ -145,7 +176,9 @@
             },
             error: function (response) {
               // Try to restart things in 10 seconds
-              state.timer = setTimeout(methods.fetch, 10000);
+              if (state.options.alive) {
+                state.timer = setTimeout(methods.fetch, 10000);
+              }
 
               // Save state
               save();
