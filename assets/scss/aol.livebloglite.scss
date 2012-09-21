@@ -1,12 +1,8 @@
-@import "../../resources/smoothness/jquery-ui-1.8.23.custom.css";
+@import "../resources/jquery-ui.scss";
 @import "compass/css3";
 
-body {
-	font-family: 'Lucida Grande', Arial, Helvetica, sans-serif;
-	padding: 20px;
-}
-
 .lb {
+    font-family: 'Lucida Grande', Arial, Helvetica, sans-serif;
     padding-right: 10px;
 
     .lb-post {
