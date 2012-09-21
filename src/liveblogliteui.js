@@ -527,10 +527,38 @@
                 updateItem(item);
               });
 
-              $(data.deletes).each(function (i, item) {
-                deleteItem(item);
-              });
-              // TODO: adjust begin and end times if first or last items were deleted
+              if (data.deletes) {
+                $(data.deletes).each(function (i, item) {
+                  var $item = $('#p' + item.id),
+                    timestamp,
+                    nextItem;
+
+                  // Adjust the begin or end time, if this item was the first or last item
+                  if ($item.length && !$item.hasClass('lb-comment')) {
+                    timestamp = $item.data('date');
+                    
+                    // Item was first, assign beginTime to prev item's date
+                    if (timestamp === beginTime) {
+                      nextItem = $item.prev(':not(.lb-comment)');
+                      if (nextItem.length) {
+                        beginTime = nextItem.data('date');
+                      }
+                    }
+                    // Item was last, assign endTime to next item's date
+                    if (timestamp === endTime) {
+                      nextItem = $item.next(':not(.lb-comment)');
+                      if (nextItem.length) {
+                        endTime = nextItem.data('date');
+                      }
+                    }
+                    // Update the slider
+                    initSlider();
+                  }
+                  
+                  // Remove the item from the DOM
+                  deleteItem(item);
+                });
+              }
 
               // Allow permalinks to individual updates
               // ie, #p19923
