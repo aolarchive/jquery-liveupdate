@@ -34,6 +34,8 @@
 
       methods = {
         init: function (customOptions) {
+          var timeToBegin;
+
           state.lastUpdate = state.lastUpdate || 0;
           state.count = state.count || 0;
           state.options = $.extend(true, {}, defaultOptions, customOptions);
@@ -41,7 +43,28 @@
           // Save state
           save();
 
-          methods.fetch();
+          timeToBegin = function () {
+            var now = new Date();
+
+            if (state.options.begin) {
+              if (state.options.begin < now) {
+                //console.log('yep, begin!');
+                $this.trigger('begin');
+                methods.fetch();
+              } else {
+                //console.log('do not begin yet');
+                // Wait 10 seconds, then check again
+                state.timer = setTimeout(timeToBegin, 10000);
+              }
+            } else {
+              //console.log('no begin time set, so... begin!');
+              $this.trigger('begin');
+              methods.fetch();
+            }
+          };
+
+
+          timeToBegin();
         },
 
         live: function () {
@@ -60,13 +83,14 @@
         fetch: function () {
           // Fetch data from API
           var apiUrl,
+            now = new Date(),
             state = $this.data('lbl-state'),
             options = state.options,
             callback = options.callbackPrefix + state.count,
             // The API's data has single-letter keys for bandwidth
             // reasons. Let's manually normalize the data into a more
             // human-readable structure.
-            normalize = function (data, membersArray) {//{{{
+            normalize = function (data, membersArray) {
                 membersArray = membersArray || [];
                 var i, length, item, items, member,
                     members = {},
@@ -132,7 +156,7 @@
                 }
 
                 return normalizedData;
-              };//}}}
+              };
 
           // Make sure options.url has a trailing slash
           if (options.url.substring(options.url.length - 1) !== '/') {
@@ -161,8 +185,17 @@
 
               // Call fetch again after the API-recommended
               // number of seconds
-              if (state.options.alive) {
-                state.timer = setTimeout(methods.fetch, delay);
+              if (options.alive) {
+                if (!options.end || options.end > now) {
+
+                  state.timer = setTimeout(methods.fetch, delay);
+
+                } else {
+                  if (options.end && options.end <= now) {
+                    options.alive = false;
+                    $this.trigger('end');
+                  }
+                }
               }
 
               state.count += 1;
