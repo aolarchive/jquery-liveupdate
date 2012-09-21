@@ -13,11 +13,12 @@
         overflow: hidden;
         padding: 0;
         margin: {
-            bottom: 1em;
+            bottom: 0;
             top: 0;
         }
         padding: {
             bottom: 1em;
+            top: 1em;
         }
 
         img {
@@ -86,11 +87,11 @@
     }
 
     .lb-toolbar {
-        padding: 20px;
+        padding: 15px;
         margin-bottom: 20px;
         background-color: #EEEEEE;
         border-bottom: 1px solid #AAAAAA;
-        @include border-radius(8px);
+        @include border-radius(4px);
     }
 
     .lb-pause-button {
