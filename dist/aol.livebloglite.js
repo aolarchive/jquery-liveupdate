@@ -29,6 +29,13 @@
     var $this = this,
       args = arguments,
       defaultOptions = {
+        // Set a time for your liveblog to begin
+        begin: null,
+        // Set a time for your liveblog to end
+        end: null,
+        // Manually tell your liveblog to be live or not
+        // (Does not poll if it's not live)
+        alive: true,
         callbackPrefix: 'lb_' + new Date().getTime() + '_',
         // The domain of the blog, i.e. http://aol.com
         url : null,
@@ -44,6 +51,8 @@
 
       methods = {
         init: function (customOptions) {
+          var timeToBegin;
+
           state.lastUpdate = state.lastUpdate || 0;
           state.count = state.count || 0;
           state.options = $.extend(true, {}, defaultOptions, customOptions);
@@ -51,19 +60,54 @@
           // Save state
           save();
 
-          methods.fetch();
+          timeToBegin = function () {
+            var now = new Date();
+
+            if (state.options.begin) {
+              if (state.options.begin < now) {
+                //console.log('yep, begin!');
+                $this.trigger('begin');
+                methods.fetch();
+              } else {
+                //console.log('do not begin yet');
+                // Wait 10 seconds, then check again
+                state.timer = setTimeout(timeToBegin, 10000);
+              }
+            } else {
+              //console.log('no begin time set, so... begin!');
+              $this.trigger('begin');
+              methods.fetch();
+            }
+          };
+
+
+          timeToBegin();
+        },
+
+        live: function () {
+          if (state.options.alive === false) {
+            methods.fetch();
+          }
+          state.options.alive = true;
+          save();
+        },
+
+        die: function () {
+          state.options.alive = false;
+          save();
         },
 
         fetch: function () {
           // Fetch data from API
           var apiUrl,
+            now = new Date(),
             state = $this.data('lbl-state'),
             options = state.options,
             callback = options.callbackPrefix + state.count,
             // The API's data has single-letter keys for bandwidth
             // reasons. Let's manually normalize the data into a more
             // human-readable structure.
-            normalize = function (data, membersArray) {//{{{
+            normalize = function (data, membersArray) {
                 membersArray = membersArray || [];
                 var i, length, item, items, member,
                     members = {},
@@ -129,7 +173,7 @@
                 }
 
                 return normalizedData;
-              };//}}}
+              };
 
           // Make sure options.url has a trailing slash
           if (options.url.substring(options.url.length - 1) !== '/') {
@@ -145,11 +189,31 @@
             jsonpCallback: callback,
             url: apiUrl,
             success: function (response) {
+              // Set the default delay to 3 seconds
+              var delay = 3 * 1000;
+
+              // If response.int is greater than zero, use it as the
+              // recommended number of seconds to delay the poll
+              if (response.int > 0) {
+                delay = response.int * 1000;
+              }
+
               state.lastUpdate = response.last_update;
 
               // Call fetch again after the API-recommended
               // number of seconds
-              state.timer = setTimeout(methods.fetch, response.int * 1000);
+              if (options.alive) {
+                if (!options.end || options.end > now) {
+
+                  state.timer = setTimeout(methods.fetch, delay);
+
+                } else {
+                  if (options.end && options.end <= now) {
+                    options.alive = false;
+                    $this.trigger('end');
+                  }
+                }
+              }
 
               state.count += 1;
 
@@ -162,7 +226,9 @@
             },
             error: function (response) {
               // Try to restart things in 10 seconds
-              state.timer = setTimeout(methods.fetch, 10000);
+              if (state.options.alive) {
+                state.timer = setTimeout(methods.fetch, 10000);
+              }
 
               // Save state
               save();
@@ -349,7 +415,7 @@
                     if ($parent.length) {
                       // Give comment the timestamp of its parent post, for navigation
                       $item.data('date', $parent.data('date'));
-                      
+
                       // Append comment directly after its parent post
                       $item.insertAfter($parent);
                     } else {
@@ -422,7 +488,7 @@
               $(items).each(function (i, item) {
                 // Add item to the DOM
                 addItem(item);
-                
+
                 // Update the begin and end times
                 if (item.type !== 'comment' && item.date) {
                   var timestamp = item.date.getTime();
@@ -463,20 +529,20 @@
                 $posts.scrollTop($post.get(0).offsetTop);
               }
             },
-            
+
             getNearestItemByTime = function (timestamp) {
               var $item = null;
-              
+
               $posts.children('.lb-post:not(.lb-comment)').each(function (i, el) {
                 var $el = $(el);
-                
-                if ($el.data('date') === timestamp || 
+
+                if ($el.data('date') === timestamp ||
                     ($el.data('date') < timestamp && $el.prev().data('date') > timestamp)) {
                   $item = $el;
                   return false;
                 }
               });
-              
+
               return $item;
             },
 
@@ -574,7 +640,7 @@
               $this.liveBlogLiteApi('pause');
               paused = true;
             },
-            
+
             /**
              * Setup the slider controls parameters, update position
              */
@@ -585,13 +651,13 @@
                   min: beginTime,
                   max: endTime
                 });
-                // Update the slider based on latest scroll position 
+                // Update the slider based on latest scroll position
                 $posts.scroll();
               }
             },
-            
+
             /**
-             * Update the slider label's text 
+             * Update the slider label's text
              */
             updateSliderLabel = function (value) {
               if ($slider) {
@@ -603,7 +669,7 @@
                 $('.lb-timeline-label', $toolbar).text(timeStr);
               }
             },
-            
+
             /**
              * Set the slider's value, which set's its position, and update the label
              */
@@ -613,52 +679,52 @@
                 updateSliderLabel();
               }
             },
-            
+
             /**
              * Return the top most visible post item in the scrollable container
              */
             getTopVisibleItem = function (container) {
               var $container = $(container || window),
                 $topItem = null;
-              
+
               $container.children('.lb-post').each(function (i, el) {
                 var $el = $(el),
                   height = $el.height(),
                   positionTop = $el.position().top,
                   positionBottom = positionTop + height;
-                
+
                 if (positionTop <= 0 && positionBottom > 0) {
                   $topItem = $el;
                   //console.log('Top scrolled item: (' + positionTop + ') ' + $el.find('.lb-post-text,.lb-post-caption').text());
                   return false;
                 }
               });
-              
+
               return $topItem;
             },
-            
+
             /**
              * On container scroll event, set slider value based on the top most visible post item
              */
             onContainerScroll = function (event) {
               var $topItem = getTopVisibleItem($posts);
-              
+
               if ($topItem) {
                 if (!$topItem.hasClass('lb-top')) {
                   $posts.children('.lb-top').removeClass('lb-top');
                   $topItem.addClass('lb-top');
                 }
-                
+
                 setSliderValue($topItem.data('date'));
               }
             },
-            
+
             /**
              * As slider is moving, update the label and scroll position
              */
             onSliderMove = function (event, ui) {
               updateSliderLabel(ui.value);
-              
+
               var $item = getNearestItemByTime(ui.value);
               if ($item) {
                 goToItem($item.attr('id').substr(1));
@@ -717,10 +783,10 @@
               if (beginTime === 0) {
                 beginTime = (new Date()).getTime();
               }
-              
+
               // Add items to the DOM
               addItems(data.updates);
-              
+
               // Update the slider's range and position
               initSlider();
             }
@@ -758,17 +824,19 @@
             // Load Twitter Share JS
             // Script taken from Twitter, but linted
             // https://twitter.com/about/resources/buttons#tweet
-            (function (d, s, id) {
-              var js,
-                fjs = d.getElementsByTagName(s)[0];
+            if (typeof twttr === 'undefined') {
+              (function (d, s, id) {
+                var js,
+                  fjs = d.getElementsByTagName(s)[0];
 
-              if (!d.getElementById(id)) {
-                js = d.createElement(s);
-                js.id = id;
-                js.src = 'http://platform.twitter.com/widgets.js';
-                fjs.parentNode.insertBefore(js, fjs);
-              }
-            }(document, 'script', 'twitter-wjs'));
+                if (!d.getElementById(id)) {
+                  js = d.createElement(s);
+                  js.id = id;
+                  js.src = 'http://platform.twitter.com/widgets.js';
+                  fjs.parentNode.insertBefore(js, fjs);
+                }
+              }(document, 'script', 'twitter-wjs'));
+            }
 
             $this.delegate('.lb-post', 'mouseenter', function (event) {
               $(event.currentTarget)
