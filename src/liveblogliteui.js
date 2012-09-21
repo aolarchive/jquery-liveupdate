@@ -28,8 +28,8 @@
             paused = true,
             pageSize = options.pageSize,
             pendingUpdates = [],
-            beginTime = null,
-            endTime = null,
+            beginTime = 0,
+            endTime = 0,
             $posts = null,
             $toolbar = null,
             $slider = null,
@@ -141,6 +141,9 @@
                     $parent = $('#p' + item.p, $posts);
 
                     if ($parent.length) {
+                      // Give comment the timestamp of its parent post, for navigation
+                      $item.data('date', $parent.data('date'));
+                      
                       // Append comment directly after its parent post
                       $item.insertAfter($parent);
                     } else {
@@ -211,7 +214,15 @@
               }
 
               $(items).each(function (i, item) {
+                // Add item to the DOM
                 addItem(item);
+                
+                // Update the begin and end times
+                if (item.type !== 'comment' && item.date) {
+                  var timestamp = item.date.getTime();
+                  beginTime = Math.min(beginTime, timestamp);
+                  endTime = Math.max(endTime, timestamp);
+                }
               });
             },
 
@@ -250,7 +261,7 @@
             getNearestItemByTime = function (timestamp) {
               var $item = null;
               
-              $posts.children('.lb-post').each(function (i, el) {
+              $posts.children('.lb-post:not(.lb-comment)').each(function (i, el) {
                 var $el = $(el);
                 
                 if ($el.data('date') === timestamp || 
@@ -496,18 +507,14 @@
             var hash = window.location.hash;
 
             if (data.updates) {
-              var updates = data.updates,
-                updatesLen = data.updates.length;
+              // Init the begin time if not set yet
+              if (beginTime === 0) {
+                beginTime = (new Date()).getTime();
+              }
               
               // Add items to the DOM
-              addItems(updates);
-
-              // Keep track of the data's begin and end times
-              if (!beginTime) {
-                beginTime = updates[0].date.getTime();
-              }
-              endTime = Math.max(endTime || 0, updates[updatesLen - 1].date.getTime());
-
+              addItems(data.updates);
+              
               // Update the slider's range and position
               initSlider();
             }
@@ -519,6 +526,7 @@
             $(data.deletes).each(function (i, item) {
               deleteItem(item);
             });
+            // TODO: adjust begin and end times if first or last items were deleted
 
             // Allow permalinks to individual updates
             // ie, #p19923
