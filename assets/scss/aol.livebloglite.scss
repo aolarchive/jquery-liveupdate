@@ -1,7 +1,9 @@
 @import "../resources/jquery-ui.scss";
 @import "compass/css3";
 
+
 .lb {
+    width: 100%;
     font-family: 'Lucida Grande', Arial, Helvetica, sans-serif;
     padding-right: 10px;
 
@@ -23,6 +25,8 @@
 
         img {
             float: left;
+            max-height: 100px;
+            max-width: 100px;
             margin: {
                 right: 15px;
                 bottom: 10px;
@@ -50,13 +54,13 @@
     }
 
     .lb-post-timestamp {
-        clear: both;
-        color: #999999;
         display: block;
         float: left;
+        position: relative;
+        clear: both;
+        color: #999999;
         font-size: 0.7em;
         line-height: 17px;
-        position: relative;
 
         .twitter-share-button {
             // Config
@@ -87,7 +91,8 @@
     }
 
     .lb-toolbar {
-        padding: 15px;
+        float: left;
+        width: 100%;
         margin-bottom: 20px;
         background-color: #EEEEEE;
         border-bottom: 1px solid #AAAAAA;
@@ -95,13 +100,15 @@
     }
 
     .lb-pause-button {
-        display: inline-block;
+        display: block;
+        float: left;
         width: 70px;
         text-align: center;
         border: 1px solid #CCCCCC;
         @include border-radius(3px);
         background-color: #DDDDDD;
         padding: 6px 8px;
+        margin: 15px;
         cursor: pointer;
 
         &:hover {
@@ -110,8 +117,9 @@
     }
 
     .lb-timeline {
-        display: inline-block;
-        margin-left: 25px;
+        display: block;
+        float: left;
+        margin: 15px;
         vertical-align: middle;
     }
 
@@ -144,6 +152,8 @@
     }
     
     .lb-post-container {
+        float: left;
+        width: 100%;
         overflow-y: auto;
         overflow-x: hidden;
         position: relative;

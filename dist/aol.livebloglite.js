@@ -349,13 +349,12 @@
 
                 } else if (type === 'image') {
                   element.append(
+                    $('<img />', {
+                      src: data
+                    }),
                     $('<span />', {
                       text: caption,
                       'class': 'lb-post-caption'
-                    }),
-                    $('<img />', {
-                      src: data,
-                      height: 100
                     })
                   );
                 }
@@ -757,7 +756,7 @@
                   .append(
                     $('<p />', {
                       'class': 'lb-timeline-label',
-                      text: ' '
+                      text: 'Calculating...'
                     }),
                     $slider = $('<div />', {
                       'class': 'lb-timeline-slider'
