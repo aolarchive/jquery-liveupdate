@@ -49,7 +49,8 @@
                   memberId = item.memberId,
                   timestampString = '<a href="#p' + id + '">' + getFormattedDateTime(timestamp) + '</a> by ' + item.memberName,
                   $tweetButton,
-                  tweetText;
+                  tweetText,
+                  $postInfo;
 
                 //console.log('type', type);
 
@@ -88,12 +89,31 @@
                 }
 
                 element.append(
-                  $('<span />', {
-                    html: timestampString,
-                    'class': 'lb-post-timestamp'
+                  $postInfo = $('<span />', {
+                    'class': 'lb-post-info'
                   })
+                  .append(
+                    $('<span />', {
+                      html: timestampString,
+                      'class': 'lb-post-timestamp'
+                    })
+                  )
                 );
 
+                if (item.tags && item.tags.length) {
+                  var tagsList = $('<ul />', {
+                    'class': 'lb-post-tags'
+                  }).appendTo($postInfo);
+
+                  $.each(item.tags, function (i, el) {
+                    tagsList.append(
+                      $('<li />', {
+                        text: el
+                      })
+                    );
+                  });
+                }
+                
                 if (options.tweetButtons) {
                   // Make the tweet button
                   tweetText = caption || data;
@@ -103,28 +123,13 @@
                   element.bind('mouseenter', function (event) {
                     // Unbind the load event once it's been triggered
                     element.unbind('mouseenter');
-                    element.find('.lb-post-timestamp')
-                      .append($tweetButton);
+                    $postInfo.append($tweetButton);
 
                     // Re-render tweet buttons
                     // https://dev.twitter.com/discussions/6860
                     twttr.widgets.load();
                   });
 
-                }
-
-                if (item.tags && item.tags.length) {
-                  var tagsList = $('<ul />', {
-                    'class': 'lb-post-tags'
-                  }).appendTo(element);
-
-                  $.each(item.tags, function (i, el) {
-                    tagsList.append(
-                      $('<li />', {
-                        text: el
-                      })
-                    );
-                  });
                 }
 
                 return element;
