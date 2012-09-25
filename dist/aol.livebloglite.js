@@ -855,9 +855,15 @@
               }
             });
             
+            // API fires 'end' event when the set time is reached to stop polling
             $this.bind('end', function (event) {
               $('.lb-pause-button', $this).hide();
             });
+            
+            // If not alive, or reached end time
+            if (options.alive === false || (options.end && options.end <= new Date())) {
+              $('.lb-pause-button', $this).hide();
+            }
 
             // Set up show / hide of tweet buttons
             if (options.tweetButtons) {
