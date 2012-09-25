@@ -380,7 +380,8 @@
                   $.each(item.tags, function (i, el) {
                     tagsList.append(
                       $('<li />', {
-                        text: el
+                        text: el,
+                        'class': ((i === 0) ? 'lb-first' : null)
                       })
                     );
                   });

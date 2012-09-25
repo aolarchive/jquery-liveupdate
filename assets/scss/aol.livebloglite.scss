@@ -25,8 +25,8 @@
 
         img {
             float: left;
-            max-height: 100px;
-            max-width: 100px;
+            height: 100px;
+            width: auto;
             margin: {
                 right: 15px;
                 bottom: 10px;
@@ -179,6 +179,12 @@
     .lb {
         .lb-toolbar {
             padding-bottom: 15px;
+        }
+        
+        .lb-post-tags {
+            li.lb-first {
+                margin-left: 0.5em;
+            }
         }
     }
 }

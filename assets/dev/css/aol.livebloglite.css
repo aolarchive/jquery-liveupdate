@@ -1329,8 +1329,8 @@
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\0000326}}
 .lb .lb-post img {
   float: left;
-  max-height: 100px;
-  max-width: 100px;
+  height: 100px;
+  width: auto;
   margin-right: 15px;
   margin-bottom: 10px;
 }
@@ -1484,4 +1484,8 @@
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\00003180}}
 * html .lb .lb-toolbar {
   padding-bottom: 15px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/liveblog-widget\/assets\/scss\/aol\.livebloglite\.scss}line{font-family:\00003189}}
+* html .lb .lb-post-tags li.lb-first {
+  margin-left: 0.5em;
 }
