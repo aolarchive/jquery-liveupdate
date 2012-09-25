@@ -164,7 +164,7 @@
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/liveblog-widget\/assets\/resources\/jquery-ui\.scss}line{font-family:\0000368}}
 .ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus {
   border: 1px solid #999999;
-  background: #dadada url(images/ui-bg_glass_75_dadada_1x400.png) 50% 50% repeat-x;
+  background: #dadada url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAGQCAYAAABvWArbAAAANklEQVQ4jWN48uTJfyYGBgaGUWKUGCWGLfHt2zcoi5GREYNgYmJCZiG42IiB98woMUqMEtgIAMdjCdyg+eEBAAAAAElFTkSuQmCC') 50% 50% repeat-x;
   font-weight: normal;
   color: #212121;
 }
@@ -178,7 +178,7 @@
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/liveblog-widget\/assets\/resources\/jquery-ui\.scss}line{font-family:\0000370}}
 .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
   border: 1px solid #aaaaaa;
-  background: white url(images/ui-bg_glass_65_ffffff_1x400.png) 50% 50% repeat-x;
+  background: white url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAGQCAYAAABvWArbAAAAMElEQVQ4je3LIQ4AIBTD0O3f/8wrFgmKhMy8pKJKwkhSKeVbbGuAPU9f4PIopTxgAeS0DRtI4yK0AAAAAElFTkSuQmCC') 50% 50% repeat-x;
   font-weight: normal;
   color: #212121;
 }
@@ -1394,7 +1394,7 @@
   list-style: none;
   margin: 0 0 0 1em;
   padding: 2px 5px;
-  background-color: #AAAAAA;
+  background: #AAAAAA;
   color: #FFFFFF;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;

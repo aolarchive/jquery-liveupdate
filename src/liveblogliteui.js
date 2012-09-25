@@ -582,6 +582,10 @@
 
               }
             });
+            
+            $this.bind('end', function (event) {
+              $('.lb-pause-button', $this).hide();
+            });
 
             // Set up show / hide of tweet buttons
             if (options.tweetButtons) {
