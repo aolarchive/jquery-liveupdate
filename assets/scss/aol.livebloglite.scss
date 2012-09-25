@@ -33,6 +33,16 @@
             }
         }
         
+        a {
+            color: #206994;
+            text-decoration: none;
+            
+            &:hover {
+                color: #206994;
+                text-decoration: underline;
+            }
+        }
+        
         &.lb-top {
            /*background-color: yellow;*/ 
         }
@@ -110,13 +120,18 @@
         text-align: center;
         border: 1px solid #CCCCCC;
         @include border-radius(3px);
+        color: #000000;
         background-color: #DDDDDD;
+        text-decoration: none;
         padding: 6px 8px;
         margin: 15px;
         cursor: pointer;
 
         &:hover {
-            background-color: #BBBBBB;
+            color: #000000;
+            background-color: #CCCCCC;
+            border: 1px solid #AAAAAA;
+            text-decoration: none;
         }
     }
 
@@ -146,12 +161,17 @@
         text-align: center;
         border: 1px solid #CCCCCC;
         @include border-radius(3px);
+        color: #000000;
         background-color: #DDDDDD;
+        text-decoration: none;
         padding: 6px 0px;
         cursor: pointer;
 
         &:hover {
-            background-color: #BBBBBB;
+            color: #000000;
+            background-color: #CCCCCC;
+            border: 1px solid #AAAAAA;
+            text-decoration: none;
         }
     }
     
