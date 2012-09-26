@@ -1,6 +1,14 @@
 @import "../resources/jquery-ui.scss";
 @import "compass/css3";
+@import "compass/css3/transition";
 
+
+/*
+@-webkit-keyframes colorPulse {
+      0% {background-color: #EEEEEE;}
+    100% {background-color: lightYellow;}
+}
+*/
 
 .lb {
     width: 100%;
@@ -111,6 +119,14 @@
         background-color: #EEEEEE;
         border-bottom: 1px solid #AAAAAA;
         @include border-radius(4px);
+        
+        &.lb-status-paused {
+            background-color: lightYellow;
+            /*
+            -webkit-animation: colorPulse 1s infinite alternate;
+            -webkit-animation-delay: 0s;
+            */
+        }
     }
 
     .lb-pause-button {
@@ -162,6 +178,7 @@
         text-align: center;
         @include border-radius(3px);
         color: #999999;
+        background-color: #EEEEEE;
         margin: 18px 15px;
         padding: 4px;
         border: 1px solid #CCCCCC;

@@ -363,9 +363,11 @@
                 if (paused) {
                   start();
                   $button.text('Pause');
+                  $toolbar.removeClass('lb-status-paused');
                 } else {
                   stop();
                   $button.text('Resume');
+                  $toolbar.addClass('lb-status-paused');
                 }
 
                 updateStatusLabel();
