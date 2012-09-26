@@ -179,7 +179,7 @@
         @include border-radius(3px);
         color: #999999;
         background-color: #EEEEEE;
-        margin: 18px 15px;
+        margin: 18px 15px 0 15px;
         padding: 4px;
         border: 1px solid #CCCCCC;
         font-size: 12px;
@@ -226,6 +226,15 @@
         .lb-toolbar {
             padding-bottom: 15px;
         }
+        .lb-post-info {
+            width: 100%;
+            
+            .twitter-share-button {
+                right: auto;
+                bottom: -1px;
+                margin-left: 10px;
+            }
+        }
     }
 } 
 
@@ -235,7 +244,15 @@
         .lb-toolbar {
             padding-bottom: 15px;
         }
-        
+        .lb-post-info {
+            width: 100%;
+            
+            .twitter-share-button {
+                right: auto;
+                bottom: -1px;
+                margin-left: 10px;
+            }
+        }
         .lb-post-tags {
             li.lb-first {
                 margin-left: 0.5em;
