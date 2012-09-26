@@ -1,14 +1,12 @@
 @import "../resources/jquery-ui.scss";
 @import "compass/css3";
-@import "compass/css3/transition";
+@import "animation";
 
 
-/*
-@-webkit-keyframes colorPulse {
+@include keyframes(colorPulse) {
       0% {background-color: #EEEEEE;}
     100% {background-color: lightYellow;}
 }
-*/
 
 .lb {
     width: 100%;
@@ -122,10 +120,7 @@
         
         &.lb-status-paused {
             background-color: lightYellow;
-            /*
-            -webkit-animation: colorPulse 1s infinite alternate;
-            -webkit-animation-delay: 0s;
-            */
+            @include animation(colorPulse 1s infinite alternate);
         }
     }
 
@@ -179,7 +174,7 @@
         @include border-radius(3px);
         color: #999999;
         background-color: #EEEEEE;
-        margin: 18px 15px 0 15px;
+        margin: 20px 15px 0 15px;
         padding: 4px;
         border: 1px solid #CCCCCC;
         font-size: 12px;

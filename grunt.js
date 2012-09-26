@@ -45,7 +45,8 @@ module.exports = function (grunt) {
         forcecompile: true,
         debugsass: true,
         relativeassets: true,
-        images: 'assets/resources/images'
+        images: 'assets/resources/images',
+        require: 'animation'
       },
       prod: {
         src: 'assets/scss',
@@ -55,7 +56,8 @@ module.exports = function (grunt) {
         forcecompile: true,
         debugsass: false,
         relativeassets: true,
-        images: 'assets/resources/images'
+        images: 'assets/resources/images',
+        require: 'animation'
       }
     },
     watch: {
