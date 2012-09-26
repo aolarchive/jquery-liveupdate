@@ -25,11 +25,21 @@
 
         img {
             float: left;
-            max-height: 100px;
-            max-width: 100px;
+            height: 100px;
+            width: auto;
             margin: {
                 right: 15px;
                 bottom: 10px;
+            }
+        }
+        
+        a {
+            color: #206994;
+            text-decoration: none;
+            
+            &:hover {
+                color: #206994;
+                text-decoration: underline;
             }
         }
         
@@ -53,24 +63,28 @@
     .lb-post-caption {
     }
 
-    .lb-post-timestamp {
-        display: block;
+    .lb-post-info {
         float: left;
-        position: relative;
         clear: both;
-        color: #999999;
-        font-size: 0.7em;
-        line-height: 17px;
+        position: relative;
 
         .twitter-share-button {
             // Config
             $tweetButtonWidth: 56px;
-            $leftPadding: 5px;
+            $leftPadding: 10px;
 
-            bottom: -3px;
+            bottom: -2px;
             position: absolute;
             right: ($tweetButtonWidth + $leftPadding) * -1;
         }
+    }
+    
+    .lb-post-timestamp {
+        display: block;
+        float: left;
+        color: #999999;
+        font-size: 0.7em;
+        line-height: 17px;
     }
 
     .lb-post-tags {
@@ -85,7 +99,7 @@
         list-style: none;
         margin: 0 0 0 1em;
         padding: 2px 5px;
-        background-color: #AAAAAA;
+        background: #AAAAAA;
         color: #FFFFFF;
         @include border-radius(2px);
     }
@@ -106,13 +120,18 @@
         text-align: center;
         border: 1px solid #CCCCCC;
         @include border-radius(3px);
+        color: #000000;
         background-color: #DDDDDD;
+        text-decoration: none;
         padding: 6px 8px;
         margin: 15px;
         cursor: pointer;
 
         &:hover {
-            background-color: #BBBBBB;
+            color: #000000;
+            background-color: #CCCCCC;
+            border: 1px solid #AAAAAA;
+            text-decoration: none;
         }
     }
 
@@ -142,12 +161,17 @@
         text-align: center;
         border: 1px solid #CCCCCC;
         @include border-radius(3px);
+        color: #000000;
         background-color: #DDDDDD;
+        text-decoration: none;
         padding: 6px 0px;
         cursor: pointer;
 
         &:hover {
-            background-color: #BBBBBB;
+            color: #000000;
+            background-color: #CCCCCC;
+            border: 1px solid #AAAAAA;
+            text-decoration: none;
         }
     }
     
@@ -159,4 +183,28 @@
         position: relative;
     }
     
+}
+
+/* Styles for IE7 */
+*:first-child+html {
+    .lb {
+        .lb-toolbar {
+            padding-bottom: 15px;
+        }
+    }
+} 
+
+/* Styles for IE 6 and below */
+* html {
+    .lb {
+        .lb-toolbar {
+            padding-bottom: 15px;
+        }
+        
+        .lb-post-tags {
+            li.lb-first {
+                margin-left: 0.5em;
+            }
+        }
+    }
 }

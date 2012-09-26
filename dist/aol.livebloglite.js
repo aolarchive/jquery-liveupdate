@@ -321,7 +321,8 @@
                   memberId = item.memberId,
                   timestampString = '<a href="#p' + id + '">' + getFormattedDateTime(timestamp) + '</a> by ' + item.memberName,
                   $tweetButton,
-                  tweetText;
+                  tweetText,
+                  $postInfo;
 
                 //console.log('type', type);
 
@@ -360,12 +361,32 @@
                 }
 
                 element.append(
-                  $('<span />', {
-                    html: timestampString,
-                    'class': 'lb-post-timestamp'
+                  $postInfo = $('<span />', {
+                    'class': 'lb-post-info'
                   })
+                  .append(
+                    $('<span />', {
+                      html: timestampString,
+                      'class': 'lb-post-timestamp'
+                    })
+                  )
                 );
 
+                if (item.tags && item.tags.length) {
+                  var tagsList = $('<ul />', {
+                    'class': 'lb-post-tags'
+                  }).appendTo($postInfo);
+
+                  $.each(item.tags, function (i, el) {
+                    tagsList.append(
+                      $('<li />', {
+                        text: el,
+                        'class': ((i === 0) ? 'lb-first' : null)
+                      })
+                    );
+                  });
+                }
+                
                 if (options.tweetButtons) {
                   // Make the tweet button
                   tweetText = caption || data;
@@ -375,28 +396,13 @@
                   element.bind('mouseenter', function (event) {
                     // Unbind the load event once it's been triggered
                     element.unbind('mouseenter');
-                    element.find('.lb-post-timestamp')
-                      .append($tweetButton);
+                    $postInfo.append($tweetButton);
 
                     // Re-render tweet buttons
                     // https://dev.twitter.com/discussions/6860
                     twttr.widgets.load();
                   });
 
-                }
-
-                if (item.tags && item.tags.length) {
-                  var tagsList = $('<ul />', {
-                    'class': 'lb-post-tags'
-                  }).appendTo(element);
-
-                  $.each(item.tags, function (i, el) {
-                    tagsList.append(
-                      $('<li />', {
-                        text: el
-                      })
-                    );
-                  });
                 }
 
                 return element;
@@ -848,6 +854,16 @@
 
               }
             });
+            
+            // API fires 'end' event when the set time is reached to stop polling
+            $this.bind('end', function (event) {
+              $('.lb-pause-button', $this).hide();
+            });
+            
+            // If not alive, or reached end time
+            if (options.alive === false || (options.end && options.end <= new Date())) {
+              $('.lb-pause-button', $this).hide();
+            }
 
             // Set up show / hide of tweet buttons
             if (options.tweetButtons) {
