@@ -154,6 +154,24 @@
         font-size: 0.7em;
         margin: 0 0 5px 0;
     }
+    
+    .lb-status {
+        display: block;
+        float: right;
+        vertical-align: middle;
+        text-align: center;
+        @include border-radius(3px);
+        color: #999999;
+        margin: 18px 15px;
+        padding: 4px;
+        border: 1px solid #CCCCCC;
+        font-size: 12px;
+        text-transform: uppercase;
+        
+        &.lb-status-live {
+            color: #CC0000;
+        }
+    }
 
     .lb-more-button {
         display: inline-block;

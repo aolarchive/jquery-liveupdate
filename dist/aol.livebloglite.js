@@ -309,6 +309,7 @@
               $posts = null,
               $toolbar = null,
               $slider = null,
+              $status = null,
 
               buildItem = function (item, element) {
 
@@ -638,6 +639,8 @@
                   stop();
                   $button.text('Resume');
                 }
+
+                updateStatusLabel();
               },
 
               start = function () {
@@ -648,6 +651,25 @@
               stop = function () {
                 $this.liveBlogLiteApi('pause');
                 paused = true;
+              },
+ 
+              updateStatusLabel = function (enabled) {
+                if ($status) {
+                  $status.removeClass('lb-status-live');
+                  
+                  if (enabled === false) {
+                    $status.text('')
+                      .hide();
+                  } else {
+                    if (paused) {
+                      $status.text('Paused');
+                    } else {
+                      $status.text('Live!')
+                        .addClass('lb-status-live');
+                    }
+                    $status.show();
+                  }
+                }
               },
 
               /**
@@ -767,7 +789,11 @@
                     $slider = $('<div />', {
                       'class': 'lb-timeline-slider'
                     })
-                  )
+                  ),
+                  
+                  $status = $('<span />', {
+                      'class': 'lb-status'
+                    })
                 )
               );
 
@@ -858,11 +884,13 @@
             // API fires 'end' event when the set time is reached to stop polling
             $this.bind('end', function (event) {
               $('.lb-pause-button', $this).hide();
+              updateStatusLabel(false);
             });
             
             // If not alive, or reached end time
             if (options.alive === false || (options.end && options.end <= new Date())) {
               $('.lb-pause-button', $this).hide();
+              updateStatusLabel(false);
             }
 
             // Set up show / hide of tweet buttons
@@ -899,6 +927,7 @@
             }
 
             paused = false;
+            updateStatusLabel();
 
           });
 
