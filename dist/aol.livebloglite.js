@@ -289,7 +289,8 @@
         url: null,
         toolbarEnabled: false,
         pageSize: 0,
-        tweetButtons: true
+        tweetButtons: true,
+        height: 0
       },
 
       $this = $(this),
@@ -884,6 +885,10 @@
             })
             .appendTo($this)
             .scroll(onContainerScroll);
+            
+            if (options.height && options.height > 0) {
+              $posts.height(options.height);
+            }
 
             // Bind to API 'update' events
             $this.bind('update', function (event, data) {
