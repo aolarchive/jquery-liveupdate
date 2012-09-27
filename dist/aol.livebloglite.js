@@ -651,7 +651,7 @@
                * @param {String} text The text to include in the tweet
                */
               makeTweetButton = function (id, text) {
-                var href = options.url + window.location.pathname.substring(1, window.location.pathname.length),
+                var href = window.location.href.replace(/\#.*$/, ''),
                   $tweetButton = $('<a />', {
                     'data-count': 'none',
                     'data-text': '"' + text + '"',
