@@ -270,11 +270,14 @@
 
 }(jQuery));
 
-/*
- * aol.livebloglite
- * https://github.com/aol/liveblog-widget
- *
- * by Nate Eagle & Jeremy Jannotta
+/**
+ * AOL Liveblog Lite UI Widget
+ * 
+ * @fileOverview A slim UI widget to publish data from AOL liveblogs.
+ * 
+ * @see https://github.com/aol/liveblog-widget
+ * @author Nate Eagle, Jeremy Jannotta
+ * @requires $.fn.liveBlogLiteApi
  */
 
 (function ($) {
@@ -297,6 +300,7 @@
 
           var options = $.extend(true, {}, defaultOptions, customOptions);
 
+          // Listen to 'begin' event from API, to initialize and build the widget
           $this.bind('begin', function (event) {
 
             $this.empty();
@@ -311,6 +315,13 @@
               $slider = null,
               $status = null,
 
+              /**
+               * Create DOM element for post item from the given data item. If element is provided 
+               *   then replaces content of that element, else creates new one.
+               * @param {Object} item The data item used as source.
+               * @param {Object|null} element The optional jQuery object to modify, instead of creating new one.
+               * @returns {Object} The jQuery object built from the data, not yet added to the DOM.
+               */
               buildItem = function (item, element) {
 
                 var data = item.content,
@@ -409,6 +420,11 @@
                 return element;
               },
 
+              /**
+               * Add data item into the DOM.
+               * @param {Object} item The item to add.
+               * @param {Object|null} afterElement The optional jQuery object after which to position the new item.
+               */
               addItem = function (item, afterElement) {
                 var $item = $('#p' + item.id, $posts),
                   $parent = null;
@@ -446,6 +462,10 @@
                 }
               },
 
+              /**
+               * Update data item in the DOM with new one.
+               * @param {Object} item The new item to use.
+               */
               updateItem = function (item) {
                 var $item = $('#p' + item.id, $posts);
 
@@ -462,6 +482,10 @@
                 }
               },
 
+              /**
+               * Remove data item from the DOM.
+               * @param {Object} item The item to remove; requires item.id for reference.
+               */
               deleteItem = function (item) {
                 var $item = $('#p' + item.id, $posts);
 
@@ -475,6 +499,11 @@
                 }
               },
 
+              /**
+               * Add data items from API into the DOM. IF pagination is enabled, 
+               *   only shows n items at a time, and remainder goes into pendingUpdates array.
+               * @param {Array} items An array of post items from the API to add to the view.
+               */
               addItems = function (items) {
 
                 items = items || [];
@@ -508,6 +537,10 @@
                 });
               },
 
+              /**
+               * The 'more' button was clicked, to show the next page of paginated items.
+               * @param {Event} event
+               */
               onMoreButtonClicked = function (event) {
                 var button = $(event.target),
                   len = pendingUpdates.length,
@@ -531,6 +564,10 @@
                 }
               },
 
+              /**
+               * Scroll the post container to position the given post item at the top.
+               * @param {String} id The id of post item to scroll to. 
+               */
               goToItem = function (id) {
                 var $post = $('#p' + id, $posts);
 
@@ -540,6 +577,12 @@
                 }
               },
 
+              /**
+               * Find the post item nearest to the given timestamp.
+               * @param {Number} timestamp The timestamp to compare, as generated from Date.getTime()
+               * @returns {Object|null} The jQuery object found with the nearest 
+               *   match to the given timestamp, or null if not found.
+               */
               getNearestItemByTime = function (timestamp) {
                 var $item = null;
 
@@ -556,6 +599,11 @@
                 return $item;
               },
 
+              /**
+               * Formats a Date object into a simple string; ex: "9/27/2012, 10:44am"
+               * @param {Date} dateObj The Date object to format.
+               * @returns {String} Formatted date/time string.
+               */
               getFormattedDateTime = function (dateObj) {
                 dateObj = new Date(dateObj);
 
@@ -595,8 +643,11 @@
                 return dateTimeStr;
               },
 
-              /* Return a Tweet Button according to the specs here:
-               * https://twitter.com/about/resources/buttons#tweet
+              /**
+               * Return a Tweet Button according to the specs here:
+               * @see https://twitter.com/about/resources/buttons#tweet
+               * @param {String} id The post item id
+               * @param {String} text The text to include in the tweet
                */
               makeTweetButton = function (id, text) {
                 var href = options.url + window.location.pathname.substring(1, window.location.pathname.length),
@@ -611,6 +662,13 @@
                 return $tweetButton;
               },
 
+              /**
+               * Modify the pendingUpdates array. If item is provided, replaces 
+               *   existing with that item; if item not provided then deletes item from list.
+               * 
+               * @param {String} id The post item id of the item to modify
+               * @param {Object|null} item The new item to use, or null to remove it
+               */
               modifyPendingUpdate = function (id, item) {
                 if (pendingUpdates.length) {
                   for (var i = 0; i < pendingUpdates.length; i++) {
@@ -629,6 +687,10 @@
                 }
               },
 
+              /**
+               * Pause button was clicked
+               * @param {Event} event
+               */
               onPausedButtonClicked = function (event) {
                 var $button = $(event.target);
 
@@ -645,16 +707,26 @@
                 updateStatusLabel();
               },
 
+              /**
+               * Start/resume the API, so polls for updates
+               */
               start = function () {
                 $this.liveBlogLiteApi('play');
                 paused = false;
               },
 
+              /**
+               * Pause the API, so no polling occurs
+               */
               stop = function () {
                 $this.liveBlogLiteApi('pause');
                 paused = true;
               },
- 
+              
+              /**
+               * Update the blog status indicator based on its paused state.
+               * @param {Boolean} enabled Whether the status should be visible or not.
+               */
               updateStatusLabel = function (enabled) {
                 if ($status) {
                   $status.removeClass('lb-status-live');
@@ -715,6 +787,7 @@
 
               /**
                * Return the top most visible post item in the scrollable container
+               * @returns {Object|null} jQuery object of top most visible item, or null if not found
                */
               getTopVisibleItem = function (container) {
                 var $container = $(container || window),
@@ -764,7 +837,9 @@
                 }
               };
 
-            // Setup the UI structure
+            /*
+             *  Setup the UI structure
+             */
 
             $this.addClass('lb');
 
@@ -810,7 +885,7 @@
             .appendTo($this)
             .scroll(onContainerScroll);
 
-            // Bind to API events
+            // Bind to API 'update' events
             $this.bind('update', function (event, data) {
               //console.log('update', event, data);
               var hash = window.location.hash;
