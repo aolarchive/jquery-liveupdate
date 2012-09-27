@@ -36,35 +36,38 @@
         init: function (customOptions) {
           var timeToBegin;
 
-          state.lastUpdate = state.lastUpdate || 0;
-          state.count = state.count || 0;
-          state.options = $.extend(true, {}, defaultOptions, customOptions);
-
-          // Save state
-          save();
-
-          timeToBegin = function () {
-            var now = new Date();
-
-            if (state.options.begin) {
-              if (state.options.begin < now) {
-                //console.log('yep, begin!');
+          // Only initialize this object once
+          if (typeof($this.data('lbl-state')) === 'undefined') {
+          
+            state.lastUpdate = state.lastUpdate || 0;
+            state.count = state.count || 0;
+            state.options = $.extend(true, {}, defaultOptions, customOptions);
+  
+            // Save state
+            save();
+  
+            timeToBegin = function () {
+              var now = new Date();
+  
+              if (state.options.begin) {
+                if (state.options.begin < now) {
+                  //console.log('yep, begin!');
+                  $this.trigger('begin');
+                  methods.fetch();
+                } else {
+                  //console.log('do not begin yet');
+                  // Wait 10 seconds, then check again
+                  state.timer = setTimeout(timeToBegin, 10000);
+                }
+              } else {
+                //console.log('no begin time set, so... begin!');
                 $this.trigger('begin');
                 methods.fetch();
-              } else {
-                //console.log('do not begin yet');
-                // Wait 10 seconds, then check again
-                state.timer = setTimeout(timeToBegin, 10000);
               }
-            } else {
-              //console.log('no begin time set, so... begin!');
-              $this.trigger('begin');
-              methods.fetch();
-            }
-          };
-
-
-          timeToBegin();
+            };
+  
+            timeToBegin();  
+          }
         },
 
         live: function () {
