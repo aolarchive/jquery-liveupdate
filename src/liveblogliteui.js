@@ -697,10 +697,15 @@
               updateStatusLabel(false);
             });
             
-            // If not alive, or reached end time
+            // If not alive, or already reached end time
             if (options.alive === false || (options.end && options.end <= new Date())) {
               $('.lb-pause-button', $this).hide();
               updateStatusLabel(false);
+            
+            // else is alive and kickin'
+            } else {
+              paused = false;
+              updateStatusLabel();
             }
 
             // Set up show / hide of tweet buttons
@@ -735,9 +740,6 @@
                   .fadeOut('fast');
               });
             }
-
-            paused = false;
-            updateStatusLabel();
 
           });
 
