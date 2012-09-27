@@ -17,6 +17,10 @@ h2. How to use @$.liveBlogLiteApi@ and @$.liveBlogLiteUi@
 # Add the CSS to your page: @assets/prod/css/aol.livebloglite.css@. (These are sample styles only - feel free to use the @.scss@ file as reference for creating your own: @assets/scss/aol.livebloglite.scss@.
 # Instantiate it using code along these lines:
 
+h2. TODO! Document begin / end features
+
+p. Note location of this "tool for creating a valid JS date string":http://codepen.io/anon/full/vFIfr.
+
 bc..  $(document).ready(function () {
   // <div id="myLiveBlog"></div> is the container element in the markup
   var $myLiveBlog = $('#myLiveBlog').liveBlogLiteUi({
