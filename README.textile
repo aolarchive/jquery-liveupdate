@@ -33,7 +33,6 @@ p. Note location of this "tool for creating a valid JS date string":http://codep
 
 h2. A Warning About Sandboxes
 
-bq..
-CMS can not, will not, has never, and will never dynamically update Sandbox'd Sites in Beta mode. Beta Mode is strictly for testing a site with the production level caching layer turned on. It is built this way to discourage people from trying to run production sites from the sandbox.
+bq..  CMS can not, will not, has never, and will never dynamically update Sandbox'd Sites in Beta mode. Beta Mode is strictly for testing a site with the production level caching layer turned on. It is built this way to discourage people from trying to run production sites from the sandbox.
 
 "If you wish to test a Live Update post, and have it update LIVE. 1. Turn off Beta mode. 2. Point the updater to the production api.
