@@ -275,9 +275,9 @@
 
 /**
  * AOL Liveblog Lite UI Widget
- * 
+ *
  * @fileOverview A slim UI widget to publish data from AOL liveblogs.
- * 
+ *
  * @see https://github.com/aol/liveblog-widget
  * @author Nate Eagle, Jeremy Jannotta
  * @requires $.fn.liveBlogLiteApi
@@ -320,7 +320,7 @@
               $status = null,
 
               /**
-               * Create DOM element for post item from the given data item. If element is provided 
+               * Create DOM element for post item from the given data item. If element is provided
                *   then replaces content of that element, else creates new one.
                * @param {Object} item The data item used as source.
                * @param {Object|null} element The optional jQuery object to modify, instead of creating new one.
@@ -355,7 +355,7 @@
                 if (type === 'text' || type === 'comment') {
                   element.append(
                     $('<span />', {
-                      text: data,
+                      html: data,
                       'class': 'lb-post-text'
                     })
                   );
@@ -370,7 +370,7 @@
                       src: data
                     }),
                     $('<span />', {
-                      text: caption,
+                      html: caption,
                       'class': 'lb-post-caption'
                     })
                   );
@@ -402,7 +402,7 @@
                     );
                   });
                 }
-                
+
                 if (options.tweetButtons) {
                   // Make the tweet button
                   tweetText = caption || data;
@@ -504,7 +504,7 @@
               },
 
               /**
-               * Add data items from API into the DOM. IF pagination is enabled, 
+               * Add data items from API into the DOM. IF pagination is enabled,
                *   only shows n items at a time, and remainder goes into pendingUpdates array.
                * @param {Array} items An array of post items from the API to add to the view.
                */
@@ -570,7 +570,7 @@
 
               /**
                * Scroll the post container to position the given post item at the top.
-               * @param {String} id The id of post item to scroll to. 
+               * @param {String} id The id of post item to scroll to.
                */
               goToItem = function (id) {
                 var $post = $('#p' + id, $posts);
@@ -584,7 +584,7 @@
               /**
                * Find the post item nearest to the given timestamp.
                * @param {Number} timestamp The timestamp to compare, as generated from Date.getTime()
-               * @returns {Object|null} The jQuery object found with the nearest 
+               * @returns {Object|null} The jQuery object found with the nearest
                *   match to the given timestamp, or null if not found.
                */
               getNearestItemByTime = function (timestamp) {
@@ -667,9 +667,9 @@
               },
 
               /**
-               * Modify the pendingUpdates array. If item is provided, replaces 
+               * Modify the pendingUpdates array. If item is provided, replaces
                *   existing with that item; if item not provided then deletes item from list.
-               * 
+               *
                * @param {String} id The post item id of the item to modify
                * @param {Object|null} item The new item to use, or null to remove it
                */
@@ -726,7 +726,7 @@
                 $this.liveBlogLiteApi('pause');
                 paused = true;
               },
-              
+
               /**
                * Update the blog status indicator based on its paused state.
                * @param {Boolean} enabled Whether the status should be visible or not.
@@ -734,7 +734,7 @@
               updateStatusLabel = function (enabled) {
                 if ($status) {
                   $status.removeClass('lb-status-live');
-                  
+
                   if (enabled === false) {
                     $status.text('')
                       .hide();
@@ -871,7 +871,7 @@
                       'class': 'lb-timeline-slider'
                     })
                   ),
-                  
+
                   $status = $('<span />', {
                       'class': 'lb-status'
                     })
@@ -888,7 +888,7 @@
             })
             .appendTo($this)
             .scroll(onContainerScroll);
-            
+
             if (options.height && options.height > 0) {
               $posts.height(options.height);
             }
@@ -924,7 +924,7 @@
                   // Adjust the begin or end time, if this item was the first or last item
                   if ($item.length && !$item.hasClass('lb-comment')) {
                     timestamp = $item.data('date');
-                    
+
                     // Item was first, assign beginTime to prev item's date
                     if (timestamp === beginTime) {
                       nextItem = $item.prev(':not(.lb-comment)');
@@ -942,7 +942,7 @@
                     // Update the slider
                     initSlider();
                   }
-                  
+
                   // Remove the item from the DOM
                   deleteItem(item);
                 });
@@ -965,18 +965,18 @@
 
               }
             });
-            
+
             // API fires 'end' event when the set time is reached to stop polling
             $this.bind('end', function (event) {
               $('.lb-pause-button', $this).hide();
               updateStatusLabel(false);
             });
-            
+
             // If not alive, or already reached end time
             if (options.alive === false || (options.end && options.end <= new Date())) {
               $('.lb-pause-button', $this).hide();
               updateStatusLabel(false);
-            
+
             // else is alive and kickin'
             } else {
               paused = false;

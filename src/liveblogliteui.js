@@ -95,7 +95,7 @@
                       src: data
                     }),
                     $('<span />', {
-                      text: caption,
+                      html: caption,
                       'class': 'lb-post-caption'
                     })
                   );
