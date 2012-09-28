@@ -3,6 +3,10 @@ module.exports = function (grunt) {
 
   // Project configuration.
   grunt.initConfig({
+    server: {
+      port: 8000,
+      base: '.'
+    },
     pkg: '<json:aol.livebloglite.jquery.json>',
     meta: {
       banner: '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
@@ -104,5 +108,7 @@ module.exports = function (grunt) {
 
   // Default task.
   grunt.registerTask('default', 'lint qunit concat min compass:dev compass:prod');
+
+  grunt.registerTask("watch-serve", "server watch");
 
 };
