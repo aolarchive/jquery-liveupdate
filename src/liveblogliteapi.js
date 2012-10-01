@@ -21,9 +21,10 @@
         alive: true,
         callbackPrefix: 'lb_' + new Date().getTime() + '_',
         // The domain of the blog, i.e. http://aol.com
-        url : null,
+        url: null,
         // The id of the live blog post, i.e. 20317028
-        postId : null
+        postId: null,
+        trafficPing: true
       },
       // Used to store plugin state
       state = $this.data('lbl-state') || {},
@@ -38,35 +39,38 @@
 
           // Only initialize this object once
           if (typeof($this.data('lbl-state')) === 'undefined') {
-          
+
             state.lastUpdate = state.lastUpdate || 0;
             state.count = state.count || 0;
             state.options = $.extend(true, {}, defaultOptions, customOptions);
-  
+
+            // Make sure options.url has a trailing slash
+            if (state.options.url.substring(state.options.url.length - 1) !== '/') {
+              state.options.url += '/';
+            }
+
             // Save state
             save();
-  
+
             timeToBegin = function () {
               var now = new Date();
-  
+
               if (state.options.begin) {
                 if (state.options.begin < now) {
-                  //console.log('yep, begin!');
                   $this.trigger('begin');
+                  methods.trafficPing();
                   methods.fetch();
                 } else {
-                  //console.log('do not begin yet');
                   // Wait 10 seconds, then check again
                   state.timer = setTimeout(timeToBegin, 10000);
                 }
               } else {
-                //console.log('no begin time set, so... begin!');
                 $this.trigger('begin');
                 methods.fetch();
               }
             };
-  
-            timeToBegin();  
+
+            timeToBegin();
           }
         },
 
@@ -80,6 +84,8 @@
 
         die: function () {
           state.options.alive = false;
+          // Turn off traffic pinging
+          methods.trafficPing(false);
           save();
         },
 
@@ -161,9 +167,10 @@
                 return normalizedData;
               };
 
-          // Make sure options.url has a trailing slash
-          if (options.url.substring(options.url.length - 1) !== '/') {
-            options.url += '/';
+          // If the trafficPing option is set to true and there's not currently
+          // a setInterval stored on the state object, start pinging
+          if (options.trafficPing && !state.trafficPing) {
+            methods.trafficPing();
           }
 
           // The Blogsmith API uses the 'live-update' pattern,
@@ -227,6 +234,7 @@
         pause: function () {
           state.paused = true;
           clearTimeout(state.timer);
+          methods.trafficPing(false);
 
           // Save state
           save();
@@ -238,6 +246,32 @@
 
           // Save state
           save();
+        },
+
+        trafficPing: function (start) {
+          // Ping the traffic URL every thirty seconds
+          var imageBeacon,
+            interval = 30 * 1000,
+            postId = state.options.postId,
+            postUrl = encodeURIComponent(window.location.pathname);
+
+          // Turn pinger on (true) or off (false)
+          if (start !== false) {
+            start = true;
+          }
+
+          if (start === true && !state.trafficPing) {
+            state.trafficPing = setInterval(function () {
+              imageBeacon = new Image();
+
+              // Fire a beacon without Ajax! h/t Dave Artz
+              imageBeacon.src = state.options.url + 'traffic/?t=js&bv=&os=' + postId + '&tz=&lg=&rv=&rsv=&pw=' + postUrl + '&cb=';
+
+            }, interval);
+          } else if (start === false) {
+            clearInterval(state.trafficPing);
+            delete state.trafficPing;
+          }
         }
 
       };
