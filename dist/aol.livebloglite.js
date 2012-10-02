@@ -421,7 +421,6 @@
 
           // Listen to 'begin' event from API, to initialize and build the widget
           $this.bind('begin', function (event) {
-            console.log('begin?');
 
             $this.empty();
 
@@ -534,7 +533,7 @@
                 if (options.tweetButtons) {
                   // Make the tweet button
                   tweetText = caption || data;
-                  $tweetButton = makeTweetButton(id, data);
+                  $tweetButton = makeTweetButton(id, tweetText);
 
                   // Bind a just-in-time load of the tweet button
                   element.bind('mouseenter', function (event) {
