@@ -192,7 +192,8 @@
                 var $item = $('#p' + item.id, $posts),
                   $parent = null,
                   height = 0,
-                  scrollTop = $posts.scrollTop();
+                  scrollTop = $posts.scrollTop(),
+                  $commentsLabel;
 
                 if (!$item.length) {
                   $item = buildItem(item);
@@ -217,6 +218,19 @@
                         
                         // Increment the parent's comments count
                         $parent.data('comments', $parent.data('comments') + 1);
+                        
+                        // Add the comments label to parent item, if needed
+                        if ($parent.data('comments') > 0) {
+                          $commentsLabel = $parent.find('.lb-post-comments-label');
+                          if (!$commentsLabel.length) {
+                            $parent.append(
+                              $commentsLabel = $('<span />', {
+                                'class': 'lb-post-comments-label',
+                                'text': 'Comments'
+                              })
+                            );
+                          }
+                        }
                         
                       } else {
                         // Parent post doesn't exist, so add comment to
@@ -298,6 +312,11 @@
                     if ($item.hasClass('lb-comment')) {
                       $parent = $item.prevAll('.lb-post:not(.lb-comment):first');
                       $parent.data('comments', $parent.data('comments') - 1);
+                      
+                      // Remove the comments label, if not needed
+                      if ($parent.data('comments') === 0) {
+                        $parent.find('.lb-post-comments-label').remove();
+                      }
                     }
                     
                     $item.remove();
