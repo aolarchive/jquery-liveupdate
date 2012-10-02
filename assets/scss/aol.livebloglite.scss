@@ -106,6 +106,7 @@
         margin: 0 0 0 1em;
 
         a {
+            display: block;
             @include border-radius(2px);
             background: #AAAAAA;
             color: #fff;
@@ -223,7 +224,17 @@
         background-color: hsl(60, 100%, 80%);
         clear: left;
         font-size: 12px;
-        padding: 10px;
+        padding: 10px 15px;
+        
+        a {
+            color: #206994;
+            text-decoration: none;
+
+            &:hover {
+                color: #206994;
+                text-decoration: underline;
+            }
+        }
     }
 
     .lb-post-container {
@@ -251,6 +262,9 @@
                 margin-left: 10px;
             }
         }
+        .lb-tag-alert {
+            padding-top: 5px;
+        }
     }
 }
 
@@ -273,6 +287,9 @@
             li.lb-first {
                 margin-left: 0.5em;
             }
+        }
+        .lb-tag-alert {
+            padding-top: 5px;
         }
     }
 }
