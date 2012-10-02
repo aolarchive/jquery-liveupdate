@@ -29,6 +29,11 @@
             top: 1em;
         }
 
+        &.active {
+            background-color: hsl(60, 100%, 90%);
+            @include transition(all, 0.5s);
+        }
+
         img {
             float: left;
             height: 100px;
@@ -57,7 +62,7 @@
     .lb-comment {
         padding-left: 50px;
         background: #EEEEEE inline-image('line-dot.png') no-repeat 20px -160px;
-        
+
         &.lb-comment-last {
         }
     }
@@ -228,7 +233,7 @@
         clear: left;
         font-size: 12px;
         padding: 10px 15px;
-        
+
         a {
             color: #206994;
             text-decoration: none;
