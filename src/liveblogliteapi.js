@@ -13,27 +13,45 @@
       args = arguments,
       defaultOptions = {
         // Set a time for your liveblog to begin
+        // Should be a valid JavaScript Date object
         begin: null,
+
         // Set a time for your liveblog to end
+        // Should be a valid JavaScript Date object
         end: null,
+
         // Manually tell your liveblog to be live or not
         // (Does not poll if it's not live)
         alive: true,
+
+        // Callback prefix to use for the JSONP call
         callbackPrefix: 'lb_' + new Date().getTime() + '_',
+
         // The domain of the blog, i.e. http://aol.com
         url: null,
+
         // The id of the live blog post, i.e. 20317028
         postId: null,
+
+        // Send image beacon calls to Blogsmith to track traffic
         trafficPing: true
       },
+
       // Used to store plugin state
       state = $this.data('lbl-state') || {},
-      // Save the state object to this element's data
+
+      /**
+       * Save the state object to this element's data
+       */
       save = function () {
         $this.data('lbl-state', state);
       },
 
       methods = {
+        /**
+         * Initialize the liveblog api
+         * @param {Object} customOptions Custom plugin options
+         */
         init: function (customOptions) {
           var timeToBegin;
 
@@ -74,6 +92,9 @@
           }
         },
 
+        /**
+         * Resume updating from the liveBlogApi
+         */
         live: function () {
           if (state.options.alive === false) {
             methods.fetch();
@@ -82,6 +103,9 @@
           save();
         },
 
+        /**
+         * Kill all updating from the liveBlogApi
+         */
         die: function () {
           state.options.alive = false;
           // Turn off traffic pinging
@@ -89,6 +113,10 @@
           save();
         },
 
+        /**
+         * Hit the Blogsmith liveupdates API and trigger an update event with
+         * the returned data
+         **/
         fetch: function () {
           // Fetch data from API
           var apiUrl,
@@ -96,9 +124,14 @@
             state = $this.data('lbl-state'),
             options = state.options,
             callback = options.callbackPrefix + state.count,
-            // The API's data has single-letter keys for bandwidth
-            // reasons. Let's manually normalize the data into a more
-            // human-readable structure.
+            /**
+             * The API's data has single-letter keys for bandwidth reasons. We
+             * manually normalize the data into a more human-readable
+             * structure.
+             * @param {Object} data Object data from the API
+             * @param {Array} membersArray An array of members (bloggers) from
+             * the API
+             */
             normalize = function (data, membersArray) {
                 membersArray = membersArray || [];
                 var i, length, item, items, member,
@@ -173,8 +206,8 @@
             methods.trafficPing();
           }
 
-          // The Blogsmith API uses the 'live-update' pattern,
-          // which needs to be defined in the blog's .htaccess
+          // The Blogsmith API uses the 'live-update' pattern in the URL which
+          // needs to be defined in the blog's .htaccess
           apiUrl = options.url + 'live-update/' + options.postId + '/' + state.lastUpdate;
 
           $.ajax({
@@ -229,8 +262,10 @@
           });
         },
 
-        // Allow updates to be paused or unpaused
-        // $('#somediv').liveBlogLiteApi('pause');
+        /**
+         * Pause updates
+         * @example $('#somediv').liveBlogLiteApi('pause');
+         */
         pause: function () {
           state.paused = true;
           clearTimeout(state.timer);
@@ -240,6 +275,10 @@
           save();
         },
 
+        /**
+         * Resume updates
+         * @example $('#somediv').liveBlogLiteApi('play');
+         */
         play: function () {
           state.paused = false;
           methods.fetch();
@@ -248,6 +287,10 @@
           save();
         },
 
+        /**
+         * Start / stop regular pinging of a traffic URL for analytics
+         * @param {Boolean} start True by default. False stops traffic beacon.
+         */
         trafficPing: function (start) {
           // Ping the traffic URL every thirty seconds
           var imageBeacon,
