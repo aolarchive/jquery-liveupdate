@@ -137,6 +137,7 @@
         padding: 6px 8px;
         margin: 15px;
         cursor: pointer;
+        @include transition(all 0.2s);
 
         &:hover {
             color: #000000;
@@ -196,6 +197,7 @@
         text-decoration: none;
         padding: 6px 0px;
         cursor: pointer;
+        @include transition(all 0.2s);
 
         &:hover {
             color: #000000;
