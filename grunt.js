@@ -65,17 +65,9 @@ module.exports = function (grunt) {
       }
     },
     watch: {
-      files: '<config:lint.files>',
+      files: ['<config:lint.files>', 'assets/scss/*.scss'],
       tasks: 'default'
     },
-    //watch: {
-      //files: '<config:lint.files>',
-      //tasks: 'lint qunit',
-      //compass: {
-        //files: ['assets/scss/*.scss'],
-        //tasks: ['compass:dev', 'compass:prod']
-      //}
-    //},
     jshint: {
       // Specifying a jshint file will be possible in Grunt soon
       options: {

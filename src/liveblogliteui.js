@@ -27,7 +27,24 @@
 
         if ($.fn.liveBlogLiteApi) {
 
-          var options = $.extend(true, {}, defaultOptions, customOptions);
+          var options = $.extend(true, {}, defaultOptions, customOptions),
+            hash = window.location.hash;
+
+          // Check the hash for the presence of a tag filter
+          // Only one tag may be filtered at a time (currently)
+          if (hash.length) {
+            var tag,
+              start,
+              tagPosition = hash.indexOf('tag=');
+
+            if (tagPosition > -1) {
+              start = tagPosition + 4;
+              tag = hash.substring(start, hash.length);
+              tag = decodeURIComponent(tag);
+
+              options.tagFilter = tag;
+            }
+          }
 
           // Listen to 'begin' event from API, to initialize and build the widget
           $this.bind('begin', function (event) {
@@ -45,8 +62,9 @@
               $status = null,
 
               /**
-               * Create DOM element for post item from the given data item. If element is provided
-               *   then replaces content of that element, else creates new one.
+               * Create DOM element for post item from the given data item. If
+               * element is provided then replaces content of that element,
+               * else creates new one.
                * @param {Object} item The data item used as source.
                * @param {Object|null} element The optional jQuery object to modify, instead of creating new one.
                * @returns {Object} The jQuery object built from the data, not yet added to the DOM.
@@ -66,6 +84,15 @@
                   $postInfo;
 
                 //console.log('type', type);
+
+                // If there is a tag filter present...
+                if (options.tagFilter && tags) {
+                  // If the tag is not present in this item, don't build it
+                  if (tags.indexOf(options.tagFilter) === -1) {
+                    // Return an empty array
+                    return [];
+                  }
+                }
 
                 if (!element) {
                   element = $('<p />', {
@@ -121,7 +148,7 @@
                   $.each(item.tags, function (i, el) {
                     tagsList.append(
                       $('<li />', {
-                        text: el,
+                        html: '<a href="#tag=' + encodeURIComponent(el) + '" class="tag">' + el + '</a>',
                         'class': ((i === 0) ? 'lb-first' : null)
                       })
                     );
@@ -703,8 +730,14 @@
 
                   goToItem(id);
                 }
-
               }
+
+            });
+
+            $this.delegate('.tag', 'click', function (event) {
+              options.tagFilter = $(event.currentTarget).text();
+              $this.liveBlogLiteApi('reset');
+              $this.trigger('begin');
             });
 
             // API fires 'end' event when the set time is reached to stop polling
