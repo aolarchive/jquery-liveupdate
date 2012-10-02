@@ -15,11 +15,14 @@
 * Includes: jquery.ui.slider.js
 * Copyright (c) 2012 AUTHORS.txt; Licensed MIT, GPL */
 (function(a,b){var c=5;a.widget("ui.slider",a.ui.mouse,{widgetEventPrefix:"slide",options:{animate:!1,distance:0,max:100,min:0,orientation:"horizontal",range:!1,step:1,value:0,values:null},_create:function(){var b=this,d=this.options,e=this.element.find(".ui-slider-handle").addClass("ui-state-default ui-corner-all"),f="<a class='ui-slider-handle ui-state-default ui-corner-all' href='#'></a>",g=d.values&&d.values.length||1,h=[];this._keySliding=!1,this._mouseSliding=!1,this._animateOff=!0,this._handleIndex=null,this._detectOrientation(),this._mouseInit(),this.element.addClass("ui-slider ui-slider-"+this.orientation+" ui-widget"+" ui-widget-content"+" ui-corner-all"+(d.disabled?" ui-slider-disabled ui-disabled":"")),this.range=a([]),d.range&&(d.range===!0&&(d.values||(d.values=[this._valueMin(),this._valueMin()]),d.values.length&&d.values.length!==2&&(d.values=[d.values[0],d.values[0]])),this.range=a("<div></div>").appendTo(this.element).addClass("ui-slider-range ui-widget-header"+(d.range==="min"||d.range==="max"?" ui-slider-range-"+d.range:"")));for(var i=e.length;i<g;i+=1)h.push(f);this.handles=e.add(a(h.join("")).appendTo(b.element)),this.handle=this.handles.eq(0),this.handles.add(this.range).filter("a").click(function(a){a.preventDefault()}).hover(function(){d.disabled||a(this).addClass("ui-state-hover")},function(){a(this).removeClass("ui-state-hover")}).focus(function(){d.disabled?a(this).blur():(a(".ui-slider .ui-state-focus").removeClass("ui-state-focus"),a(this).addClass("ui-state-focus"))}).blur(function(){a(this).removeClass("ui-state-focus")}),this.handles.each(function(b){a(this).data("index.ui-slider-handle",b)}),this.handles.keydown(function(d){var e=a(this).data("index.ui-slider-handle"),f,g,h,i;if(b.options.disabled)return;switch(d.keyCode){case a.ui.keyCode.HOME:case a.ui.keyCode.END:case a.ui.keyCode.PAGE_UP:case a.ui.keyCode.PAGE_DOWN:case a.ui.keyCode.UP:case a.ui.keyCode.RIGHT:case a.ui.keyCode.DOWN:case a.ui.keyCode.LEFT:d.preventDefault();if(!b._keySliding){b._keySliding=!0,a(this).addClass("ui-state-active"),f=b._start(d,e);if(f===!1)return}}i=b.options.step,b.options.values&&b.options.values.length?g=h=b.values(e):g=h=b.value();switch(d.keyCode){case a.ui.keyCode.HOME:h=b._valueMin();break;case a.ui.keyCode.END:h=b._valueMax();break;case a.ui.keyCode.PAGE_UP:h=b._trimAlignValue(g+(b._valueMax()-b._valueMin())/c);break;case a.ui.keyCode.PAGE_DOWN:h=b._trimAlignValue(g-(b._valueMax()-b._valueMin())/c);break;case a.ui.keyCode.UP:case a.ui.keyCode.RIGHT:if(g===b._valueMax())return;h=b._trimAlignValue(g+i);break;case a.ui.keyCode.DOWN:case a.ui.keyCode.LEFT:if(g===b._valueMin())return;h=b._trimAlignValue(g-i)}b._slide(d,e,h)}).keyup(function(c){var d=a(this).data("index.ui-slider-handle");b._keySliding&&(b._keySliding=!1,b._stop(c,d),b._change(c,d),a(this).removeClass("ui-state-active"))}),this._refreshValue(),this._animateOff=!1},destroy:function(){return this.handles.remove(),this.range.remove(),this.element.removeClass("ui-slider ui-slider-horizontal ui-slider-vertical ui-slider-disabled ui-widget ui-widget-content ui-corner-all").removeData("slider").unbind(".slider"),this._mouseDestroy(),this},_mouseCapture:function(b){var c=this.options,d,e,f,g,h,i,j,k,l;return c.disabled?!1:(this.elementSize={width:this.element.outerWidth(),height:this.element.outerHeight()},this.elementOffset=this.element.offset(),d={x:b.pageX,y:b.pageY},e=this._normValueFromMouse(d),f=this._valueMax()-this._valueMin()+1,h=this,this.handles.each(function(b){var c=Math.abs(e-h.values(b));f>c&&(f=c,g=a(this),i=b)}),c.range===!0&&this.values(1)===c.min&&(i+=1,g=a(this.handles[i])),j=this._start(b,i),j===!1?!1:(this._mouseSliding=!0,h._handleIndex=i,g.addClass("ui-state-active").focus(),k=g.offset(),l=!a(b.target).parents().andSelf().is(".ui-slider-handle"),this._clickOffset=l?{left:0,top:0}:{left:b.pageX-k.left-g.width()/2,top:b.pageY-k.top-g.height()/2-(parseInt(g.css("borderTopWidth"),10)||0)-(parseInt(g.css("borderBottomWidth"),10)||0)+(parseInt(g.css("marginTop"),10)||0)},this.handles.hasClass("ui-state-hover")||this._slide(b,i,e),this._animateOff=!0,!0))},_mouseStart:function(a){return!0},_mouseDrag:function(a){var b={x:a.pageX,y:a.pageY},c=this._normValueFromMouse(b);return this._slide(a,this._handleIndex,c),!1},_mouseStop:function(a){return this.handles.removeClass("ui-state-active"),this._mouseSliding=!1,this._stop(a,this._handleIndex),this._change(a,this._handleIndex),this._handleIndex=null,this._clickOffset=null,this._animateOff=!1,!1},_detectOrientation:function(){this.orientation=this.options.orientation==="vertical"?"vertical":"horizontal"},_normValueFromMouse:function(a){var b,c,d,e,f;return this.orientation==="horizontal"?(b=this.elementSize.width,c=a.x-this.elementOffset.left-(this._clickOffset?this._clickOffset.left:0)):(b=this.elementSize.height,c=a.y-this.elementOffset.top-(this._clickOffset?this._clickOffset.top:0)),d=c/b,d>1&&(d=1),d<0&&(d=0),this.orientation==="vertical"&&(d=1-d),e=this._valueMax()-this._valueMin(),f=this._valueMin()+d*e,this._trimAlignValue(f)},_start:function(a,b){var c={handle:this.handles[b],value:this.value()};return this.options.values&&this.options.values.length&&(c.value=this.values(b),c.values=this.values()),this._trigger("start",a,c)},_slide:function(a,b,c){var d,e,f;this.options.values&&this.options.values.length?(d=this.values(b?0:1),this.options.values.length===2&&this.options.range===!0&&(b===0&&c>d||b===1&&c<d)&&(c=d),c!==this.values(b)&&(e=this.values(),e[b]=c,f=this._trigger("slide",a,{handle:this.handles[b],value:c,values:e}),d=this.values(b?0:1),f!==!1&&this.values(b,c,!0))):c!==this.value()&&(f=this._trigger("slide",a,{handle:this.handles[b],value:c}),f!==!1&&this.value(c))},_stop:function(a,b){var c={handle:this.handles[b],value:this.value()};this.options.values&&this.options.values.length&&(c.value=this.values(b),c.values=this.values()),this._trigger("stop",a,c)},_change:function(a,b){if(!this._keySliding&&!this._mouseSliding){var c={handle:this.handles[b],value:this.value()};this.options.values&&this.options.values.length&&(c.value=this.values(b),c.values=this.values()),this._trigger("change",a,c)}},value:function(a){if(arguments.length){this.options.value=this._trimAlignValue(a),this._refreshValue(),this._change(null,0);return}return this._value()},values:function(b,c){var d,e,f;if(arguments.length>1){this.options.values[b]=this._trimAlignValue(c),this._refreshValue(),this._change(null,b);return}if(!arguments.length)return this._values();if(!a.isArray(arguments[0]))return this.options.values&&this.options.values.length?this._values(b):this.value();d=this.options.values,e=arguments[0];for(f=0;f<d.length;f+=1)d[f]=this._trimAlignValue(e[f]),this._change(null,f);this._refreshValue()},_setOption:function(b,c){var d,e=0;a.isArray(this.options.values)&&(e=this.options.values.length),a.Widget.prototype._setOption.apply(this,arguments);switch(b){case"disabled":c?(this.handles.filter(".ui-state-focus").blur(),this.handles.removeClass("ui-state-hover"),this.handles.propAttr("disabled",!0),this.element.addClass("ui-disabled")):(this.handles.propAttr("disabled",!1),this.element.removeClass("ui-disabled"));break;case"orientation":this._detectOrientation(),this.element.removeClass("ui-slider-horizontal ui-slider-vertical").addClass("ui-slider-"+this.orientation),this._refreshValue();break;case"value":this._animateOff=!0,this._refreshValue(),this._change(null,0),this._animateOff=!1;break;case"values":this._animateOff=!0,this._refreshValue();for(d=0;d<e;d+=1)this._change(null,d);this._animateOff=!1}},_value:function(){var a=this.options.value;return a=this._trimAlignValue(a),a},_values:function(a){var b,c,d;if(arguments.length)return b=this.options.values[a],b=this._trimAlignValue(b),b;c=this.options.values.slice();for(d=0;d<c.length;d+=1)c[d]=this._trimAlignValue(c[d]);return c},_trimAlignValue:function(a){if(a<=this._valueMin())return this._valueMin();if(a>=this._valueMax())return this._valueMax();var b=this.options.step>0?this.options.step:1,c=(a-this._valueMin())%b,d=a-c;return Math.abs(c)*2>=b&&(d+=c>0?b:-b),parseFloat(d.toFixed(5))},_valueMin:function(){return this.options.min},_valueMax:function(){return this.options.max},_refreshValue:function(){var b=this.options.range,c=this.options,d=this,e=this._animateOff?!1:c.animate,f,g={},h,i,j,k;this.options.values&&this.options.values.length?this.handles.each(function(b,i){f=(d.values(b)-d._valueMin())/(d._valueMax()-d._valueMin())*100,g[d.orientation==="horizontal"?"left":"bottom"]=f+"%",a(this).stop(1,1)[e?"animate":"css"](g,c.animate),d.options.range===!0&&(d.orientation==="horizontal"?(b===0&&d.range.stop(1,1)[e?"animate":"css"]({left:f+"%"},c.animate),b===1&&d.range[e?"animate":"css"]({width:f-h+"%"},{queue:!1,duration:c.animate})):(b===0&&d.range.stop(1,1)[e?"animate":"css"]({bottom:f+"%"},c.animate),b===1&&d.range[e?"animate":"css"]({height:f-h+"%"},{queue:!1,duration:c.animate}))),h=f}):(i=this.value(),j=this._valueMin(),k=this._valueMax(),f=k!==j?(i-j)/(k-j)*100:0,g[d.orientation==="horizontal"?"left":"bottom"]=f+"%",this.handle.stop(1,1)[e?"animate":"css"](g,c.animate),b==="min"&&this.orientation==="horizontal"&&this.range.stop(1,1)[e?"animate":"css"]({width:f+"%"},c.animate),b==="max"&&this.orientation==="horizontal"&&this.range[e?"animate":"css"]({width:100-f+"%"},{queue:!1,duration:c.animate}),b==="min"&&this.orientation==="vertical"&&this.range.stop(1,1)[e?"animate":"css"]({height:f+"%"},c.animate),b==="max"&&this.orientation==="vertical"&&this.range[e?"animate":"css"]({height:100-f+"%"},{queue:!1,duration:c.animate}))}}),a.extend(a.ui.slider,{version:"1.8.23"})})(jQuery);;
-/*
- * aol.livebloglite
- * https://github.com/aol/liveblog-widget
+/**
+ * AOL Liveblog Lite UI Widget
  *
- * by Nate Eagle & Jeremy Jannotta
+ * @fileOverview A slim API to fetch data from AOL liveblogs.
+ *
+ * @see https://github.com/aol/liveblog-widget
+ * @author Nate Eagle, Jeremy Jannotta
+ * @requires jQuery 1.5.2+
  */
 
 (function ($) {
@@ -30,27 +33,45 @@
       args = arguments,
       defaultOptions = {
         // Set a time for your liveblog to begin
+        // Should be a valid JavaScript Date object
         begin: null,
+
         // Set a time for your liveblog to end
+        // Should be a valid JavaScript Date object
         end: null,
+
         // Manually tell your liveblog to be live or not
         // (Does not poll if it's not live)
         alive: true,
+
+        // Callback prefix to use for the JSONP call
         callbackPrefix: 'lb_' + new Date().getTime() + '_',
+
         // The domain of the blog, i.e. http://aol.com
         url: null,
+
         // The id of the live blog post, i.e. 20317028
         postId: null,
+
+        // Send image beacon calls to Blogsmith to track traffic
         trafficPing: true
       },
+
       // Used to store plugin state
       state = $this.data('lbl-state') || {},
-      // Save the state object to this element's data
+
+      /**
+       * Save the state object to this element's data
+       */
       save = function () {
         $this.data('lbl-state', state);
       },
 
       methods = {
+        /**
+         * Initialize the liveblog api
+         * @param {Object} customOptions Custom plugin options
+         */
         init: function (customOptions) {
           var timeToBegin;
 
@@ -91,6 +112,9 @@
           }
         },
 
+        /**
+         * Resume updating from the liveBlogApi
+         */
         live: function () {
           if (state.options.alive === false) {
             methods.fetch();
@@ -99,6 +123,9 @@
           save();
         },
 
+        /**
+         * Kill all updating from the liveBlogApi
+         */
         die: function () {
           state.options.alive = false;
           // Turn off traffic pinging
@@ -106,16 +133,38 @@
           save();
         },
 
+        /**
+         * Reset the API to refetch all the data
+         */
+        reset: function () {
+          state.count = 0;
+          state.lastUpdate = 0;
+          state.options.callbackPrefix = 'lb_' + new Date().getTime() + '_';
+          clearTimeout(state.timer);
+          console.log(state.timer);
+          methods.fetch();
+        },
+
+        /**
+         * Hit the Blogsmith liveupdates API and trigger an update event with
+         * the returned data
+         **/
         fetch: function () {
+          console.log('fetch');
           // Fetch data from API
           var apiUrl,
             now = new Date(),
             state = $this.data('lbl-state'),
             options = state.options,
             callback = options.callbackPrefix + state.count,
-            // The API's data has single-letter keys for bandwidth
-            // reasons. Let's manually normalize the data into a more
-            // human-readable structure.
+            /**
+             * The API's data has single-letter keys for bandwidth reasons. We
+             * manually normalize the data into a more human-readable
+             * structure.
+             * @param {Object} data Object data from the API
+             * @param {Array} membersArray An array of members (bloggers) from
+             * the API
+             */
             normalize = function (data, membersArray) {
                 membersArray = membersArray || [];
                 var i, length, item, items, member,
@@ -190,8 +239,8 @@
             methods.trafficPing();
           }
 
-          // The Blogsmith API uses the 'live-update' pattern,
-          // which needs to be defined in the blog's .htaccess
+          // The Blogsmith API uses the 'live-update' pattern in the URL which
+          // needs to be defined in the blog's .htaccess
           apiUrl = options.url + 'live-update/' + options.postId + '/' + state.lastUpdate;
 
           $.ajax({
@@ -246,8 +295,10 @@
           });
         },
 
-        // Allow updates to be paused or unpaused
-        // $('#somediv').liveBlogLiteApi('pause');
+        /**
+         * Pause updates
+         * @example $('#somediv').liveBlogLiteApi('pause');
+         */
         pause: function () {
           state.paused = true;
           clearTimeout(state.timer);
@@ -257,6 +308,10 @@
           save();
         },
 
+        /**
+         * Resume updates
+         * @example $('#somediv').liveBlogLiteApi('play');
+         */
         play: function () {
           state.paused = false;
           methods.fetch();
@@ -265,6 +320,10 @@
           save();
         },
 
+        /**
+         * Start / stop regular pinging of a traffic URL for analytics
+         * @param {Boolean} start True by default. False stops traffic beacon.
+         */
         trafficPing: function (start) {
           // Ping the traffic URL every thirty seconds
           var imageBeacon,
@@ -336,7 +395,24 @@
 
         if ($.fn.liveBlogLiteApi) {
 
-          var options = $.extend(true, {}, defaultOptions, customOptions);
+          var options = $.extend(true, {}, defaultOptions, customOptions),
+            hash = window.location.hash;
+
+          // Check the hash for the presence of a tag filter
+          // Only one tag may be filtered at a time (currently)
+          if (hash.length) {
+            var tag,
+              start,
+              tagPosition = hash.indexOf('tag=');
+
+            if (tagPosition > -1) {
+              start = tagPosition + 4;
+              tag = hash.substring(start, hash.length);
+              tag = decodeURIComponent(tag);
+
+              options.tagFilter = tag;
+            }
+          }
 
           // Listen to 'begin' event from API, to initialize and build the widget
           $this.bind('begin', function (event) {
@@ -348,19 +424,22 @@
               pendingUpdates = [],
               beginTime = 0,
               endTime = 0,
+              $tagAlert = null,
+              $clearTagFilter = null,
               $posts = null,
               $toolbar = null,
               $slider = null,
               $status = null,
 
               /**
-               * Create DOM element for post item from the given data item. If element is provided
-               *   then replaces content of that element, else creates new one.
+               * Create DOM element for post item from the given data item. If
+               * element is provided then replaces content of that element,
+               * else creates new one.
                * @param {Object} item The data item used as source.
                * @param {Object|null} element The optional jQuery object to modify, instead of creating new one.
                * @returns {Object} The jQuery object built from the data, not yet added to the DOM.
                */
-              buildItem = function (item, element) {
+              buildItem = function (item, element) {//{{{
 
                 var data = item.content,
                   type = item.type,
@@ -375,6 +454,15 @@
                   $postInfo;
 
                 //console.log('type', type);
+
+                // If there is a tag filter present...
+                if (options.tagFilter && tags) {
+                  // If the tag is not present in this item, don't build it
+                  if ($.inArray(options.tagFilter, tags) === -1) {
+                    // Return an empty array
+                    return [];
+                  }
+                }
 
                 if (!element) {
                   element = $('<p />', {
@@ -430,7 +518,7 @@
                   $.each(item.tags, function (i, el) {
                     tagsList.append(
                       $('<li />', {
-                        text: el,
+                        html: '<a href="#tag=' + encodeURIComponent(el) + '" class="tag">' + el + '</a>',
                         'class': ((i === 0) ? 'lb-first' : null)
                       })
                     );
@@ -456,14 +544,14 @@
                 }
 
                 return element;
-              },
+              },//}}}
 
               /**
                * Add data item into the DOM.
                * @param {Object} item The item to add.
                * @param {Object|null} afterElement The optional jQuery object after which to position the new item.
                */
-              addItem = function (item, afterElement) {
+              addItem = function (item, afterElement) {//{{{
                 var $item = $('#p' + item.id, $posts),
                   $parent = null;
 
@@ -498,13 +586,13 @@
                     $item.fadeIn(400);
                   }
                 }
-              },
+              },//}}}
 
               /**
                * Update data item in the DOM with new one.
                * @param {Object} item The new item to use.
                */
-              updateItem = function (item) {
+              updateItem = function (item) {//{{{
                 var $item = $('#p' + item.id, $posts);
 
                 if ($item.length) {
@@ -518,13 +606,13 @@
                   // If item is pending, overwrite its object
                   modifyPendingUpdate(item.id, item);
                 }
-              },
+              },//}}}
 
               /**
                * Remove data item from the DOM.
                * @param {Object} item The item to remove; requires item.id for reference.
                */
-              deleteItem = function (item) {
+              deleteItem = function (item) {//{{{
                 var $item = $('#p' + item.id, $posts);
 
                 if ($item.length) {
@@ -535,14 +623,14 @@
                   // If item is pending, delete it from the list
                   modifyPendingUpdate(item.id, null);
                 }
-              },
+              },//}}}
 
               /**
                * Add data items from API into the DOM. IF pagination is enabled,
                *   only shows n items at a time, and remainder goes into pendingUpdates array.
                * @param {Array} items An array of post items from the API to add to the view.
                */
-              addItems = function (items) {
+              addItems = function (items) {//{{{
 
                 items = items || [];
 
@@ -573,13 +661,13 @@
                     endTime = Math.max(endTime, timestamp);
                   }
                 });
-              },
+              },//}}}
 
               /**
                * The 'more' button was clicked, to show the next page of paginated items.
                * @param {Event} event
                */
-              onMoreButtonClicked = function (event) {
+              onMoreButtonClicked = function (event) {//{{{
                 var button = $(event.target),
                   len = pendingUpdates.length,
                   lastItem = null,
@@ -600,20 +688,20 @@
                 if (!pendingUpdates.length) {
                   button.remove();
                 }
-              },
+              },//}}}
 
               /**
                * Scroll the post container to position the given post item at the top.
                * @param {String} id The id of post item to scroll to.
                */
-              goToItem = function (id) {
+              goToItem = function (id) {//{{{
                 var $post = $('#p' + id, $posts);
 
                 if ($post.length) {
                   // Scroll to top of this post
                   $posts.scrollTop($post.get(0).offsetTop);
                 }
-              },
+              },//}}}
 
               /**
                * Find the post item nearest to the given timestamp.
@@ -621,7 +709,7 @@
                * @returns {Object|null} The jQuery object found with the nearest
                *   match to the given timestamp, or null if not found.
                */
-              getNearestItemByTime = function (timestamp) {
+              getNearestItemByTime = function (timestamp) {//{{{
                 var $item = null;
 
                 $posts.children('.lb-post:not(.lb-comment)').each(function (i, el) {
@@ -635,14 +723,14 @@
                 });
 
                 return $item;
-              },
+              },//}}}
 
               /**
                * Formats a Date object into a simple string; ex: "9/27/2012, 10:44am"
                * @param {Date} dateObj The Date object to format.
                * @returns {String} Formatted date/time string.
                */
-              getFormattedDateTime = function (dateObj) {
+              getFormattedDateTime = function (dateObj) {//{{{
                 dateObj = new Date(dateObj);
 
                 var ampm = 'am',
@@ -679,7 +767,7 @@
                 }
 
                 return dateTimeStr;
-              },
+              },//}}}
 
               /**
                * Return a Tweet Button according to the specs here:
@@ -687,7 +775,7 @@
                * @param {String} id The post item id
                * @param {String} text The text to include in the tweet
                */
-              makeTweetButton = function (id, text) {
+              makeTweetButton = function (id, text) {//{{{
                 var href = window.location.href.replace(/\#.*$/, ''),
                   /**
                    * Simple way to strip html tags
@@ -711,10 +799,8 @@
 
                 tmp.innerHtml = text;
 
-
-
                 return $tweetButton;
-              },
+              },//}}}
 
               /**
                * Modify the pendingUpdates array. If item is provided, replaces
@@ -723,7 +809,7 @@
                * @param {String} id The post item id of the item to modify
                * @param {Object|null} item The new item to use, or null to remove it
                */
-              modifyPendingUpdate = function (id, item) {
+              modifyPendingUpdate = function (id, item) {//{{{
                 if (pendingUpdates.length) {
                   for (var i = 0; i < pendingUpdates.length; i++) {
                     if (pendingUpdates[i].id === id) {
@@ -739,13 +825,13 @@
                     }
                   }
                 }
-              },
+              },//}}}
 
               /**
                * Pause button was clicked
                * @param {Event} event
                */
-              onPausedButtonClicked = function (event) {
+              onPausedButtonClicked = function (event) {//{{{
                 var $button = $(event.target);
 
                 if (paused) {
@@ -759,7 +845,7 @@
                 }
 
                 updateStatusLabel();
-              },
+              },//}}}
 
               /**
                * Start/resume the API, so polls for updates
@@ -781,7 +867,7 @@
                * Update the blog status indicator based on its paused state.
                * @param {Boolean} enabled Whether the status should be visible or not.
                */
-              updateStatusLabel = function (enabled) {
+              updateStatusLabel = function (enabled) {//{{{
                 if ($status) {
                   $status.removeClass('lb-status-live');
 
@@ -798,27 +884,28 @@
                     $status.show();
                   }
                 }
-              },
+              },//}}}
 
               /**
                * Setup the slider controls parameters, update position
                */
-              initSlider = function () {
+              initSlider = function () {//{{{
                 if ($slider) {
                   // Set the min and max values
                   $slider.slider('option', {
                     min: beginTime,
-                    max: endTime
+                    max: endTime,
+                    disabled: false
                   });
                   // Update the slider based on latest scroll position
                   $posts.scroll();
                 }
-              },
+              },//}}}
 
               /**
                * Update the slider label's text
                */
-              updateSliderLabel = function (value) {
+              updateSliderLabel = function (value) {//{{{
                 if ($slider) {
                   value = value || $slider.slider('value');
 
@@ -827,23 +914,23 @@
 
                   $('.lb-timeline-label', $toolbar).text(timeStr);
                 }
-              },
+              },//}}}
 
               /**
                * Set the slider's value, which sets its position, and update the label
                */
-              setSliderValue = function (value) {
+              setSliderValue = function (value) {//{{{
                 if ($slider) {
                   $slider.slider('value', value);
                   updateSliderLabel();
                 }
-              },
+              },//}}}
 
               /**
                * Return the top most visible post item in the scrollable container
                * @returns {Object|null} jQuery object of top most visible item, or null if not found
                */
-              getTopVisibleItem = function (container) {
+              getTopVisibleItem = function (container) {//{{{
                 var $container = $(container || window),
                   $topItem = null;
 
@@ -861,12 +948,12 @@
                 });
 
                 return $topItem;
-              },
+              },//}}}
 
               /**
                * On container scroll event, set slider value based on the top most visible post item
                */
-              onContainerScroll = function (event) {
+              onContainerScroll = function (event) {//{{{
                 var $topItem = getTopVisibleItem($posts);
 
                 if ($topItem) {
@@ -877,19 +964,19 @@
 
                   setSliderValue($topItem.data('date'));
                 }
-              },
+              },//}}}
 
               /**
                * As slider is moving, update the label and scroll position
                */
-              onSliderMove = function (event, ui) {
+              onSliderMove = function (event, ui) {//{{{
                 updateSliderLabel(ui.value);
 
                 var $item = getNearestItemByTime(ui.value);
                 if ($item) {
                   goToItem($item.attr('id').substr(1));
                 }
-              };
+              };//}}}
 
             /*
              *  Setup the UI structure
@@ -897,7 +984,7 @@
 
             $this.addClass('lb');
 
-            if (options.toolbarEnabled) {
+            if (options.toolbarEnabled) {//{{{
               $this.append(
                 $toolbar = $('<div />', {
                   'class': 'lb-toolbar'
@@ -915,7 +1002,7 @@
                   .append(
                     $('<p />', {
                       'class': 'lb-timeline-label',
-                      text: 'Calculating...'
+                      text: 'Waiting for updates...'
                     }),
                     $slider = $('<div />', {
                       'class': 'lb-timeline-slider'
@@ -929,8 +1016,29 @@
               );
 
               $slider.slider({
-                slide: onSliderMove
+                slide: onSliderMove,
+                disabled: true
               });
+            }//}}}
+
+            if (options.tagFilter) {
+              $tagAlert = $('<div />', {
+                'class': 'lb-tag-alert',
+                html: 'Showing all updates with the <b>' + options.tagFilter + '</b> tag. '
+              }).appendTo($this);
+
+              $clearTagFilter = $('<a />', {
+                href: '#',
+                text: 'View all updates'
+              })
+                .appendTo($tagAlert)
+                .bind('click', function (event) {
+                  event.preventDefault();
+
+                  options.tagFilter = '';
+                  $this.liveBlogLiteApi('reset');
+                  $this.trigger('begin');
+                });
             }
 
             $posts = $('<div />', {
@@ -1012,8 +1120,8 @@
 
                   goToItem(id);
                 }
-
               }
+
             });
 
             // API fires 'end' event when the set time is reached to stop polling
@@ -1033,40 +1141,53 @@
               updateStatusLabel();
             }
 
-            // Set up show / hide of tweet buttons
-            if (options.tweetButtons) {
+          });
 
-              // Load Twitter Share JS
-              // Script taken from Twitter, but linted
-              // https://twitter.com/about/resources/buttons#tweet
-              if (typeof twttr === 'undefined') {
-                (function (d, s, id) {
-                  var js,
-                    fjs = d.getElementsByTagName(s)[0];
+          $this.delegate('.tag', 'click', function (event) {
+            options.tagFilter = $(event.currentTarget).text();
+            $this.liveBlogLiteApi('reset');
 
-                  if (!d.getElementById(id)) {
-                    js = d.createElement(s);
-                    js.id = id;
-                    js.src = 'http://platform.twitter.com/widgets.js';
-                    fjs.parentNode.insertBefore(js, fjs);
-                  }
-                }(document, 'script', 'twitter-wjs'));
-              }
+            // Manually clean up some bindings
+            // TODO: separate building UI from event binding
+            $this.unbind('end update');
 
-              $this.delegate('.lb-post', 'mouseenter', function (event) {
-                $(event.currentTarget)
-                  .find('.twitter-share-button')
-                  .fadeIn('fast');
-              });
+            $this.trigger('begin');
+            //$this.find('.lb-post-container').scrollTop('0');
+          });
 
-              $this.delegate('.lb-post', 'mouseleave', function (event) {
-                $(event.currentTarget)
-                  .find('.twitter-share-button')
-                  .fadeOut('fast');
-              });
+
+          // Set up show / hide of tweet buttons
+          if (options.tweetButtons) {
+
+            // Load Twitter Share JS
+            // Script taken from Twitter, but linted
+            // https://twitter.com/about/resources/buttons#tweet
+            if (typeof twttr === 'undefined') {
+              (function (d, s, id) {
+                var js,
+                  fjs = d.getElementsByTagName(s)[0];
+
+                if (!d.getElementById(id)) {
+                  js = d.createElement(s);
+                  js.id = id;
+                  js.src = 'http://platform.twitter.com/widgets.js';
+                  fjs.parentNode.insertBefore(js, fjs);
+                }
+              }(document, 'script', 'twitter-wjs'));
             }
 
-          });
+            $this.delegate('.lb-post', 'mouseenter', function (event) {
+              $(event.currentTarget)
+                .find('.twitter-share-button')
+                .fadeIn('fast');
+            });
+
+            $this.delegate('.lb-post', 'mouseleave', function (event) {
+              $(event.currentTarget)
+                .find('.twitter-share-button')
+                .fadeOut('fast');
+            });
+          }
 
           // Begin polling the API
           $this.liveBlogLiteApi(options);

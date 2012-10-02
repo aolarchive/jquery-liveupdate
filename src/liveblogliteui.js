@@ -27,7 +27,24 @@
 
         if ($.fn.liveBlogLiteApi) {
 
-          var options = $.extend(true, {}, defaultOptions, customOptions);
+          var options = $.extend(true, {}, defaultOptions, customOptions),
+            hash = window.location.hash;
+
+          // Check the hash for the presence of a tag filter
+          // Only one tag may be filtered at a time (currently)
+          if (hash.length) {
+            var tag,
+              start,
+              tagPosition = hash.indexOf('tag=');
+
+            if (tagPosition > -1) {
+              start = tagPosition + 4;
+              tag = hash.substring(start, hash.length);
+              tag = decodeURIComponent(tag);
+
+              options.tagFilter = tag;
+            }
+          }
 
           // Listen to 'begin' event from API, to initialize and build the widget
           $this.bind('begin', function (event) {
@@ -39,19 +56,22 @@
               pendingUpdates = [],
               beginTime = 0,
               endTime = 0,
+              $tagAlert = null,
+              $clearTagFilter = null,
               $posts = null,
               $toolbar = null,
               $slider = null,
               $status = null,
 
               /**
-               * Create DOM element for post item from the given data item. If element is provided
-               *   then replaces content of that element, else creates new one.
+               * Create DOM element for post item from the given data item. If
+               * element is provided then replaces content of that element,
+               * else creates new one.
                * @param {Object} item The data item used as source.
                * @param {Object|null} element The optional jQuery object to modify, instead of creating new one.
                * @returns {Object} The jQuery object built from the data, not yet added to the DOM.
                */
-              buildItem = function (item, element) {
+              buildItem = function (item, element) {//{{{
 
                 var data = item.content,
                   type = item.type,
@@ -66,6 +86,15 @@
                   $postInfo;
 
                 //console.log('type', type);
+
+                // If there is a tag filter present...
+                if (options.tagFilter && tags) {
+                  // If the tag is not present in this item, don't build it
+                  if ($.inArray(options.tagFilter, tags) === -1) {
+                    // Return an empty array
+                    return [];
+                  }
+                }
 
                 if (!element) {
                   element = $('<p />', {
@@ -121,7 +150,7 @@
                   $.each(item.tags, function (i, el) {
                     tagsList.append(
                       $('<li />', {
-                        text: el,
+                        html: '<a href="#tag=' + encodeURIComponent(el) + '" class="tag">' + el + '</a>',
                         'class': ((i === 0) ? 'lb-first' : null)
                       })
                     );
@@ -147,14 +176,14 @@
                 }
 
                 return element;
-              },
+              },//}}}
 
               /**
                * Add data item into the DOM.
                * @param {Object} item The item to add.
                * @param {Object|null} afterElement The optional jQuery object after which to position the new item.
                */
-              addItem = function (item, afterElement) {
+              addItem = function (item, afterElement) {//{{{
                 var $item = $('#p' + item.id, $posts),
                   $parent = null,
                   height = 0,
@@ -188,16 +217,16 @@
                       $item.prependTo($posts);
                     }
 
-                    // Adjust scroll position so doesn't shift after adding an item 
+                    // Adjust scroll position so doesn't shift after adding an item
                     height = $item.outerHeight();
                     if (height && scrollTop) {
                       $posts.scrollTop(scrollTop + height);
                     }
-                    
+
                     $item.fadeIn(400);
                   }
                 }
-              },
+              },//}}}
 
               /**
                * Update data item in the DOM with new one.
@@ -217,12 +246,12 @@
                   if ($item) {
                     afterHeight = $item.outerHeight();
                     diffHeight = afterHeight - beforeHeight;
-                    
+
                     // Adjust scroll position so doesn't shift after editing an item
                     if (diffHeight && scrollTop) {
                       $posts.scrollTop(scrollTop + diffHeight);
                     }
-                    
+
                     // TODO: Show update animation effect here instead of fadeIn
                     $item.hide().fadeIn(400);
                   }
@@ -230,7 +259,7 @@
                   // If item is pending, overwrite its object
                   modifyPendingUpdate(item.id, item);
                 }
-              },
+              },//}}}
 
               /**
                * Remove data item from the DOM.
@@ -243,11 +272,11 @@
 
                 if ($item.length) {
                   height = $item.outerHeight();
-                  
+
                   $item.fadeOut(400, 'swing', function () {
                     $item.remove();
-                    
-                    // Adjust scroll position so doesn't shift after removing an item 
+
+                    // Adjust scroll position so doesn't shift after removing an item
                     if (height && scrollTop) {
                       $posts.scrollTop(scrollTop - height);
                     }
@@ -256,14 +285,14 @@
                   // If item is pending, delete it from the list
                   modifyPendingUpdate(item.id, null);
                 }
-              },
+              },//}}}
 
               /**
                * Add data items from API into the DOM. IF pagination is enabled,
                *   only shows n items at a time, and remainder goes into pendingUpdates array.
                * @param {Array} items An array of post items from the API to add to the view.
                */
-              addItems = function (items) {
+              addItems = function (items) {//{{{
 
                 items = items || [];
 
@@ -294,13 +323,13 @@
                     endTime = Math.max(endTime, timestamp);
                   }
                 });
-              },
+              },//}}}
 
               /**
                * The 'more' button was clicked, to show the next page of paginated items.
                * @param {Event} event
                */
-              onMoreButtonClicked = function (event) {
+              onMoreButtonClicked = function (event) {//{{{
                 var button = $(event.target),
                   len = pendingUpdates.length,
                   lastItem = null,
@@ -321,20 +350,20 @@
                 if (!pendingUpdates.length) {
                   button.remove();
                 }
-              },
+              },//}}}
 
               /**
                * Scroll the post container to position the given post item at the top.
                * @param {String} id The id of post item to scroll to.
                */
-              goToItem = function (id) {
+              goToItem = function (id) {//{{{
                 var $post = $('#p' + id, $posts);
 
                 if ($post.length) {
                   // Scroll to top of this post
                   $posts.scrollTop($post.get(0).offsetTop);
                 }
-              },
+              },//}}}
 
               /**
                * Find the post item nearest to the given timestamp.
@@ -342,7 +371,7 @@
                * @returns {Object|null} The jQuery object found with the nearest
                *   match to the given timestamp, or null if not found.
                */
-              getNearestItemByTime = function (timestamp) {
+              getNearestItemByTime = function (timestamp) {//{{{
                 var $item = null;
 
                 $posts.children('.lb-post:not(.lb-comment)').each(function (i, el) {
@@ -356,14 +385,14 @@
                 });
 
                 return $item;
-              },
+              },//}}}
 
               /**
                * Formats a Date object into a simple string; ex: "9/27/2012, 10:44am"
                * @param {Date} dateObj The Date object to format.
                * @returns {String} Formatted date/time string.
                */
-              getFormattedDateTime = function (dateObj) {
+              getFormattedDateTime = function (dateObj) {//{{{
                 dateObj = new Date(dateObj);
 
                 var ampm = 'am',
@@ -400,7 +429,7 @@
                 }
 
                 return dateTimeStr;
-              },
+              },//}}}
 
               /**
                * Return a Tweet Button according to the specs here:
@@ -408,7 +437,7 @@
                * @param {String} id The post item id
                * @param {String} text The text to include in the tweet
                */
-              makeTweetButton = function (id, text) {
+              makeTweetButton = function (id, text) {//{{{
                 var href = window.location.href.replace(/\#.*$/, ''),
                   /**
                    * Simple way to strip html tags
@@ -432,10 +461,8 @@
 
                 tmp.innerHtml = text;
 
-
-
                 return $tweetButton;
-              },
+              },//}}}
 
               /**
                * Modify the pendingUpdates array. If item is provided, replaces
@@ -444,7 +471,7 @@
                * @param {String} id The post item id of the item to modify
                * @param {Object|null} item The new item to use, or null to remove it
                */
-              modifyPendingUpdate = function (id, item) {
+              modifyPendingUpdate = function (id, item) {//{{{
                 if (pendingUpdates.length) {
                   for (var i = 0; i < pendingUpdates.length; i++) {
                     if (pendingUpdates[i].id === id) {
@@ -460,13 +487,13 @@
                     }
                   }
                 }
-              },
+              },//}}}
 
               /**
                * Pause button was clicked
                * @param {Event} event
                */
-              onPausedButtonClicked = function (event) {
+              onPausedButtonClicked = function (event) {//{{{
                 var $button = $(event.target);
 
                 if (paused) {
@@ -480,7 +507,7 @@
                 }
 
                 updateStatusLabel();
-              },
+              },//}}}
 
               /**
                * Start/resume the API, so polls for updates
@@ -502,7 +529,7 @@
                * Update the blog status indicator based on its paused state.
                * @param {Boolean} enabled Whether the status should be visible or not.
                */
-              updateStatusLabel = function (enabled) {
+              updateStatusLabel = function (enabled) {//{{{
                 if ($status) {
                   $status.removeClass('lb-status-live');
 
@@ -519,12 +546,12 @@
                     $status.show();
                   }
                 }
-              },
+              },//}}}
 
               /**
                * Setup the slider controls parameters, update position
                */
-              initSlider = function () {
+              initSlider = function () {//{{{
                 if ($slider) {
                   // Set the min and max values
                   $slider.slider('option', {
@@ -535,12 +562,12 @@
                   // Update the slider based on latest scroll position
                   $posts.scroll();
                 }
-              },
+              },//}}}
 
               /**
                * Update the slider label's text
                */
-              updateSliderLabel = function (value) {
+              updateSliderLabel = function (value) {//{{{
                 if ($slider) {
                   value = value || $slider.slider('value');
 
@@ -549,23 +576,23 @@
 
                   $('.lb-timeline-label', $toolbar).text(timeStr);
                 }
-              },
+              },//}}}
 
               /**
                * Set the slider's value, which sets its position, and update the label
                */
-              setSliderValue = function (value) {
+              setSliderValue = function (value) {//{{{
                 if ($slider) {
                   $slider.slider('value', value);
                   updateSliderLabel();
                 }
-              },
+              },//}}}
 
               /**
                * Return the top most visible post item in the scrollable container
                * @returns {Object|null} jQuery object of top most visible item, or null if not found
                */
-              getTopVisibleItem = function (container) {
+              getTopVisibleItem = function (container) {//{{{
                 var $container = $(container || window),
                   $topItem = null;
 
@@ -583,12 +610,12 @@
                 });
 
                 return $topItem;
-              },
+              },//}}}
 
               /**
                * On container scroll event, set slider value based on the top most visible post item
                */
-              onContainerScroll = function (event) {
+              onContainerScroll = function (event) {//{{{
                 var $topItem = getTopVisibleItem($posts);
 
                 if ($topItem) {
@@ -599,19 +626,19 @@
 
                   setSliderValue($topItem.data('date'));
                 }
-              },
+              },//}}}
 
               /**
                * As slider is moving, update the label and scroll position
                */
-              onSliderMove = function (event, ui) {
+              onSliderMove = function (event, ui) {//{{{
                 updateSliderLabel(ui.value);
 
                 var $item = getNearestItemByTime(ui.value);
                 if ($item) {
                   goToItem($item.attr('id').substr(1));
                 }
-              };
+              };//}}}
 
             /*
              *  Setup the UI structure
@@ -619,7 +646,7 @@
 
             $this.addClass('lb');
 
-            if (options.toolbarEnabled) {
+            if (options.toolbarEnabled) {//{{{
               $this.append(
                 $toolbar = $('<div />', {
                   'class': 'lb-toolbar'
@@ -654,6 +681,26 @@
                 slide: onSliderMove,
                 disabled: true
               });
+            }//}}}
+
+            if (options.tagFilter) {
+              $tagAlert = $('<div />', {
+                'class': 'lb-tag-alert',
+                html: 'Showing all updates with the <b>' + options.tagFilter + '</b> tag. '
+              }).appendTo($this);
+
+              $clearTagFilter = $('<a />', {
+                href: '#',
+                text: 'View all updates'
+              })
+                .appendTo($tagAlert)
+                .bind('click', function (event) {
+                  event.preventDefault();
+
+                  options.tagFilter = '';
+                  $this.liveBlogLiteApi('reset');
+                  $this.trigger('begin');
+                });
             }
 
             $posts = $('<div />', {
@@ -735,8 +782,8 @@
 
                   goToItem(id);
                 }
-
               }
+
             });
 
             // API fires 'end' event when the set time is reached to stop polling
@@ -756,40 +803,53 @@
               updateStatusLabel();
             }
 
-            // Set up show / hide of tweet buttons
-            if (options.tweetButtons) {
+          });
 
-              // Load Twitter Share JS
-              // Script taken from Twitter, but linted
-              // https://twitter.com/about/resources/buttons#tweet
-              if (typeof twttr === 'undefined') {
-                (function (d, s, id) {
-                  var js,
-                    fjs = d.getElementsByTagName(s)[0];
+          $this.delegate('.tag', 'click', function (event) {
+            options.tagFilter = $(event.currentTarget).text();
+            $this.liveBlogLiteApi('reset');
 
-                  if (!d.getElementById(id)) {
-                    js = d.createElement(s);
-                    js.id = id;
-                    js.src = 'http://platform.twitter.com/widgets.js';
-                    fjs.parentNode.insertBefore(js, fjs);
-                  }
-                }(document, 'script', 'twitter-wjs'));
-              }
+            // Manually clean up some bindings
+            // TODO: separate building UI from event binding
+            $this.unbind('end update');
 
-              $this.delegate('.lb-post', 'mouseenter', function (event) {
-                $(event.currentTarget)
-                  .find('.twitter-share-button')
-                  .fadeIn('fast');
-              });
+            $this.trigger('begin');
+            //$this.find('.lb-post-container').scrollTop('0');
+          });
 
-              $this.delegate('.lb-post', 'mouseleave', function (event) {
-                $(event.currentTarget)
-                  .find('.twitter-share-button')
-                  .fadeOut('fast');
-              });
+
+          // Set up show / hide of tweet buttons
+          if (options.tweetButtons) {
+
+            // Load Twitter Share JS
+            // Script taken from Twitter, but linted
+            // https://twitter.com/about/resources/buttons#tweet
+            if (typeof twttr === 'undefined') {
+              (function (d, s, id) {
+                var js,
+                  fjs = d.getElementsByTagName(s)[0];
+
+                if (!d.getElementById(id)) {
+                  js = d.createElement(s);
+                  js.id = id;
+                  js.src = 'http://platform.twitter.com/widgets.js';
+                  fjs.parentNode.insertBefore(js, fjs);
+                }
+              }(document, 'script', 'twitter-wjs'));
             }
 
-          });
+            $this.delegate('.lb-post', 'mouseenter', function (event) {
+              $(event.currentTarget)
+                .find('.twitter-share-button')
+                .fadeIn('fast');
+            });
+
+            $this.delegate('.lb-post', 'mouseleave', function (event) {
+              $(event.currentTarget)
+                .find('.twitter-share-button')
+                .fadeOut('fast');
+            });
+          }
 
           // Begin polling the API
           $this.liveBlogLiteApi(options);

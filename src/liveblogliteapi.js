@@ -1,8 +1,11 @@
-/*
- * aol.livebloglite
- * https://github.com/aol/liveblog-widget
+/**
+ * AOL Liveblog Lite UI Widget
  *
- * by Nate Eagle & Jeremy Jannotta
+ * @fileOverview A slim API to fetch data from AOL liveblogs.
+ *
+ * @see https://github.com/aol/liveblog-widget
+ * @author Nate Eagle, Jeremy Jannotta
+ * @requires jQuery 1.5.2+
  */
 
 (function ($) {
@@ -114,10 +117,23 @@
         },
 
         /**
+         * Reset the API to refetch all the data
+         */
+        reset: function () {
+          state.count = 0;
+          state.lastUpdate = 0;
+          state.options.callbackPrefix = 'lb_' + new Date().getTime() + '_';
+          clearTimeout(state.timer);
+          console.log(state.timer);
+          methods.fetch();
+        },
+
+        /**
          * Hit the Blogsmith liveupdates API and trigger an update event with
          * the returned data
          **/
         fetch: function () {
+          console.log('fetch');
           // Fetch data from API
           var apiUrl,
             now = new Date(),

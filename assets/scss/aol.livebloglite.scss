@@ -38,19 +38,19 @@
                 bottom: 10px;
             }
         }
-        
+
         a {
             color: #206994;
             text-decoration: none;
-            
+
             &:hover {
                 color: #206994;
                 text-decoration: underline;
             }
         }
-        
+
         &.lb-top {
-           /*background-color: yellow;*/ 
+           /*background-color: yellow;*/
         }
     }
 
@@ -84,7 +84,7 @@
             right: ($tweetButtonWidth + $leftPadding) * -1;
         }
     }
-    
+
     .lb-post-timestamp {
         display: block;
         float: left;
@@ -104,10 +104,22 @@
         float: left;
         list-style: none;
         margin: 0 0 0 1em;
-        padding: 2px 5px;
-        background: #AAAAAA;
-        color: #FFFFFF;
-        @include border-radius(2px);
+
+        a {
+            @include border-radius(2px);
+            background: #AAAAAA;
+            color: #fff;
+            cursor: pointer;
+            padding: 2px 5px;
+            text-decoration: none;
+            @include transition(all 0.2s);
+
+            &:hover {
+                background: #666;
+                color: #fff;
+                text-decoration: none;
+            }
+        }
     }
 
     .lb-toolbar {
@@ -117,7 +129,7 @@
         background-color: #EEEEEE;
         border-bottom: 1px solid #AAAAAA;
         @include border-radius(4px);
-        
+
         &.lb-status-paused {
             background-color: lightYellow;
             @include animation(colorPulse 1s infinite alternate);
@@ -166,7 +178,7 @@
         font-size: 0.7em;
         margin: 0 0 5px 0;
     }
-    
+
     .lb-status {
         display: block;
         float: right;
@@ -180,7 +192,7 @@
         border: 1px solid #CCCCCC;
         font-size: 12px;
         text-transform: uppercase;
-        
+
         &.lb-status-live {
             color: #CC0000;
         }
@@ -206,7 +218,14 @@
             text-decoration: none;
         }
     }
-    
+
+    .lb-tag-alert {
+        background-color: hsl(60, 100%, 80%);
+        clear: left;
+        font-size: 12px;
+        padding: 10px;
+    }
+
     .lb-post-container {
         float: left;
         width: 100%;
@@ -214,7 +233,7 @@
         overflow-x: hidden;
         position: relative;
     }
-    
+
 }
 
 /* Styles for IE7 */
@@ -225,7 +244,7 @@
         }
         .lb-post-info {
             width: 100%;
-            
+
             .twitter-share-button {
                 right: auto;
                 bottom: -1px;
@@ -233,7 +252,7 @@
             }
         }
     }
-} 
+}
 
 /* Styles for IE 6 and below */
 * html {
@@ -243,7 +262,7 @@
         }
         .lb-post-info {
             width: 100%;
-            
+
             .twitter-share-button {
                 right: auto;
                 bottom: -1px;
