@@ -380,13 +380,29 @@
                */
               makeTweetButton = function (id, text) {
                 var href = window.location.href.replace(/\#.*$/, ''),
+                  /**
+                   * Simple way to strip html tags
+                   * @see http://stackoverflow.com/questions/822452/strip-html-from-text-javascript
+                   * @param {string} html Text with html tags
+                   */
+                  stripHtml = function (html) {
+                    var tmp = document.createElement('DIV');
+                    tmp.innerHTML = html;
+                    return tmp.textContent || tmp.innerText;
+                  },
+
                   $tweetButton = $('<a />', {
                     'data-count': 'none',
-                    'data-text': '"' + text + '"',
+                    'data-text': '"' + stripHtml(text) + '"',
                     'data-url': href + '#p' + id,
                     'href': 'https://twitter.com/share',
                     'class': 'twitter-share-button'
-                  });
+                  }),
+                  tmp = document.createElement('DIV');
+
+                tmp.innerHtml = text;
+
+
 
                 return $tweetButton;
               },
@@ -505,7 +521,7 @@
               },
 
               /**
-               * Set the slider's value, which set's its position, and update the label
+               * Set the slider's value, which sets its position, and update the label
                */
               setSliderValue = function (value) {
                 if ($slider) {
