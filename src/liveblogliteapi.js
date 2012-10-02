@@ -124,6 +124,7 @@
           state.lastUpdate = 0;
           state.options.callbackPrefix = 'lb_' + new Date().getTime() + '_';
           clearTimeout(state.timer);
+          console.log(state.timer);
           methods.fetch();
         },
 
@@ -132,6 +133,7 @@
          * the returned data
          **/
         fetch: function () {
+          console.log('fetch');
           // Fetch data from API
           var apiUrl,
             now = new Date(),
