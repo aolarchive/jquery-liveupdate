@@ -56,7 +56,10 @@
 
     .lb-comment {
         padding-left: 50px;
-        background-color: #EEEEEE;
+        background: #EEEEEE inline-image('line-dot.png') no-repeat 20px -160px;
+        
+        &.lb-comment-last {
+        }
     }
 
     .lb-post-text {

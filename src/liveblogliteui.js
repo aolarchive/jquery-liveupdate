@@ -204,6 +204,11 @@
 
                         // Append comment directly after its parent post
                         $item.insertAfter($parent);
+                        
+                        // Add class to last comment in a row
+                        $item.next('.lb-comment').andSelf()
+                          .last().addClass('lb-comment-last')
+                          .prev().removeClass('lb-comment-last');
                       } else {
                         // Parent post doesn't exist, so add comment to
                         // pendingUpdates array for processing in next page
@@ -274,6 +279,10 @@
                   height = $item.outerHeight();
 
                   $item.fadeOut(400, 'swing', function () {
+                    // If deleting last comment in a row, shift class to prev comment
+                    if ($item.hasClass('lb-comment-last')) {
+                      $item.prev('.lb-comment').addClass('lb-comment-last');
+                    }
                     $item.remove();
 
                     // Adjust scroll position so doesn't shift after removing an item
