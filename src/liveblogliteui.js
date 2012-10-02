@@ -698,6 +698,7 @@
                   event.preventDefault();
 
                   options.tagFilter = '';
+                  window.location.hash = '';
                   $this.liveBlogLiteApi('reset');
                   $this.trigger('begin');
                 });
