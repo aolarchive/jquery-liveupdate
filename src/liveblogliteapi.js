@@ -78,7 +78,8 @@
 
               if (state.options.begin) {
                 if (state.options.begin < now) {
-                  $this.trigger('begin');
+                  //$this.trigger('begin');
+                  state.first = true;
                   methods.trafficPing();
                   methods.fetch();
                 } else {
@@ -86,7 +87,8 @@
                   state.timer = setTimeout(timeToBegin, 10000);
                 }
               } else {
-                $this.trigger('begin');
+                state.first = true;
+                //$this.trigger('begin');
                 methods.fetch();
               }
             };
@@ -124,7 +126,6 @@
           state.lastUpdate = 0;
           state.options.callbackPrefix = 'lb_' + new Date().getTime() + '_';
           clearTimeout(state.timer);
-          console.log(state.timer);
           methods.fetch();
         },
 
@@ -133,7 +134,6 @@
          * the returned data
          **/
         fetch: function () {
-          console.log('fetch');
           // Fetch data from API
           var apiUrl,
             now = new Date(),
@@ -240,7 +240,7 @@
                 delay = response.int * 1000;
               }
 
-              state.lastUpdate = response.last_update;
+              state.lastUpdate = response.last_update || 0;
 
               // Call fetch again after the API-recommended
               // number of seconds
@@ -260,6 +260,11 @@
               state.count += 1;
 
               if (response.data) {
+                // If this is the first update, trigger the begin event
+                if (state.first === true) {
+                  $this.trigger('begin');
+                }
+
                 $this.trigger('update', normalize(response.data, response.members));
               }
 

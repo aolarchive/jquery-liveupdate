@@ -95,7 +95,8 @@
 
               if (state.options.begin) {
                 if (state.options.begin < now) {
-                  $this.trigger('begin');
+                  //$this.trigger('begin');
+                  state.first = true;
                   methods.trafficPing();
                   methods.fetch();
                 } else {
@@ -103,7 +104,8 @@
                   state.timer = setTimeout(timeToBegin, 10000);
                 }
               } else {
-                $this.trigger('begin');
+                state.first = true;
+                //$this.trigger('begin');
                 methods.fetch();
               }
             };
@@ -141,7 +143,6 @@
           state.lastUpdate = 0;
           state.options.callbackPrefix = 'lb_' + new Date().getTime() + '_';
           clearTimeout(state.timer);
-          console.log(state.timer);
           methods.fetch();
         },
 
@@ -150,7 +151,6 @@
          * the returned data
          **/
         fetch: function () {
-          console.log('fetch');
           // Fetch data from API
           var apiUrl,
             now = new Date(),
@@ -257,7 +257,7 @@
                 delay = response.int * 1000;
               }
 
-              state.lastUpdate = response.last_update;
+              state.lastUpdate = response.last_update || 0;
 
               // Call fetch again after the API-recommended
               // number of seconds
@@ -277,6 +277,11 @@
               state.count += 1;
 
               if (response.data) {
+                // If this is the first update, trigger the begin event
+                if (state.first === true) {
+                  $this.trigger('begin');
+                }
+
                 $this.trigger('update', normalize(response.data, response.members));
               }
 
@@ -416,6 +421,7 @@
 
           // Listen to 'begin' event from API, to initialize and build the widget
           $this.bind('begin', function (event) {
+            console.log('begin?');
 
             $this.empty();
 
@@ -553,7 +559,9 @@
                */
               addItem = function (item, afterElement) {//{{{
                 var $item = $('#p' + item.id, $posts),
-                  $parent = null;
+                  $parent = null,
+                  height = 0,
+                  scrollTop = $posts.scrollTop();
 
                 if (!$item.length) {
                   $item = buildItem(item);
@@ -583,6 +591,12 @@
                       $item.prependTo($posts);
                     }
 
+                    // Adjust scroll position so doesn't shift after adding an item
+                    height = $item.outerHeight();
+                    if (height && scrollTop) {
+                      $posts.scrollTop(scrollTop + height);
+                    }
+
                     $item.fadeIn(400);
                   }
                 }
@@ -592,13 +606,26 @@
                * Update data item in the DOM with new one.
                * @param {Object} item The new item to use.
                */
-              updateItem = function (item) {//{{{
-                var $item = $('#p' + item.id, $posts);
+              updateItem = function (item) {
+                var $item = $('#p' + item.id, $posts),
+                  beforeHeight = 0,
+                  afterHeight = 0,
+                  diffHeight = 0,
+                  scrollTop = $posts.scrollTop();
 
                 if ($item.length) {
+                  beforeHeight = $item.outerHeight();
                   $item = buildItem(item, $item);
 
                   if ($item) {
+                    afterHeight = $item.outerHeight();
+                    diffHeight = afterHeight - beforeHeight;
+
+                    // Adjust scroll position so doesn't shift after editing an item
+                    if (diffHeight && scrollTop) {
+                      $posts.scrollTop(scrollTop + diffHeight);
+                    }
+
                     // TODO: Show update animation effect here instead of fadeIn
                     $item.hide().fadeIn(400);
                   }
@@ -612,12 +639,21 @@
                * Remove data item from the DOM.
                * @param {Object} item The item to remove; requires item.id for reference.
                */
-              deleteItem = function (item) {//{{{
-                var $item = $('#p' + item.id, $posts);
+              deleteItem = function (item) {
+                var $item = $('#p' + item.id, $posts),
+                  height = 0,
+                  scrollTop = $posts.scrollTop();
 
                 if ($item.length) {
+                  height = $item.outerHeight();
+
                   $item.fadeOut(400, 'swing', function () {
                     $item.remove();
+
+                    // Adjust scroll position so doesn't shift after removing an item
+                    if (height && scrollTop) {
+                      $posts.scrollTop(scrollTop - height);
+                    }
                   });
                 } else {
                   // If item is pending, delete it from the list
@@ -1036,6 +1072,7 @@
                   event.preventDefault();
 
                   options.tagFilter = '';
+                  window.location.hash = '';
                   $this.liveBlogLiteApi('reset');
                   $this.trigger('begin');
                 });
