@@ -116,6 +116,11 @@
 
                   if (type === 'comment') {
                     element.addClass('lb-comment');
+                  } else {
+                    // Initialize item's comments to 0
+                    if (!element.data('comments')) {
+                      element.data('comments', 0);
+                    }
                   }
 
                 } else if (type === 'image') {
@@ -209,6 +214,10 @@
                         $item.next('.lb-comment').andSelf()
                           .last().addClass('lb-comment-last')
                           .prev().removeClass('lb-comment-last');
+                        
+                        // Increment the parent's comments count
+                        $parent.data('comments', $parent.data('comments') + 1);
+                        
                       } else {
                         // Parent post doesn't exist, so add comment to
                         // pendingUpdates array for processing in next page
@@ -273,7 +282,8 @@
               deleteItem = function (item) {
                 var $item = $('#p' + item.id, $posts),
                   height = 0,
-                  scrollTop = $posts.scrollTop();
+                  scrollTop = $posts.scrollTop(),
+                  $parent = null;
 
                 if ($item.length) {
                   height = $item.outerHeight();
@@ -283,6 +293,13 @@
                     if ($item.hasClass('lb-comment-last')) {
                       $item.prev('.lb-comment').addClass('lb-comment-last');
                     }
+                    
+                    // Decrement the parent's comments count
+                    if ($item.hasClass('lb-comment')) {
+                      $parent = $item.prevAll('.lb-post:not(.lb-comment):first');
+                      $parent.data('comments', $parent.data('comments') - 1);
+                    }
+                    
                     $item.remove();
 
                     // Adjust scroll position so doesn't shift after removing an item

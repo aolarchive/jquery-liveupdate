@@ -125,6 +125,28 @@
             }
         }
     }
+    
+    .lb-post-comments-label {
+        display: block;
+        float: left;
+        clear: both;
+        width: 100%;
+        vertical-align: middle;
+        line-height: 12px;
+        font-size: 8px;
+        color: #999999;
+        text-transform: uppercase;
+        margin: {
+            top: 15px;
+            bottom: -15px;
+        }
+        padding: {
+            left: 50px;
+        }
+        border: {
+            top: 1px solid #AAAAAA;
+        }
+    }
 
     .lb-toolbar {
         float: left;
