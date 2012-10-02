@@ -156,7 +156,9 @@
                */
               addItem = function (item, afterElement) {
                 var $item = $('#p' + item.id, $posts),
-                  $parent = null;
+                  $parent = null,
+                  height = 0,
+                  scrollTop = $posts.scrollTop();
 
                 if (!$item.length) {
                   $item = buildItem(item);
@@ -186,6 +188,12 @@
                       $item.prependTo($posts);
                     }
 
+                    // Adjust scroll position so doesn't shift after adding an item 
+                    height = $item.outerHeight();
+                    if (height && scrollTop) {
+                      $posts.scrollTop(scrollTop + height);
+                    }
+                    
                     $item.fadeIn(400);
                   }
                 }
@@ -196,12 +204,25 @@
                * @param {Object} item The new item to use.
                */
               updateItem = function (item) {
-                var $item = $('#p' + item.id, $posts);
+                var $item = $('#p' + item.id, $posts),
+                  beforeHeight = 0,
+                  afterHeight = 0,
+                  diffHeight = 0,
+                  scrollTop = $posts.scrollTop();
 
                 if ($item.length) {
+                  beforeHeight = $item.outerHeight();
                   $item = buildItem(item, $item);
 
                   if ($item) {
+                    afterHeight = $item.outerHeight();
+                    diffHeight = afterHeight - beforeHeight;
+                    
+                    // Adjust scroll position so doesn't shift after editing an item
+                    if (diffHeight && scrollTop) {
+                      $posts.scrollTop(scrollTop + diffHeight);
+                    }
+                    
                     // TODO: Show update animation effect here instead of fadeIn
                     $item.hide().fadeIn(400);
                   }
@@ -216,11 +237,20 @@
                * @param {Object} item The item to remove; requires item.id for reference.
                */
               deleteItem = function (item) {
-                var $item = $('#p' + item.id, $posts);
+                var $item = $('#p' + item.id, $posts),
+                  height = 0,
+                  scrollTop = $posts.scrollTop();
 
                 if ($item.length) {
+                  height = $item.outerHeight();
+                  
                   $item.fadeOut(400, 'swing', function () {
                     $item.remove();
+                    
+                    // Adjust scroll position so doesn't shift after removing an item 
+                    if (height && scrollTop) {
+                      $posts.scrollTop(scrollTop - height);
+                    }
                   });
                 } else {
                   // If item is pending, delete it from the list
