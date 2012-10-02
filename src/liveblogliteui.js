@@ -499,7 +499,8 @@
                   // Set the min and max values
                   $slider.slider('option', {
                     min: beginTime,
-                    max: endTime
+                    max: endTime,
+                    disabled: false
                   });
                   // Update the slider based on latest scroll position
                   $posts.scroll();
@@ -606,7 +607,7 @@
                   .append(
                     $('<p />', {
                       'class': 'lb-timeline-label',
-                      text: 'Calculating...'
+                      text: 'Waiting for updates...'
                     }),
                     $slider = $('<div />', {
                       'class': 'lb-timeline-slider'
@@ -620,7 +621,8 @@
               );
 
               $slider.slider({
-                slide: onSliderMove
+                slide: onSliderMove,
+                disabled: true
               });
             }
 
