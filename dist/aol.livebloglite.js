@@ -279,6 +279,7 @@
               if (response.data) {
                 // If this is the first update, trigger the begin event
                 if (state.first === true) {
+                  delete state.first;
                   $this.trigger('begin');
                 }
 
