@@ -1,12 +1,12 @@
 h1. LiveBlogLite
 
-* "Intro":#intro
-* "How to use Live Blog Lite":#howtouseit
-* "Blogsmith Setup":#blogsmithsetup
-* "@$.liveBlogLiteUi;@":#ui
-* "@$.liveBlogLiteApi;@":#api
+* "Intro":#two-light-weight-plugins-for-publishing-blogsmith-liveblog-content
+* "How to use Live Blog Lite":#how-to-use-live-blog-lite
+* "Blogsmith Setup":#blogsmith-setup
+* "@$.liveBlogLiteUi;@":#liveblogliteuioptions
+* "@$.liveBlogLiteApi;@":#liveblogliteapioptions
 
-h2(#intro). Two light-weight plugins for publishing Blogsmith liveblog content
+h2. Two light-weight plugins for publishing Blogsmith liveblog content
 
 p. For the premiere, full-featured Liveblog Publisher, check out Joe Bartlett's "Liveblog Publisher":https://github.com/aoltech/liveblog-publisher.
 
@@ -16,7 +16,7 @@ p. LbL is two simple plugins. @$.liveBlogLiteApi@ fetches liveblog data using a 
 
 p. *Credit where credit is due:* Liveblog Publisher (LbP) was heavily consulted in writing this lighter version. Some patterns were even copied entirely.
 
-h2(#howtouseit). How to use Live Blog Lite
+h2. How to use Live Blog Lite
 
 h3. Requirements
 
@@ -50,7 +50,7 @@ p. The element you instantiate @$.liveBlogLiteUI@ on (here, @<div id="#myLiveBlo
 
 That's the quick and dirty. More detailed documentation is provided below.
 
-h2(#blogsmithsetup). Blogsmith Setup
+h2. Blogsmith Setup
 
 Blogsmith blogs have to be set up to have live blog posts.
 
@@ -61,7 +61,7 @@ bc. RewriteRule ^live-update/([0-99]+)/([0-99]+)/?$ /index.php?&a=live-update&po
 
 Order can affect the way this works, so it needs to be close to the top of your `.htaccess` file.
 
-h2(#ui). $.liveBlogLiteUi(options)
+h2. $.liveBlogLiteUi(options)
 
 The Live Blog Lite UI plugin provides user interface elements for displaying live blog updates. It requires and wraps the API plugin, so if you use it you don't have to separately instnatiate the API. Also: you may pass options for the API plugin (such as `postId` and `url`) through the UI plugin.
 
@@ -87,7 +87,7 @@ h3. Available Options
 |toolbarEnabled|boolean|false|Turns on or off toolbar functionality.|
 |tweetButtons|boolean|true|Turns on or off tweet buttons in updates.|
 
-h2(#api). $.liveBlogLiteApi(options)
+h2. $.liveBlogLiteApi(options)
 
 The Live Blog Lite API plugin initiates a recurring poll of the Blogsmith Live Updater API. The first time, it receives all updates that currently exist on the live blog post. It begins checking the API every three seconds (or so) and only returns new or edited data. It provides this data to the jQuery object on which it's initiated as a custom "update" event.
 
