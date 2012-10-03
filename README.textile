@@ -1,6 +1,12 @@
 h1. LiveBlogLite
 
-h2. Two light-weight plugins for publishing Blogsmith liveblog content
+* "Intro":#intro
+* "How to use Live Blog Lite":#howtouseit
+* "Blogsmith Setup":#blogsmithsetup
+* "@$.liveBlogLiteUi;@":#ui
+* "@$.liveBlogLiteApi;@":#api
+
+h2(#intro). Two light-weight plugins for publishing Blogsmith liveblog content
 
 p. For the premiere, full-featured Liveblog Publisher, check out Joe Bartlett's "Liveblog Publisher":https://github.com/aoltech/liveblog-publisher.
 
@@ -10,12 +16,26 @@ p. LbL is two simple plugins. @$.liveBlogLiteApi@ fetches liveblog data using a 
 
 p. *Credit where credit is due:* Liveblog Publisher (LbP) was heavily consulted in writing this lighter version. Some patterns were even copied entirely.
 
-h2. How to use @$.liveBlogLiteApi@ and @$.liveBlogLiteUi@
+h2(#howtouseit). How to use Live Blog Lite
 
-# LbL requires jQuery 1.5.2 or higher. (It may work with even older versions of jQuery - we haven't tested how low it will go, yet.)
-# Download @dist/aol.livebloglite.min.js@ and add it to your project.
-# Add the CSS to your page: @assets/prod/css/aol.livebloglite.css@. (These are sample styles only - feel free to use the @.scss@ file as reference for creating your own: @assets/scss/aol.livebloglite.scss@.
-# Instantiate it using code along these lines:
+h3. Requirements
+
+LbL requires jQuery 1.5.2 or higher. (It may work with even older versions of jQuery - we haven't tested how low it will go, yet.)
+
+h3. Files
+
+The plugins' JS and CSS are hosted as a bundle on AOL's global origin server.
+
+JS: "http://o.aolcdn.com/os/aol/livebloglite/aol.livebloglite.min.js":http://o.aolcdn.com/os/aol/livebloglite/aol.livebloglite.min.js
+CSS: "http://o.aolcdn.com/os/aol/livebloglite/aol.livebloglite.css":http://o.aolcdn.com/os/aol/livebloglite/aol.livebloglite.css
+
+Include them on your page.
+
+The files are also located in the @dist@ folder in this repo, in both minified and unminified versions. The two plugins are also provided separately here, in case you want to use only the API plugin and implement your own UI.
+
+h3. Instantiation
+
+Instantiate it using code along these lines:
 
 bc..  $(document).ready(function () {
   // <div id="myLiveBlog"></div> is the container element in the markup
@@ -27,7 +47,9 @@ bc..  $(document).ready(function () {
   });
 });
 
-h3. Blogsmith Setup
+That's the quick and dirty. More detailed documentation is provided below.
+
+h2(#blogsmithsetup). Blogsmith Setup
 
 Blogsmith blogs have to be set up to have live blog posts.
 
@@ -38,11 +60,11 @@ bc. RewriteRule ^live-update/([0-99]+)/([0-99]+)/?$ /index.php?&a=live-update&po
 
 Order can affect the way this works, so it needs to be close to the top of your `.htaccess` file.
 
-h3. $.liveBlogLiteUi(options)
+h2(#ui). $.liveBlogLiteUi(options)
 
 The Live Blog Lite UI plugin provides user interface elements for displaying live blog updates. It requires and wraps the API plugin, so if you use it you don't have to separately instnatiate the API. Also: you may pass options for the API plugin (such as `postId` and `url`) through the UI plugin.
 
-h4. Example Usage
+h3. Example Usage
 
 bc.. $('#myWidget').liveBlogLiteUi({
   postId: '20334012',
@@ -53,7 +75,7 @@ bc.. $('#myWidget').liveBlogLiteUi({
   height: 700
 });
 
-h4. Available Options
+h3. Available Options
 
 |_.Property|_.Type|_.Default|_.Description|
 |_.Required|
@@ -63,11 +85,12 @@ h4. Available Options
 |_.Optional|
 |toolbarEnabled|boolean|false|Turns on or off toolbar functionality.|
 |tweetButtons|boolean|true|Turns on or off tweet buttons in updates.|
-h3. $.liveBlogLiteApi(options)
+
+h2(#api). $.liveBlogLiteApi(options)
 
 The Live Blog Lite API plugin initiates a recurring poll of the Blogsmith Live Updater API. The first time, it receives all updates that currently exist on the live blog post. It begins checking the API every three seconds (or so) and only returns new or edited data. It provides this data to the jQuery object on which it's initiated as a custom "update" event.
 
-h4. Example usage
+h3. Example usage
 
 bc.. // Initiate the Plugin
 $('#myLiveBlog').liveBlogLiteApi({
@@ -80,7 +103,7 @@ $('#myLiveBlog').bind('update', function (event, data) {
   console.log(data);
 });
 
-h4. Methods
+h3. Methods
 
 Use methods by passing their name as an argument to the plugin.
 
@@ -91,7 +114,7 @@ bc. $('#myLiveBlog').liveBlogLiteApi('pause');
 |play|Resume updates from the API.|
 |reset|Resets the API so that the next update will be like the first one, and will return all available data.|
 
-h4. Available Options
+h3. Available Options
 
 |_.Property|_.Type|_.Default|_.Description|
 |_.Required|
