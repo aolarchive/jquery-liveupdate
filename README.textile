@@ -20,7 +20,7 @@ h2. How to use Live Blog Lite
 
 h3. Requirements
 
-LbL requires jQuery 1.5.2 or higher. (It may work with even older versions of jQuery - we haven't tested how low it will go, yet.)
+LbL officially requires jQuery 1.5.2 or higher. (It has been tested to work as low as jQuery 1.4.2, however, but we don't recommend it.)
 
 The following browsers have been tested with known support, for both the Javascript and CSS: 
 IE (6+), Chrome (11+), Firefox (3.6+), Safari (3+), Opera (9+)
