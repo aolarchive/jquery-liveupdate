@@ -22,6 +22,9 @@ h3. Requirements
 
 LbL requires jQuery 1.5.2 or higher. (It may work with even older versions of jQuery - we haven't tested how low it will go, yet.)
 
+The following browsers have been tested with known support, for both the Javascript and CSS: 
+IE (6+), Chrome (11+), Firefox (3.6+), Safari (3+), Opera (9+)
+
 h3. Files
 
 The plugins' JS and CSS are hosted as a bundle on AOL's global origin server.
