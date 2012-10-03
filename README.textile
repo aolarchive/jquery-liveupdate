@@ -27,21 +27,57 @@ bc..  $(document).ready(function () {
   });
 });
 
+h3. Blogsmith Setup
+
+Blogsmith blogs have to be set up to have live blog posts.
+
+# In the CMS, an owner of the blog in question needs to go to *Management* >> *Settings* and change "Live Content Tool" to *Live Update Tool (Ver 2)*.
+# This line needs to be present in the `.htaccess` file of the blog in question (accessed via the Design tool):
+
+bc. RewriteRule ^live-update/([0-99]+)/([0-99]+)/?$ /index.php?&a=live-update&postid=$1&timestamp=$2 [QSA,L]
+
+Order can affect the way this works, so it needs to be close to the top of your `.htaccess` file.
+
+h3. $.liveBlogLiteUi(options)
+
+The Live Blog Lite UI plugin provides user interface elements for displaying live blog updates. It requires and wraps the API plugin, so if you use it you don't have to separately instnatiate the API. Also: you may pass options for the API plugin (such as `postId` and `url`) through the UI plugin.
+
+h4. Example Usage
+
+bc.. $('#myWidget').liveBlogLiteUi({
+  postId: '20334012',
+  url: 'http://liveupdater.aol.com/',
+  toolbarEnabled: true,
+  begin: new Date('9/21/2012 15:27:00 GMT-0400'),
+  end: new Date('9/21/2012 15:30 GMT-0400'),
+  height: 700
+});
+
+h4. Available Options
+
+|_.Property|_.Type|_.Default|_.Description|
+|_.Required|
+|url|string|null|The domain of the Blogsmith blog with your live blog post. Ex: http://liveupdater.aol.com|
+|postId|number|null|The id of the live blog post, i.e. 20317028. Can be found in the URL string while editing the post in question.|
+|height|number|0|Set the height of the post container. This is required for the UI slider|
+|_.Optional|
+|toolbarEnabled|boolean|false|Turns on or off toolbar functionality.|
+|tweetButtons|boolean|true|Turns on or off tweet buttons in updates.|
 h3. $.liveBlogLiteApi(options)
 
-The liveBlogLiteApi plugin initiates a recurring poll of the Blogsmith Live Updater API. The first time, it receives all updates that currently exist on the live blog post. It begins checking the API every three seconds (or so) and only returns new or edited data. It provides this data to the jQuery object on which it's initiated as a custom "update" event.
+The Live Blog Lite API plugin initiates a recurring poll of the Blogsmith Live Updater API. The first time, it receives all updates that currently exist on the live blog post. It begins checking the API every three seconds (or so) and only returns new or edited data. It provides this data to the jQuery object on which it's initiated as a custom "update" event.
 
 h4. Example usage
 
 bc.. // Initiate the Plugin
 $('#myLiveBlog').liveBlogLiteApi({
-    postId: 20334012,
-    url: 'http://liveupdater.aol.com/'
+  postId: 20334012,
+  url: 'http://liveupdater.aol.com/'
 });
 
 // Output the data to the console
 $('#myLiveBlog').bind('update', function (event, data) {
-    console.log(data);
+  console.log(data);
 });
 
 h4. Methods
@@ -72,6 +108,6 @@ fn1. Here's an easy "tool for creating a valid JS date string":http://codepen.io
 
 h2. A Warning About Sandboxes
 
-bq..  CMS can not, will not, has never, and will never dynamically update Sandbox'd Sites in Beta mode. Beta Mode is strictly for testing a site with the production level caching layer turned on. It is built this way to discourage people from trying to run production sites from the sandbox.
+bq.. CMS can not, will not, has never, and will never dynamically update Sandbox'd Sites in Beta mode. Beta Mode is strictly for testing a site with the production level caching layer turned on. It is built this way to discourage people from trying to run production sites from the sandbox.
 
 "If you wish to test a Live Update post, and have it update LIVE. 1. Turn off Beta mode. 2. Point the updater to the production api.
