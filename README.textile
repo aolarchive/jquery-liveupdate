@@ -27,9 +27,48 @@ bc..  $(document).ready(function () {
   });
 });
 
-h2. TODO! Document begin / end features
+h3. $.liveBlogLiteApi(options)
 
-p. Note location of this "tool for creating a valid JS date string":http://codepen.io/anon/full/vFIfr.
+The liveBlogLiteApi plugin initiates a recurring poll of the Blogsmith Live Updater API. The first time, it receives all updates that currently exist on the live blog post. It begins checking the API every three seconds (or so) and only returns new or edited data. It provides this data to the jQuery object on which it's initiated as a custom "update" event.
+
+h4. Example usage
+
+bc.. // Initiate the Plugin
+$('#myLiveBlog').liveBlogLiteApi({
+    postId: 20334012,
+    url: 'http://liveupdater.aol.com/'
+});
+
+// Output the data to the console
+$('#myLiveBlog').bind('update', function (event, data) {
+    console.log(data);
+});
+
+h4. Methods
+
+Use methods by passing their name as an argument to the plugin.
+
+bc. $('#myLiveBlog').liveBlogLiteApi('pause');
+
+|_.Method|_.Description|
+|pause|Pause updates from the API.|
+|play|Resume updates from the API.|
+|reset|Resets the API so that the next update will be like the first one, and will return all available data.|
+
+h4. Available Options
+
+|_.Property|_.Type|_.Default|_.Description|
+|_.Required|
+|url|string|null|The domain of the Blogsmith blog with your live blog post. Ex: http://liveupdater.aol.com|
+|postId|number|null|The id of the live blog post, i.e. 20317028. Can be found in the URL string while editing the post in question.|
+|_.Optional|
+|begin|Date Object[1]|null|Sets a time for your live blog to begin polling the API for updates.|
+|end|Date Object[1]|null|Sets a time for your live blog to stop polling the API for updates.|
+|alive|boolean|true|If set to false, your live blog will only hit the API once to fetch all available data - it will not continue polling the API.|
+|callbackPrefix|string|'lb_' + new Date().getTime() + '_'|The prefix used for the JSONP call. Hard to envision a need to change this, but here it is!|
+|trafficPing|boolean|true|If true, polls the appropriate Blogsmith traffic URL every thirty seconds for analytics.|
+
+fn1. Here's an easy "tool for creating a valid JS date string":http://codepen.io/anon/full/vFIfr.
 
 h2. A Warning About Sandboxes
 
