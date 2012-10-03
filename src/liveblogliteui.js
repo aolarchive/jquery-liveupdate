@@ -351,7 +351,7 @@
                   pendingUpdates = items.splice(0, len - pageSize);
 
                   $posts.append($('<a />', {
-                    'class': 'lb-more-button',
+                    'class': 'lb-more-button lb-button',
                     text: 'Show earlier posts'
                   }))
                   .click($.proxy(onMoreButtonClicked, this));
@@ -698,7 +698,7 @@
                 })
                 .append(
                   $('<a />', {
-                    'class': 'lb-pause-button',
+                    'class': 'lb-pause-button lb-button',
                     'text': 'Pause'
                   })
                   .bind('click', $.proxy(onPausedButtonClicked, this)),
@@ -865,6 +865,13 @@
             //$this.find('.lb-post-container').scrollTop('0');
           });
 
+          // If IE 6 (or lower... oh dear)
+          if ($.browser.msie && parseInt($.browser.version, 10) <= 6) {
+            // Add .lb-hover class upon hover
+            $this.delegate('.lb-button', 'hover', function (event) {
+              $(this).toggleClass('lb-hover');
+            });
+          }
 
           // Set up show / hide of tweet buttons
           if (options.tweetButtons) {

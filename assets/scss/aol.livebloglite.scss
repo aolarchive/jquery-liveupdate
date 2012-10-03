@@ -163,10 +163,10 @@
         }
     }
 
-    .lb-pause-button {
+    .lb-button {
         display: block;
         float: left;
-        width: 70px;
+        width: 100px;
         text-align: center;
         border: 1px solid #CCCCCC;
         @include border-radius(3px);
@@ -174,15 +174,26 @@
         background-color: #DDDDDD;
         text-decoration: none;
         padding: 6px 8px;
-        margin: 15px;
         cursor: pointer;
         @include transition(all 0.2s);
 
-        &:hover {
+        &:hover,
+        &.lb-hover {
             color: #000000;
             background-color: #CCCCCC;
             border: 1px solid #AAAAAA;
             text-decoration: none;
+        }
+        
+        &.lb-pause-button {
+            width: 70px;
+            margin: 15px;
+        }
+
+        &.lb-more-button {
+            display: inline-block;
+            width: 100%;
+            padding: 6px 0px;
         }
     }
 
@@ -222,27 +233,6 @@
 
         &.lb-status-live {
             color: #CC0000;
-        }
-    }
-
-    .lb-more-button {
-        display: inline-block;
-        width: 100%;
-        text-align: center;
-        border: 1px solid #CCCCCC;
-        @include border-radius(3px);
-        color: #000000;
-        background-color: #DDDDDD;
-        text-decoration: none;
-        padding: 6px 0px;
-        cursor: pointer;
-        @include transition(all 0.2s);
-
-        &:hover {
-            color: #000000;
-            background-color: #CCCCCC;
-            border: 1px solid #AAAAAA;
-            text-decoration: none;
         }
     }
 
@@ -313,9 +303,6 @@
             li.lb-first {
                 margin-left: 0.5em;
             }
-        }
-        .lb-tag-alert {
-            padding-top: 5px;
         }
     }
 }
