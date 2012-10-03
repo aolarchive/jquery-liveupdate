@@ -118,6 +118,13 @@ bc. $('#myLiveBlog').liveBlogLiteApi('pause');
 |play|Resume updates from the API.|
 |reset|Resets the API so that the next update will be like the first one, and will return all available data.|
 
+h3. Events
+
+|_.Event|_.Description|
+|begin|Fired one time after the first update is received from the API with non-empty data.|
+|end|Fired when the API is no longer polling for updates, either because alive is false, or the end option was specified, and that time has passed.|
+|update|Fired every time non-empty data is received from the API. Passes the normalized response data object with the event.|
+
 h3. Available Options
 
 |_.Property|_.Type|_.Default|_.Description|
