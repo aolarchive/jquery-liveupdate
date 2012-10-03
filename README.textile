@@ -38,7 +38,6 @@ h3. Instantiation
 Instantiate it using code along these lines:
 
 bc..  $(document).ready(function () {
-  // <div id="myLiveBlog"></div> is the container element in the markup
   var $myLiveBlog = $('#myLiveBlog').liveBlogLiteUi({
     // This is an example post on the Bootcamp blog
     postId: '20317028',
@@ -46,6 +45,8 @@ bc..  $(document).ready(function () {
     url: 'http://bootcamp.aol.com/'
   });
 });
+
+The element you instantiate @$.liveBlogLiteUI@ on (here, @<div id="#myLiveBlog"></div>@) *can* have content. That content will be displayed until there are actually updates on the live blog post in question *and* the begin time has passed, if that option has been set. This allows you to have pre-event content. Once the initial conditions have been met, the element in question is emptied and refilled with live blog content.
 
 That's the quick and dirty. More detailed documentation is provided below.
 
