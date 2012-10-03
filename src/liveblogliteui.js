@@ -210,15 +210,15 @@
 
                         // Append comment directly after its parent post
                         $item.insertAfter($parent);
-                        
+
                         // Add class to last comment in a row
                         $item.next('.lb-comment').andSelf()
                           .last().addClass('lb-comment-last')
                           .prev().removeClass('lb-comment-last');
-                        
+
                         // Increment the parent's comments count
                         $parent.data('comments', $parent.data('comments') + 1);
-                        
+
                         // Add the comments label to parent item, if needed
                         if ($parent.data('comments') > 0) {
                           $commentsLabel = $parent.find('.lb-post-comments-label');
@@ -231,7 +231,7 @@
                             );
                           }
                         }
-                        
+
                       } else {
                         // Parent post doesn't exist, so add comment to
                         // pendingUpdates array for processing in next page
@@ -307,18 +307,18 @@
                     if ($item.hasClass('lb-comment-last')) {
                       $item.prev('.lb-comment').addClass('lb-comment-last');
                     }
-                    
+
                     // Decrement the parent's comments count
                     if ($item.hasClass('lb-comment')) {
                       $parent = $item.prevAll('.lb-post:not(.lb-comment):first');
                       $parent.data('comments', $parent.data('comments') - 1);
-                      
+
                       // Remove the comments label, if not needed
                       if ($parent.data('comments') === 0) {
                         $parent.find('.lb-post-comments-label').remove();
                       }
                     }
-                    
+
                     $item.remove();
 
                     // Adjust scroll position so doesn't shift after removing an item
@@ -743,7 +743,9 @@
                   event.preventDefault();
 
                   options.tagFilter = '';
-                  window.location.hash = '';
+                  // Use a dummy hash, because '#' alone is equivalent to _top,
+                  // which scrolls the page
+                  window.location.hash = '_';
                   $this.liveBlogLiteApi('reset');
                   $this.trigger('begin');
                 });
