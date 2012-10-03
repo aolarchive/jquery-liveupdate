@@ -490,6 +490,11 @@
 
                   if (type === 'comment') {
                     element.addClass('lb-comment');
+                  } else {
+                    // Initialize item's comments to 0
+                    if (!element.data('comments')) {
+                      element.data('comments', 0);
+                    }
                   }
 
                 } else if (type === 'image') {
@@ -561,7 +566,8 @@
                 var $item = $('#p' + item.id, $posts),
                   $parent = null,
                   height = 0,
-                  scrollTop = $posts.scrollTop();
+                  scrollTop = $posts.scrollTop(),
+                  $commentsLabel;
 
                 if (!$item.length) {
                   $item = buildItem(item);
@@ -578,6 +584,28 @@
 
                         // Append comment directly after its parent post
                         $item.insertAfter($parent);
+                        
+                        // Add class to last comment in a row
+                        $item.next('.lb-comment').andSelf()
+                          .last().addClass('lb-comment-last')
+                          .prev().removeClass('lb-comment-last');
+                        
+                        // Increment the parent's comments count
+                        $parent.data('comments', $parent.data('comments') + 1);
+                        
+                        // Add the comments label to parent item, if needed
+                        if ($parent.data('comments') > 0) {
+                          $commentsLabel = $parent.find('.lb-post-comments-label');
+                          if (!$commentsLabel.length) {
+                            $parent.append(
+                              $commentsLabel = $('<span />', {
+                                'class': 'lb-post-comments-label',
+                                'text': 'Comments'
+                              })
+                            );
+                          }
+                        }
+                        
                       } else {
                         // Parent post doesn't exist, so add comment to
                         // pendingUpdates array for processing in next page
@@ -642,12 +670,29 @@
               deleteItem = function (item) {
                 var $item = $('#p' + item.id, $posts),
                   height = 0,
-                  scrollTop = $posts.scrollTop();
+                  scrollTop = $posts.scrollTop(),
+                  $parent = null;
 
                 if ($item.length) {
                   height = $item.outerHeight();
 
                   $item.fadeOut(400, 'swing', function () {
+                    // If deleting last comment in a row, shift class to prev comment
+                    if ($item.hasClass('lb-comment-last')) {
+                      $item.prev('.lb-comment').addClass('lb-comment-last');
+                    }
+                    
+                    // Decrement the parent's comments count
+                    if ($item.hasClass('lb-comment')) {
+                      $parent = $item.prevAll('.lb-post:not(.lb-comment):first');
+                      $parent.data('comments', $parent.data('comments') - 1);
+                      
+                      // Remove the comments label, if not needed
+                      if ($parent.data('comments') === 0) {
+                        $parent.find('.lb-post-comments-label').remove();
+                      }
+                    }
+                    
                     $item.remove();
 
                     // Adjust scroll position so doesn't shift after removing an item
