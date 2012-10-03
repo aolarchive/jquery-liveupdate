@@ -46,7 +46,7 @@ bc..  $(document).ready(function () {
   });
 });
 
-The element you instantiate @$.liveBlogLiteUI@ on (here, @<div id="#myLiveBlog"></div>@) *can* have content. That content will be displayed until there are actually updates on the live blog post in question *and* the begin time has passed, if that option has been set. This allows you to have pre-event content. Once the initial conditions have been met, the element in question is emptied and refilled with live blog content.
+p. The element you instantiate @$.liveBlogLiteUI@ on (here, @<div id="#myLiveBlog"></div>@) *can* have content. That content will be displayed until there are actually updates on the live blog post in question *and* the begin time has passed, if that option has been set. This allows you to have pre-event content. Once the initial conditions have been met, the element in question is emptied and refilled with live blog content.
 
 That's the quick and dirty. More detailed documentation is provided below.
 
