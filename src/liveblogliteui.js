@@ -69,6 +69,11 @@
               options.tagFilter = tag;
             }
           }
+          
+          // Make sure linkParams don't begin with a delimiter
+          if (options.linkParams && (options.linkParams.charAt(0) === '?' || options.linkParams.charAt(0) === '&')) {
+            options.linkParams = options.linkParams.substr(1);
+          }
 
           // Listen to 'begin' event from API, to initialize and build the widget
           $this.bind('begin', function (event) {
@@ -132,10 +137,7 @@
 
                 if (type === 'text' || type === 'comment') {
                   element.append(
-                    $('<span />', {
-                      html: data,
-                      'class': 'lb-post-text'
-                    })
+                    buildTextElement(data, 'lb-post-text')
                   );
 
                   if (type === 'comment') {
@@ -152,10 +154,7 @@
                     $('<img />', {
                       src: data
                     }),
-                    $('<span />', {
-                      html: caption,
-                      'class': 'lb-post-caption'
-                    })
+                    buildTextElement(caption, 'lb-post-caption')
                   );
                 }
 
@@ -206,6 +205,55 @@
 
                 return element;
               },//}}}
+              
+              /**
+               * Create jQuery element for the text portion of a post item. 
+               *   Does extra processing to remove unwanted tags, and format others.
+               * @param {String} text The text data from the API.
+               * @param {String|null} className The className for this element.
+               * @returns {Object} The new jQuery object.
+               */
+              buildTextElement = function (text, className) {
+                className = className || 'lb-post-text';
+                var $el;
+                
+                if (text) {
+                  // Strip out all undesirable tags before they become DOM elements
+                  text = text.replace(/<script[^>]*>.*?<\/script>/ig, '');
+                }
+                
+                // Build element
+                $el = $('<span />', {
+                  html: text,
+                  'class': className
+                });
+                
+                // Make sure all links target a new window
+                $el.find('a').attr('target', '_blank');
+                
+                // If linkParams are provided, append to all links, in appropriate place
+                if (options.linkParams) {
+                  $el.find('a[href]').each(function (i, el) {
+                    var $link = $(el),
+                      href = $link.attr('href'),
+                      hashPos = href.indexOf('#'),
+                      params = (href.indexOf('?') === -1 ? '?' : '&') + options.linkParams;
+                    
+                    if (hashPos !== -1) {
+                      href = href.substring(0, hashPos) + params + href.substring(hashPos);
+                    } else {
+                      href += params;
+                    }
+                    
+                    $link.attr('href', href);
+                  });
+                }
+                
+                // Remove undesirable elements
+                $el.find('object, embed, applet, iframe, frame, input, select, textarea').remove();
+                
+                return $el;
+              },
 
               /**
                * Add data item into the DOM.
