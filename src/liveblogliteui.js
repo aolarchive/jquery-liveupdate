@@ -13,12 +13,36 @@
   $.fn.liveBlogLiteUi = function (customOptions) {
 
     var defaultOptions = {
-        postId: null,
-        url: null,
+        /**
+         * Whether to show the toolbar UI.
+         * @type Boolean
+         * @default false
+         */
         toolbarEnabled: false,
+        /**
+         * Number of items to show for pagination. If 0 or not a positive integer, pagination is disabled.
+         * @type Number 
+         * @default 0
+         */
         pageSize: 0,
+        /**
+         * Whether to show the tweet buttons on posts.
+         * @type Boolean
+         * @default true
+         */
         tweetButtons: true,
-        height: 0
+        /**
+         * Height of the post container, required for the timeline slider to function. Must be a positive integer.
+         * @type Number
+         * @default 0
+         */
+        height: 0,
+        /**
+         * Optional URL params to append to all outgoing links within the post text; for link tracking, etc. Ex: 'icid=aol123'
+         * @type String
+         * @default null
+         */
+        linkParams: null
       },
 
       $this = $(this),
