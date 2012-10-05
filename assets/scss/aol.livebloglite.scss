@@ -225,7 +225,7 @@
         @include border-radius(3px);
         color: #999999;
         background-color: #EEEEEE;
-        margin: 20px 15px 0 15px;
+        margin: 20px 15px 0 0;
         padding: 4px;
         border: 1px solid #CCCCCC;
         font-size: 12px;
@@ -234,6 +234,21 @@
         &.lb-status-live {
             color: #CC0000;
         }
+    }
+    
+    .lb-unread-count {
+        display: block;
+        float: right;
+        position: relative;
+        vertical-align: middle;
+        margin: {
+            top: 17px;
+        }
+        padding: 2px 5px;
+        @include border-radius(3px);
+        font-size: 10px;
+        color: #FFFFFF;
+        background-color: #CC0000;
     }
 
     .lb-tag-alert {
