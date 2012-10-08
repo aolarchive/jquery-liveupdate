@@ -111,6 +111,7 @@
               $status = null,
               $unreadCount,
               unreadItemCount = 0,
+              receivedFirstUpdate = false,
 
               /**
                * Create DOM element for post item from the given data item. If
@@ -863,7 +864,7 @@
               'class': 'lb-post-container'
             })
             .appendTo($this)
-            .scroll(onContainerScroll);
+            .scroll($.throttle(250, onContainerScroll));
 
             if (options.height && options.height > 0) {
               $posts.height(options.height);
@@ -872,7 +873,8 @@
             // Bind to API 'update' events
             $this.bind('update', function (event, data) {
               //console.log('update', event, data);
-              var hash = window.location.hash;
+              var hash = window.location.hash,
+                newUnreadItems = 0;
 
               if (data.updates) {
                 // Init the begin time if not set yet
@@ -885,9 +887,25 @@
 
                 // Update the slider's range and position
                 initSlider();
-
-                if ($posts.scrollTop() > 0) {
-                  updateUnreadItems(unreadItemCount + data.updates.length);
+                
+                if (receivedFirstUpdate) {
+                  // If container is scrolled, record all updates as new
+                  if ($posts.scrollTop() > 0) {
+                    newUnreadItems = data.updates.length;
+                  
+                  // If container isn't scrolled but is showing tag filter view, 
+                  // only record new items not in this view as new 
+                  } else if (options.tagFilter) {
+                    $.each(data.updates, function (i, item) {
+                      if (!item.tags || (item.tags && $.inArray(options.tagFilter, item.tags) === -1)) {
+                        newUnreadItems += 1;
+                      }
+                    });
+                  }
+                  // Update the unread count
+                  if (newUnreadItems > 0) {
+                    updateUnreadItems(unreadItemCount + newUnreadItems);
+                  }
                 }
               }
 
@@ -944,6 +962,7 @@
                 }
               }
 
+              receivedFirstUpdate = true;
             });
 
             // API fires 'end' event when the set time is reached to stop polling
