@@ -99,6 +99,8 @@
               $toolbar = null,
               $slider = null,
               $status = null,
+              $unreadCount,
+              unreadItemCount = 0,
 
               /**
                * Create DOM element for post item from the given data item. If
@@ -759,6 +761,10 @@
 
                   setSliderValue($topItem.data('date'));
                 }
+                
+                if ($posts.scrollTop() === 0) {
+                  updateUnreadItems(0);
+                }
               },
 
               /**
@@ -771,6 +777,15 @@
                 if ($item) {
                   goToItem($item.attr('id').substr(1));
                 }
+              },
+              
+              /**
+               * Update the unreadItemCount prop, and update the badge UI
+               */
+              updateUnreadItems = function (num) {
+                unreadItemCount = num;
+                
+                $unreadCount.text(num).toggle(num > 0);
               };
 
             /*
@@ -806,6 +821,10 @@
 
                   $status = $('<span />', {
                       'class': 'lb-status'
+                    }),
+                    
+                    $unreadCount = $('<span />', {
+                      'class': 'lb-unread-count'
                     })
                 )
               );
@@ -865,6 +884,10 @@
 
                 // Update the slider's range and position
                 initSlider();
+                
+                if ($posts.scrollTop() > 0) {
+                  updateUnreadItems(unreadItemCount + data.updates.length);
+                }
               }
 
               $(data.changes).each(function (i, item) {
