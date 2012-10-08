@@ -5,6 +5,7 @@ h1. LiveBlogLite
 * "Blogsmith Setup":#blogsmith-setup
 * "@$.liveBlogLiteUi;@":#liveblogliteuioptions
 * "@$.liveBlogLiteApi;@":#liveblogliteapioptions
+* "Development":#development
 
 h2. Two light-weight plugins for publishing Blogsmith liveblog content
 
@@ -22,7 +23,7 @@ h3. Requirements
 
 LbL officially requires jQuery 1.5.2 or higher. (It has been tested to work as low as jQuery 1.4.2, however, but we don't recommend it.)
 
-The following browsers have been tested with known support, for both the Javascript and CSS: 
+The following browsers have been tested with known support, for both the Javascript and CSS:
 IE (6+), Chrome (11+), Firefox (3.6+), Safari (3+), Opera (9+)
 
 h3. Files
@@ -145,3 +146,18 @@ h2. A Warning About Sandboxes
 bq.. CMS can not, will not, has never, and will never dynamically update Sandbox'd Sites in Beta mode. Beta Mode is strictly for testing a site with the production level caching layer turned on. It is built this way to discourage people from trying to run production sites from the sandbox.
 
 "If you wish to test a Live Update post, and have it update LIVE. 1. Turn off Beta mode. 2. Point the updater to the production api.
+
+h2. Development
+
+Do you want to contribute to LbL? Or fork it and modify it for your own needs? Awesome. You'll need a few more things.
+
+* "Node":http://nodejs.org/
+* "Grunt":https://github.com/gruntjs/grunt
+* "Compass":http://compass-style.org/
+* "Compass Animation":https://github.com/ericam/compass-animation
+
+If you've got these installed, you should be able to build the project from your command line by going to the root directory and typing @grunt@.
+
+You can use @grunt watch-serve@ to run a watcher that'll rebuild the project whenever key files are changed and also let you view the project at @localhost:8000@.
+
+*Important note:* as of this writing, only Jeremy and Nate have installed the requirements and it was as we were building this. If you're trying to set yourself up to develop, you may be the first person. Please do us and future developers a favor and tell us about any problems you run into! Don't just quietly solve them yourself because you're super smart. We want to make this as easy as possible.
