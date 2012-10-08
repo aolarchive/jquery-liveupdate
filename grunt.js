@@ -65,7 +65,7 @@ module.exports = function (grunt) {
       }
     },
     watch: {
-      files: ['<config:lint.files>', 'assets/scss/*.scss'],
+      files: ['<config:lint.files>', 'assets/scss/*.scss', 'assets/resources/*.scss'],
       tasks: 'default'
     },
     jshint: {

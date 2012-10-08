@@ -52,6 +52,16 @@
          */
         thumbnails: false
       },
+      /**
+       * Simple way to strip html tags
+       * @see http://stackoverflow.com/questions/822452/strip-html-from-text-javascript
+       * @param {string} html Text with html tags
+       */
+      stripHtml = function (html) {
+        var tmp = document.createElement('DIV');
+        tmp.innerHTML = html;
+        return tmp.textContent || tmp.innerText;
+      },
 
       $this = $(this),
 
@@ -170,7 +180,8 @@
                   element.append(
                     $('<img />', {
                       // Use the thumbnail version of the image
-                      src: imageUrl
+                      src: imageUrl,
+                      alt: (caption) ? stripHtml(caption) : ''
                     }),
                     buildTextElement(caption, 'lb-post-caption')
                   );
@@ -574,16 +585,6 @@
                */
               makeTweetButton = function (id, text) {
                 var href = window.location.href.replace(/\#.*$/, ''),
-                  /**
-                   * Simple way to strip html tags
-                   * @see http://stackoverflow.com/questions/822452/strip-html-from-text-javascript
-                   * @param {string} html Text with html tags
-                   */
-                  stripHtml = function (html) {
-                    var tmp = document.createElement('DIV');
-                    tmp.innerHTML = html;
-                    return tmp.textContent || tmp.innerText;
-                  },
 
                   $tweetButton = $('<a />', {
                     'data-count': 'none',
@@ -761,7 +762,7 @@
 
                   setSliderValue($topItem.data('date'));
                 }
-                
+
                 if ($posts.scrollTop() === 0) {
                   updateUnreadItems(0);
                 }
@@ -778,13 +779,13 @@
                   goToItem($item.attr('id').substr(1));
                 }
               },
-              
+
               /**
                * Update the unreadItemCount prop, and update the badge UI
                */
               updateUnreadItems = function (num) {
                 unreadItemCount = num;
-                
+
                 $unreadCount.text(num).toggle(num > 0);
               };
 
@@ -822,7 +823,7 @@
                   $status = $('<span />', {
                       'class': 'lb-status'
                     }),
-                    
+
                     $unreadCount = $('<span />', {
                       'class': 'lb-unread-count'
                     })
@@ -884,7 +885,7 @@
 
                 // Update the slider's range and position
                 initSlider();
-                
+
                 if ($posts.scrollTop() > 0) {
                   updateUnreadItems(unreadItemCount + data.updates.length);
                 }
@@ -977,18 +978,31 @@
           });
 
           $this.delegate('img', 'click', function (event) {
-            console.log(event.currentTarget);
-            var $imgDisplay = $('<div />', {
-              html: '<img src="' + $(event.currentTarget).attr('src') + '">'
+            var $currentTarget = $(event.currentTarget),
+              $img = $('<img />', {
+                src: $currentTarget.attr('src')
+              }),
+              $imgDisplay = $('<div />');
+
+            $imgDisplay.append($img);
+
+            $img.bind('load', function (event) {
+              var $img = $(event.currentTarget);
+
+              $imgDisplay.dialog({
+                height: 'auto',
+                modal: true,
+                title: $currentTarget.attr('alt'),
+                width: 'auto'
+              });
+
+              // If the user clicks outside the dialog, close it
+              $('.ui-widget-overlay').bind('click', function (event) {
+                $imgDisplay.dialog('destroy');
+              });
             });
 
             $imgDisplay.prependTo('body');
-
-            $imgDisplay.dialog({
-                resizable: false
-              });
-            console.log($imgDisplay);
-
           });
 
           // If IE 6 (or lower... oh dear)

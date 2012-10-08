@@ -30,6 +30,7 @@
         }
 
         img {
+            cursor: pointer;
             float: left;
             height: 100px;
             width: auto;
@@ -57,7 +58,7 @@
     .lb-comment {
         padding-left: 50px;
         background: #EEEEEE inline-image('line-dot.png') no-repeat 20px -160px;
-        
+
         &.lb-comment-last {
         }
     }
@@ -125,7 +126,7 @@
             }
         }
     }
-    
+
     .lb-post-comments-label {
         display: block;
         float: left;
@@ -184,7 +185,7 @@
             border: 1px solid #AAAAAA;
             text-decoration: none;
         }
-        
+
         &.lb-pause-button {
             width: 70px;
             margin: 15px;
@@ -235,7 +236,7 @@
             color: #CC0000;
         }
     }
-    
+
     .lb-unread-count {
         display: block;
         float: right;
@@ -256,7 +257,7 @@
         clear: left;
         font-size: 12px;
         padding: 10px 15px;
-        
+
         a {
             color: #206994;
             text-decoration: none;
