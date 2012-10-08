@@ -953,6 +953,21 @@
             //$this.find('.lb-post-container').scrollTop('0');
           });
 
+          $this.delegate('img', 'click', function (event) {
+            console.log(event.currentTarget);
+            var $imgDisplay = $('<div />', {
+              html: '<img src="' + $(event.currentTarget).attr('src') + '">'
+            });
+
+            $imgDisplay.prependTo('body');
+
+            $imgDisplay.dialog({
+                resizable: false
+              });
+            console.log($imgDisplay);
+
+          });
+
           // If IE 6 (or lower... oh dear)
           if ($.browser.msie && parseInt($.browser.version, 10) <= 6) {
             // Add .lb-hover class upon hover
