@@ -129,6 +129,10 @@
         return normalizedData;
       },
       
+      /**
+       * Success handler for all fetch requests
+       * @param {Object} response The raw data object returned in the fetch request 
+       */
       onFetchSuccess = function (response) {
         // Set the default delay to 3 seconds
         var delay = 3 * 1000,
@@ -173,6 +177,10 @@
         save();
       },
       
+      /**
+       * Error handler for all fetch requests
+       * @param {Object} response The raw data object returned in the fetch request 
+       */
       onFetchError = function (response) {
         // Try to restart things in 10 seconds
         if (state.options.alive) {
@@ -199,7 +207,7 @@
             state.options = $.extend(true, {}, defaultOptions, customOptions);
 
             // Make sure options.url has a trailing slash
-            if (state.options.url.substring(state.options.url.length - 1) !== '/') {
+            if (state.options.url && state.options.url.substring(state.options.url.length - 1) !== '/') {
               state.options.url += '/';
             }
 

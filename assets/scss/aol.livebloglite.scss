@@ -57,6 +57,8 @@
 
     .lb-comment {
         padding-left: 50px;
+        
+        // NOTE: Data URI not supported in IE6-7; see http://jonraasch.com/blog/css-data-uris-in-all-browsers#ie
         background: #EEEEEE inline-image('line-dot.png') no-repeat 20px -160px;
 
         &.lb-comment-last {
