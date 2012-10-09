@@ -153,7 +153,6 @@
     .lb-toolbar {
         float: left;
         width: 100%;
-        margin-bottom: 20px;
         background-color: #EEEEEE;
         border-bottom: 1px solid #AAAAAA;
         @include border-radius(4px);
@@ -236,8 +235,8 @@
             color: #CC0000;
         }
     }
-
-    .lb-unread-count {
+    
+    /*.lb-unread-count {
         display: block;
         float: right;
         position: relative;
@@ -250,9 +249,9 @@
         font-size: 10px;
         color: #FFFFFF;
         background-color: #CC0000;
-    }
+    }*/
 
-    .lb-tag-alert {
+    .lb-alert {
         background-color: hsl(60, 100%, 80%);
         clear: left;
         font-size: 12px;
@@ -261,6 +260,7 @@
         a {
             color: #206994;
             text-decoration: none;
+            cursor: pointer;
 
             &:hover {
                 color: #206994;
@@ -268,13 +268,23 @@
             }
         }
     }
-
+    
+    .lb-unread-count {
+        display: inline;
+        padding: 2px 6px;
+        @include border-radius(3px);
+        color: #CC0000;
+        background-color: lightYellow;
+        margin-right: 20px;
+    }
+    
     .lb-post-container {
         float: left;
         width: 100%;
         overflow-y: auto;
         overflow-x: hidden;
         position: relative;
+        margin-top: 20px;
     }
 
 }
@@ -294,7 +304,7 @@
                 margin-left: 10px;
             }
         }
-        .lb-tag-alert {
+        .lb-alert {
             padding-top: 5px;
         }
     }

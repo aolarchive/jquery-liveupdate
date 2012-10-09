@@ -120,7 +120,8 @@
               pendingUpdates = [],
               beginTime = 0,
               endTime = 0,
-              $tagAlert = null,
+              $alert = null,
+              $tagFilter = null,
               $clearTagFilter = null,
               $posts = null,
               $toolbar = null,
@@ -816,7 +817,28 @@
               updateUnreadItems = function (num) {
                 unreadItemCount = num;
 
-                $unreadCount.text(num).toggle(num > 0);
+                // Update the unread count UI element
+                $unreadCount.html('<b>' + num + '</b> new update' + (num !== 1 ? 's' : ''))
+                .toggle(num > 0);
+                
+                // Show/hide the alert box based on its contents
+                if (num > 0) {
+                  $alert.slideDown(300);
+                } else if (!Boolean(options.tagFilter)) {
+                  $alert.slideUp(300);
+                }
+              },
+              
+              /**
+               * Clear the tag filter and reset view to show all updates
+               */
+              clearTagFilter = function () {
+                options.tagFilter = '';
+                // Use a dummy hash, because '#' alone is equivalent to _top,
+                // which scrolls the page
+                window.location.hash = '_';
+                $this.liveBlogLiteApi('reset');
+                $this.trigger('begin');
               };
 
             /*
@@ -852,11 +874,8 @@
 
                   $status = $('<span />', {
                       'class': 'lb-status'
-                    }),
-
-                    $unreadCount = $('<span />', {
-                      'class': 'lb-unread-count'
                     })
+                    .hide()
                 )
               );
 
@@ -866,26 +885,45 @@
               });
             }
 
-            if (options.tagFilter) {
-              $tagAlert = $('<div />', {
-                'class': 'lb-tag-alert',
-                html: 'Showing all updates with the <b>' + options.tagFilter + '</b> tag. '
-              }).appendTo($this);
+            $alert = $('<div />', {
+              'class': 'lb-alert'
+            })
+            .appendTo($this)
+            .append(
+              $unreadCount = $('<a />', {
+                'class': 'lb-unread-count'
+              })
+              .hide()
+              .click(function (event) {
+                event.preventDefault();
+                
+                if (!options.tagFilter) {
+                  $posts.scrollTop(0);
+                } else {
+                  clearTagFilter();
+                }
+              })
+            )
+            .hide();
 
+            if (options.tagFilter) {
+              $alert.show()
+              .append(
+                $tagFilter = $('<span />', {
+                  'class': 'lb-tag-filter',
+                  html: 'Showing all updates with the <b>' + options.tagFilter + '</b> tag. '
+                })
+              );
+              
               $clearTagFilter = $('<a />', {
                 href: '#',
                 text: 'View all updates'
               })
-                .appendTo($tagAlert)
+                .appendTo($tagFilter)
                 .bind('click', function (event) {
                   event.preventDefault();
-
-                  options.tagFilter = '';
-                  // Use a dummy hash, because '#' alone is equivalent to _top,
-                  // which scrolls the page
-                  window.location.hash = '_';
-                  $this.liveBlogLiteApi('reset');
-                  $this.trigger('begin');
+                  
+                  clearTagFilter();
                 });
             }
 
