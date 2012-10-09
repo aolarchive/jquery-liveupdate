@@ -138,6 +138,7 @@ h3. Available Options
 |alive|boolean|true|If set to false, your live blog will only hit the API once to fetch all available data - it will not continue polling the API.|
 |callbackPrefix|string|'lb_' + new Date().getTime() + '_'|The prefix used for the JSONP call. Hard to envision a need to change this, but here it is!|
 |trafficPing|boolean|true|If true, polls the appropriate Blogsmith traffic URL every thirty seconds for analytics.|
+|fetch|function|null|Reference to alternate function to execute the fetch request, useful for simulating different data patterns, or testing the UI, for instance. Signature should be @function(state, successCallback(response), errorCallback(response))@|
 
 fn1. Here's an easy "tool for creating a valid JS date string":http://codepen.io/anon/full/vFIfr.
 
