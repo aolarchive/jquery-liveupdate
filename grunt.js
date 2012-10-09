@@ -17,7 +17,16 @@ module.exports = function (grunt) {
     },
     concat: {
       dist: {
-        src: ['libs/jquery/jquery-ui*.js', 'libs/aol/**/*.js', 'src/**/*.js'],
+        src: [
+          // jQuery UI
+          'libs/jquery/jquery-ui*.js',
+          // All AOL plugins
+          'libs/aol/**/*.js',
+          // Specific jQuery plugins
+          'libs/jquery/jquery.ba-throttle-debounce.min.js',
+          // All our own JavaScript files
+          'src/**/*.js'
+        ],
         dest: 'dist/<%= pkg.name %>.js'
       }
     },
