@@ -239,7 +239,7 @@
                   $.each(item.tags, function (i, el) {
                     tagsList.append(
                       $('<li />', {
-                        html: '<a href="#tag=' + encodeURIComponent(el) + '" class="tag">' + el + '</a>',
+                        html: '<a href="#tag=' + encodeURIComponent(el) + '" class="tag" title="Show only updates with this tag">' + el + '</a>',
                         'class': ((i === 0) ? 'lb-first' : null)
                       })
                     );
@@ -675,11 +675,11 @@
 
                 if (paused) {
                   start();
-                  $button.text('Pause');
+                  $button.text('Pause').attr('title', 'Stop receiving updates');
                   $toolbar.removeClass('lb-status-paused');
                 } else {
                   stop();
-                  $button.text('Resume');
+                  $button.text('Resume').attr('title', 'Resume receiving updates');
                   $toolbar.addClass('lb-status-paused');
                 }
 
@@ -869,7 +869,8 @@
                 .append(
                   $('<a />', {
                     'class': 'lb-pause-button lb-button',
-                    'text': 'Pause'
+                    'text': 'Pause',
+                    'title': 'Stop receiving updates'
                   })
                   .bind('click', $.proxy(onPausedButtonClicked, this)),
 
@@ -905,7 +906,8 @@
             .appendTo($this)
             .append(
               $unreadCount = $('<a />', {
-                'class': 'lb-unread-count'
+                'class': 'lb-unread-count',
+                title: 'Jump to newest update'
               })
               .hide()
               .click(function (event) {

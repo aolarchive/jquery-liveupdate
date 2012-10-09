@@ -267,15 +267,23 @@
                 text-decoration: underline;
             }
         }
-    }
 
-    .lb-unread-count {
-        display: inline;
-        padding: 2px 6px;
-        @include border-radius(3px);
-        color: #CC0000;
-        background-color: lightYellow;
-        margin-right: 20px;
+        .lb-unread-count {
+            display: inline;
+            padding: 2px 6px;
+            @include border-radius(3px);
+            color: #FFFFFF;
+            background-color: #CC0000;
+            margin-right: 20px;
+            @include transition(all 0.2s);
+            border: 1px solid #CC0000;
+
+            &:hover {
+                color: #FFFFFF;
+                text-decoration: none;
+                background-color: lightsalmon;
+            }
+        }
     }
 
     .lb-post-container {
