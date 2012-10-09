@@ -9,6 +9,9 @@
 
     var options, dimensions, action, modifiers;
 
+    photoWidth = photoWidth || '';
+    photoHeight = photoHeight || '';
+
     if (typeof thumbnail === "object") {
       settings = thumbnail;
     }

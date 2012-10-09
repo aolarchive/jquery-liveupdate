@@ -31,6 +31,56 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
 * Includes: jquery.effects.highlight.js
 * Copyright (c) 2012 AUTHORS.txt; Licensed MIT, GPL */
 (function(a,b){a.effects.highlight=function(b){return this.queue(function(){var c=a(this),d=["backgroundImage","backgroundColor","opacity"],e=a.effects.setMode(c,b.options.mode||"show"),f={backgroundColor:c.css("backgroundColor")};e=="hide"&&(f.opacity=0),a.effects.save(c,d),c.show().css({backgroundImage:"none",backgroundColor:b.options.color||"#ffff99"}).animate(f,{queue:!1,duration:b.duration,easing:b.options.easing,complete:function(){e=="hide"&&c.hide(),a.effects.restore(c,d),e=="show"&&!a.support.opacity&&this.style.removeAttribute("filter"),b.callback&&b.callback.apply(this,arguments),c.dequeue()}})})}})(jQuery);;
+/*! Get Dynamic Image Src - v0.1.0 - 2012-10-09
+* Copyright (c) 2012 Dave Artz; Licensed MIT, GPL */
+
+(function ($) {
+
+  "use strict";
+
+  $.getDynamicImageSrc = function (photoSrc, photoWidth, photoHeight, thumbnail, settings) {
+
+    var options, dimensions, action, modifiers;
+
+    photoWidth = photoWidth || '';
+    photoHeight = photoHeight || '';
+
+    if (typeof thumbnail === "object") {
+      settings = thumbnail;
+    }
+
+    $.extend(options = {}, {
+      action: 'resize',
+      format: null,
+      quality: 85
+    }, settings);
+
+    dimensions = photoWidth + "x" + photoHeight;
+    action = (thumbnail && typeof thumbnail !== "object") ? "thumbnail" : options.action;
+    modifiers = "/quality/" + options.quality;
+
+    if (options.crop) {
+      dimensions += "+" + (options.crop.x || 0) + "+" + (options.crop.y || 0);
+    }
+
+    if (options.format) {
+      modifiers += "/format/" + options.format;
+    }
+
+    return "http://o.aolcdn.com/dims-global/dims3/GLOB/" + action + "/" + dimensions + modifiers + "/" + photoSrc;
+  };
+
+}(jQuery));
+
+/*
+ * jQuery throttle / debounce - v1.1 - 3/7/2010
+ * http://benalman.com/projects/jquery-throttle-debounce-plugin/
+ * 
+ * Copyright (c) 2010 "Cowboy" Ben Alman
+ * Dual licensed under the MIT and GPL licenses.
+ * http://benalman.com/about/license/
+ */
+(function(b,c){var $=b.jQuery||b.Cowboy||(b.Cowboy={}),a;$.throttle=a=function(e,f,j,i){var h,d=0;if(typeof f!=="boolean"){i=j;j=f;f=c}function g(){var o=this,m=+new Date()-d,n=arguments;function l(){d=+new Date();j.apply(o,n)}function k(){h=c}if(i&&!h){l()}h&&clearTimeout(h);if(i===c&&m>e){l()}else{if(f!==true){h=setTimeout(i?k:l,i===c?e-m:e)}}}if($.guid){g.guid=j.guid=j.guid||$.guid++}return g};$.debounce=function(d,e,f){return f===c?a(d,e,false):a(d,f,e!==false)}})(this);
 /**
  * AOL Liveblog Lite UI Widget
  *
@@ -422,13 +472,15 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
          */
         tweetButtons: true,
         /**
-         * Height of the post container, required for the timeline slider to function. Must be a positive integer.
+         * Height of the post container, required for the timeline slider to
+         * function. Must be a positive integer.
          * @type Number
          * @default 0
          */
         height: 0,
         /**
-         * Optional URL params to append to all outgoing links within the post text; for link tracking, etc. Ex: 'icid=aol123'
+         * Optional URL params to append to all outgoing links within the post
+         * text; for link tracking, etc. Ex: 'icid=aol123'
          * @type String
          * @default null
          */
@@ -438,9 +490,24 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
          * false, will show the full image. In our default CSS, the image is
          * scaled down to 100px height and proportionally determined width.
          * @type Boolean
-         * @default false
+         * @default true
          */
-        thumbnails: false
+        thumbnails: true,
+        /**
+         * Whether to use DIMS for thumbnails
+         * @type Boolean
+         * @default true
+         */
+        dims: true,
+        /**
+         * Dimension restrictions for thumbnail images - only applicable if
+         * using DIMS
+         * @type Object
+         **/
+        thumbnailDimensions: {
+          height: 100,
+          width: null
+        }
       },
       /**
        * Simple way to strip html tags
@@ -501,6 +568,7 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
               $status = null,
               $unreadCount,
               unreadItemCount = 0,
+              receivedFirstUpdate = false,
 
               /**
                * Create DOM element for post item from the given data item. If
@@ -521,6 +589,7 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
                   memberId = item.memberId,
                   timestampString = '<a href="#p' + id + '">' + getFormattedDateTime(timestamp) + '</a> by ' + item.memberName,
                   imageUrl,
+                  fullImageUrl,
                   $tweetButton,
                   tweetText,
                   $postInfo;
@@ -562,7 +631,17 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
 
                 } else if (type === 'image') {
                   if (options.thumbnails) {
-                    imageUrl = data.replace(/(\.gif|\.jpg|\.jpeg|\.png)$/, '_thumbnail$1');
+                    // Store a reference to the full-sized image
+                    fullImageUrl = data;
+                    if (options.dims) {
+                      // Use the getDynamicImageSrc plugin to fetch a proper
+                      // DIMS URL
+                      imageUrl = $.getDynamicImageSrc(data, options.thumbnailDimensions.width, options.thumbnailDimensions.height);
+                    } else {
+                      // Otherwise, use the Blogsmith CDN way of fetching a
+                      // standard 75x75 thumbnail
+                      imageUrl = data.replace(/(\.gif|\.jpg|\.jpeg|\.png)$/, '_thumbnail$1');
+                    }
                   } else {
                     imageUrl = data;
                   }
@@ -571,6 +650,7 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
                     $('<img />', {
                       // Use the thumbnail version of the image
                       src: imageUrl,
+                      'data-src': fullImageUrl || '',
                       alt: (caption) ? stripHtml(caption) : ''
                     }),
                     buildTextElement(caption, 'lb-post-caption')
@@ -1253,7 +1333,7 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
               'class': 'lb-post-container'
             })
             .appendTo($this)
-            .scroll(onContainerScroll);
+            .scroll($.throttle(250, onContainerScroll));
 
             if (options.height && options.height > 0) {
               $posts.height(options.height);
@@ -1262,7 +1342,8 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
             // Bind to API 'update' events
             $this.bind('update', function (event, data) {
               //console.log('update', event, data);
-              var hash = window.location.hash;
+              var hash = window.location.hash,
+                newUnreadItems = 0;
 
               if (data.updates) {
                 // Init the begin time if not set yet
@@ -1276,8 +1357,24 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
                 // Update the slider's range and position
                 initSlider();
 
-                if ($posts.scrollTop() > 0) {
-                  updateUnreadItems(unreadItemCount + data.updates.length);
+                if (receivedFirstUpdate) {
+                  // If container is scrolled, record all updates as new
+                  if ($posts.scrollTop() > 0) {
+                    newUnreadItems = data.updates.length;
+
+                  // If container isn't scrolled but is showing tag filter view,
+                  // only record new items not in this view as new
+                  } else if (options.tagFilter) {
+                    $.each(data.updates, function (i, item) {
+                      if (!item.tags || (item.tags && $.inArray(options.tagFilter, item.tags) === -1)) {
+                        newUnreadItems += 1;
+                      }
+                    });
+                  }
+                  // Update the unread count
+                  if (newUnreadItems > 0) {
+                    updateUnreadItems(unreadItemCount + newUnreadItems);
+                  }
                 }
               }
 
@@ -1334,6 +1431,7 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
                 }
               }
 
+              receivedFirstUpdate = true;
             });
 
             // API fires 'end' event when the set time is reached to stop polling
@@ -1369,15 +1467,17 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
 
           $this.delegate('img', 'click', function (event) {
             var $currentTarget = $(event.currentTarget),
+              fullImageUrl = $currentTarget.attr('data-src'),
               $img = $('<img />', {
-                src: $currentTarget.attr('src')
+                src: (fullImageUrl) ? fullImageUrl : $currentTarget.attr('src')
               }),
               $imgDisplay = $('<div />');
 
-            $imgDisplay.append($img);
 
             $img.bind('load', function (event) {
               var $img = $(event.currentTarget);
+
+              $imgDisplay.append($img);
 
               $imgDisplay.dialog({
                 height: 'auto',

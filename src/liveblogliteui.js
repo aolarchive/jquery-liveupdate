@@ -32,13 +32,15 @@
          */
         tweetButtons: true,
         /**
-         * Height of the post container, required for the timeline slider to function. Must be a positive integer.
+         * Height of the post container, required for the timeline slider to
+         * function. Must be a positive integer.
          * @type Number
          * @default 0
          */
         height: 0,
         /**
-         * Optional URL params to append to all outgoing links within the post text; for link tracking, etc. Ex: 'icid=aol123'
+         * Optional URL params to append to all outgoing links within the post
+         * text; for link tracking, etc. Ex: 'icid=aol123'
          * @type String
          * @default null
          */
@@ -48,9 +50,24 @@
          * false, will show the full image. In our default CSS, the image is
          * scaled down to 100px height and proportionally determined width.
          * @type Boolean
-         * @default false
+         * @default true
          */
-        thumbnails: false
+        thumbnails: true,
+        /**
+         * Whether to use DIMS for thumbnails
+         * @type Boolean
+         * @default true
+         */
+        dims: true,
+        /**
+         * Dimension restrictions for thumbnail images - only applicable if
+         * using DIMS
+         * @type Object
+         **/
+        thumbnailDimensions: {
+          height: 100,
+          width: null
+        }
       },
       /**
        * Simple way to strip html tags
@@ -132,6 +149,7 @@
                   memberId = item.memberId,
                   timestampString = '<a href="#p' + id + '">' + getFormattedDateTime(timestamp) + '</a> by ' + item.memberName,
                   imageUrl,
+                  fullImageUrl,
                   $tweetButton,
                   tweetText,
                   $postInfo;
@@ -173,7 +191,17 @@
 
                 } else if (type === 'image') {
                   if (options.thumbnails) {
-                    imageUrl = data.replace(/(\.gif|\.jpg|\.jpeg|\.png)$/, '_thumbnail$1');
+                    // Store a reference to the full-sized image
+                    fullImageUrl = data;
+                    if (options.dims) {
+                      // Use the getDynamicImageSrc plugin to fetch a proper
+                      // DIMS URL
+                      imageUrl = $.getDynamicImageSrc(data, options.thumbnailDimensions.width, options.thumbnailDimensions.height);
+                    } else {
+                      // Otherwise, use the Blogsmith CDN way of fetching a
+                      // standard 75x75 thumbnail
+                      imageUrl = data.replace(/(\.gif|\.jpg|\.jpeg|\.png)$/, '_thumbnail$1');
+                    }
                   } else {
                     imageUrl = data;
                   }
@@ -182,6 +210,7 @@
                     $('<img />', {
                       // Use the thumbnail version of the image
                       src: imageUrl,
+                      'data-src': fullImageUrl || '',
                       alt: (caption) ? stripHtml(caption) : ''
                     }),
                     buildTextElement(caption, 'lb-post-caption')
@@ -887,14 +916,14 @@
 
                 // Update the slider's range and position
                 initSlider();
-                
+
                 if (receivedFirstUpdate) {
                   // If container is scrolled, record all updates as new
                   if ($posts.scrollTop() > 0) {
                     newUnreadItems = data.updates.length;
-                  
-                  // If container isn't scrolled but is showing tag filter view, 
-                  // only record new items not in this view as new 
+
+                  // If container isn't scrolled but is showing tag filter view,
+                  // only record new items not in this view as new
                   } else if (options.tagFilter) {
                     $.each(data.updates, function (i, item) {
                       if (!item.tags || (item.tags && $.inArray(options.tagFilter, item.tags) === -1)) {
@@ -998,15 +1027,17 @@
 
           $this.delegate('img', 'click', function (event) {
             var $currentTarget = $(event.currentTarget),
+              fullImageUrl = $currentTarget.attr('data-src'),
               $img = $('<img />', {
-                src: $currentTarget.attr('src')
+                src: (fullImageUrl) ? fullImageUrl : $currentTarget.attr('src')
               }),
               $imgDisplay = $('<div />');
 
-            $imgDisplay.append($img);
 
             $img.bind('load', function (event) {
               var $img = $(event.currentTarget);
+
+              $imgDisplay.append($img);
 
               $imgDisplay.dialog({
                 height: 'auto',
