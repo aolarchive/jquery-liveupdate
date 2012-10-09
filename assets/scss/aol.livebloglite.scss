@@ -235,7 +235,7 @@
             color: #CC0000;
         }
     }
-    
+
     /*.lb-unread-count {
         display: block;
         float: right;
@@ -268,7 +268,7 @@
             }
         }
     }
-    
+
     .lb-unread-count {
         display: inline;
         padding: 2px 6px;
@@ -277,7 +277,7 @@
         background-color: lightYellow;
         margin-right: 20px;
     }
-    
+
     .lb-post-container {
         float: left;
         width: 100%;
@@ -285,6 +285,13 @@
         overflow-x: hidden;
         position: relative;
         margin-top: 20px;
+    }
+
+    .lb-top {
+        /*background-color: green;*/
+    }
+    .highlight {
+        /*background-color: red;*/
     }
 
 }

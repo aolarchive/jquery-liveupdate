@@ -87,6 +87,7 @@
         if ($.fn.liveBlogLiteApi) {
 
           var options = $.extend(true, {}, defaultOptions, customOptions),
+            scrolling = false,
             hash = window.location.hash;
 
           // Check the hash for the presence of a tag filter
@@ -536,9 +537,18 @@
               goToItem = function (id) {
                 var $post = $('#p' + id, $posts);
 
+                scrolling = true;
+
                 if ($post.length) {
                   // Scroll to top of this post
-                  $posts.scrollTop($post.get(0).offsetTop);
+                  $posts.stop().animate({
+                    'scrollTop': $post.get(0).offsetTop
+                  }, {
+                    duration: 'fast',
+                    complete: function () {
+                      scrolling = false;
+                    }
+                  });
                 }
               },
 
@@ -791,7 +801,9 @@
                     $topItem.addClass('lb-top');
                   }
 
-                  setSliderValue($topItem.data('date'));
+                  if (!scrolling) {
+                    setSliderValue($topItem.data('date'));
+                  }
                 }
 
                 if ($posts.scrollTop() === 0) {
@@ -807,6 +819,8 @@
 
                 var $item = getNearestItemByTime(ui.value);
                 if ($item) {
+                  //$posts.find('.highlight').removeClass('highlight');
+                  //$item.addClass('highlight');
                   goToItem($item.attr('id').substr(1));
                 }
               },
@@ -820,7 +834,7 @@
                 // Update the unread count UI element
                 $unreadCount.html('<b>' + num + '</b> new update' + (num !== 1 ? 's' : ''))
                 .toggle(num > 0);
-                
+
                 // Show/hide the alert box based on its contents
                 if (num > 0) {
                   $alert.slideDown(300);
@@ -828,7 +842,7 @@
                   $alert.slideUp(300);
                 }
               },
-              
+
               /**
                * Clear the tag filter and reset view to show all updates
                */
@@ -896,9 +910,13 @@
               .hide()
               .click(function (event) {
                 event.preventDefault();
-                
+
                 if (!options.tagFilter) {
-                  $posts.scrollTop(0);
+                  $posts.stop().animate({
+                    'scrollTop': 0
+                  }, {
+                    duration: 'fast'
+                  });
                 } else {
                   clearTagFilter();
                 }
@@ -914,7 +932,7 @@
                   html: 'Showing all updates with the <b>' + options.tagFilter + '</b> tag. '
                 })
               );
-              
+
               $clearTagFilter = $('<a />', {
                 href: '#',
                 text: 'View all updates'
@@ -922,7 +940,7 @@
                 .appendTo($tagFilter)
                 .bind('click', function (event) {
                   event.preventDefault();
-                  
+
                   clearTagFilter();
                 });
             }
