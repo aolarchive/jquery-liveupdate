@@ -38,6 +38,8 @@
                 right: 15px;
                 bottom: 10px;
             }
+            padding: 2px;
+            border: 1px solid #CCCCCC;
         }
 
         a {
@@ -303,7 +305,20 @@
     .highlight {
         /*background-color: red;*/
     }
+}
 
+.ui-dialog {
+    &.lb-image-dialog {
+        font-size: 12px;
+    
+        .ui-dialog-title {
+            font-size: 1.1em;
+        }
+        
+        .ui-dialog-content {
+            text-align: center;
+        }
+    }
 }
 
 /* Styles for IE7 */

@@ -213,7 +213,8 @@
                       // Use the thumbnail version of the image
                       src: imageUrl,
                       'data-src': fullImageUrl || '',
-                      alt: (caption) ? stripHtml(caption) : ''
+                      alt: (caption) ? stripHtml(caption) : '',
+                      title: 'Click to view larger'
                     }),
                     buildTextElement(caption, 'lb-post-caption')
                   );
@@ -1102,7 +1103,8 @@
                 height: 'auto',
                 modal: true,
                 title: $currentTarget.attr('alt'),
-                width: 'auto'
+                width: 'auto',
+                dialogClass: 'lb-image-dialog'
               });
 
               // If the user clicks outside the dialog, close it
