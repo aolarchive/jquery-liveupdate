@@ -120,7 +120,10 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
         postId: null,
 
         // Send image beacon calls to Blogsmith to track traffic
-        trafficPing: true
+        trafficPing: true,
+        
+        // Reference to alternate function to execute the fetch, for simulating data, for instance
+        fetch: null
       },
 
       // Used to store plugin state
@@ -131,6 +134,144 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
        */
       save = function () {
         $this.data('lbl-state', state);
+      },
+      
+      /**
+       * The API's data has single-letter keys for bandwidth reasons. We
+       * manually normalize the data into a more human-readable
+       * structure.
+       * @param {Object} data Object data from the API
+       * @param {Array} membersArray An array of members (bloggers) from
+       * the API
+       */
+      normalize = function (data, membersArray) {
+        membersArray = membersArray || [];
+        var i, length, item, items, member,
+            members = {},
+            normalizedData = data,
+            // What the update type integer really means
+            types = { 1: 'text', 2: 'image', 4: 'comment' };
+
+        // Create a members object
+        for (i = 0, length = membersArray.length; i < length; i += 1) {
+          member = membersArray[i];
+
+          members[member.m] = {
+            name: member.name,
+            slug: member.slug
+          };
+        }
+
+        for (items in normalizedData) {
+          if (normalizedData.hasOwnProperty(items)) {
+            for (i = 0, length = normalizedData[items].length; i < normalizedData[items].length; i += 1) {
+              item = normalizedData[items][i];
+
+              // Transform m into a member object
+              if (item.m) {
+                item.memberId = item.m;
+                item.memberName = members[item.memberId].name;
+                item.memberSlug = members[item.memberId].slug;
+                delete item.m;
+              }
+
+              // Transform t (time) into a date object
+              if (item.t) {
+                item.date = new Date(item.t * 1000);
+                delete item.t;
+              }
+
+              // Give type a meaningful name with a default
+              if (item.type) {
+                item.type = types[item.type] || 'unknown';
+              }
+
+              // d (data) is our content
+              if (item.d) {
+                item.content = item.d;
+                delete item.d;
+              }
+
+              // Take caption from md (metadata) and
+              // place it on our item
+              if (item.md && item.md.caption) {
+                item.caption = item.md.caption || '';
+                delete item.md.caption;
+              }
+
+              // Take tags from md (metadata) and place
+              // them on our item
+              if (item.md && item.md.tags) {
+                item.tags = item.md.tags || [];
+                delete item.md.tags;
+              }
+            }
+          }
+        }
+
+        return normalizedData;
+      },
+      
+      /**
+       * Success handler for all fetch requests
+       * @param {Object} response The raw data object returned in the fetch request 
+       */
+      onFetchSuccess = function (response) {
+        // Set the default delay to 3 seconds
+        var delay = 3 * 1000,
+          now = new Date();
+
+        // If response.int is greater than zero, use it as the
+        // recommended number of seconds to delay the poll
+        if (response.int > 0) {
+          delay = response.int * 1000;
+        }
+
+        state.lastUpdate = response.last_update || 0;
+
+        // Call fetch again after the API-recommended
+        // number of seconds
+        if (state.options.alive) {
+          if (!state.options.end || state.options.end > now) {
+
+            state.timer = setTimeout(methods.fetch, delay);
+
+          } else {
+            if (state.options.end && state.options.end <= now) {
+              state.options.alive = false;
+              $this.trigger('end');
+            }
+          }
+        }
+
+        state.count += 1;
+
+        if (response.data) {
+          // If this is the first update, trigger the begin event
+          if (state.first === true) {
+            delete state.first;
+            $this.trigger('begin');
+          }
+
+          $this.trigger('update', normalize(response.data, response.members));
+        }
+
+        // Save state
+        save();
+      },
+      
+      /**
+       * Error handler for all fetch requests
+       * @param {Object} response The raw data object returned in the fetch request 
+       */
+      onFetchError = function (response) {
+        // Try to restart things in 10 seconds
+        if (state.options.alive) {
+          state.timer = setTimeout(methods.fetch, 10000);
+        }
+
+        // Save state
+        save();
       },
 
       methods = {
@@ -149,7 +290,7 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
             state.options = $.extend(true, {}, defaultOptions, customOptions);
 
             // Make sure options.url has a trailing slash
-            if (state.options.url.substring(state.options.url.length - 1) !== '/') {
+            if (state.options.url && state.options.url.substring(state.options.url.length - 1) !== '/') {
               state.options.url += '/';
             }
 
@@ -219,152 +360,31 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
         fetch: function () {
           // Fetch data from API
           var apiUrl,
-            now = new Date(),
             state = $this.data('lbl-state'),
             options = state.options,
-            callback = options.callbackPrefix + state.count,
-            /**
-             * The API's data has single-letter keys for bandwidth reasons. We
-             * manually normalize the data into a more human-readable
-             * structure.
-             * @param {Object} data Object data from the API
-             * @param {Array} membersArray An array of members (bloggers) from
-             * the API
-             */
-            normalize = function (data, membersArray) {
-                membersArray = membersArray || [];
-                var i, length, item, items, member,
-                    members = {},
-                    normalizedData = data,
-                    // What the update type integer really means
-                    types = { 1: 'text', 2: 'image', 4: 'comment' };
-
-                // Create a members object
-                for (i = 0, length = membersArray.length; i < length; i += 1) {
-                  member = membersArray[i];
-
-                  members[member.m] = {
-                    name: member.name,
-                    slug: member.slug
-                  };
-                }
-
-                for (items in normalizedData) {
-                  if (normalizedData.hasOwnProperty(items)) {
-                    for (i = 0, length = normalizedData[items].length; i < normalizedData[items].length; i += 1) {
-                      item = normalizedData[items][i];
-
-                      // Transform m into a member object
-                      if (item.m) {
-                        item.memberId = item.m;
-                        item.memberName = members[item.memberId].name;
-                        item.memberSlug = members[item.memberId].slug;
-                        delete item.m;
-                      }
-
-                      // Transform t (time) into a date object
-                      if (item.t) {
-                        item.date = new Date(item.t * 1000);
-                        delete item.t;
-                      }
-
-                      // Give type a meaningful name with a default
-                      if (item.type) {
-                        item.type = types[item.type] || 'unknown';
-                      }
-
-                      // d (data) is our content
-                      if (item.d) {
-                        item.content = item.d;
-                        delete item.d;
-                      }
-
-                      // Take caption from md (metadata) and
-                      // place it on our item
-                      if (item.md && item.md.caption) {
-                        item.caption = item.md.caption || '';
-                        delete item.md.caption;
-                      }
-
-                      // Take tags from md (metadata) and place
-                      // them on our item
-                      if (item.md && item.md.tags) {
-                        item.tags = item.md.tags || [];
-                        delete item.md.tags;
-                      }
-                    }
-                  }
-                }
-
-                return normalizedData;
-              };
+            callback = options.callbackPrefix + state.count;
 
           // If the trafficPing option is set to true and there's not currently
           // a setInterval stored on the state object, start pinging
           if (options.trafficPing && !state.trafficPing) {
             methods.trafficPing();
           }
-
-          // The Blogsmith API uses the 'live-update' pattern in the URL which
-          // needs to be defined in the blog's .htaccess
-          apiUrl = options.url + 'live-update/' + options.postId + '/' + state.lastUpdate;
-
-          $.ajax({
-            dataType: 'jsonp',
-            jsonpCallback: callback,
-            url: apiUrl,
-            success: function (response) {
-              // Set the default delay to 3 seconds
-              var delay = 3 * 1000;
-
-              // If response.int is greater than zero, use it as the
-              // recommended number of seconds to delay the poll
-              if (response.int > 0) {
-                delay = response.int * 1000;
-              }
-
-              state.lastUpdate = response.last_update || 0;
-
-              // Call fetch again after the API-recommended
-              // number of seconds
-              if (options.alive) {
-                if (!options.end || options.end > now) {
-
-                  state.timer = setTimeout(methods.fetch, delay);
-
-                } else {
-                  if (options.end && options.end <= now) {
-                    options.alive = false;
-                    $this.trigger('end');
-                  }
-                }
-              }
-
-              state.count += 1;
-
-              if (response.data) {
-                // If this is the first update, trigger the begin event
-                if (state.first === true) {
-                  delete state.first;
-                  $this.trigger('begin');
-                }
-
-                $this.trigger('update', normalize(response.data, response.members));
-              }
-
-              // Save state
-              save();
-            },
-            error: function (response) {
-              // Try to restart things in 10 seconds
-              if (state.options.alive) {
-                state.timer = setTimeout(methods.fetch, 10000);
-              }
-
-              // Save state
-              save();
-            }
-          });
+          
+          if (!options.fetch) {
+            // The Blogsmith API uses the 'live-update' pattern in the URL which
+            // needs to be defined in the blog's .htaccess
+            apiUrl = options.url + 'live-update/' + options.postId + '/' + state.lastUpdate;
+  
+            $.ajax({
+              dataType: 'jsonp',
+              jsonpCallback: callback,
+              url: apiUrl,
+              success: onFetchSuccess,
+              error: onFetchError
+            });
+          } else {
+            options.fetch(state, onFetchSuccess, onFetchError);
+          }
         },
 
         /**
@@ -653,7 +673,8 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
                       // Use the thumbnail version of the image
                       src: imageUrl,
                       'data-src': fullImageUrl || '',
-                      alt: (caption) ? stripHtml(caption) : ''
+                      alt: (caption) ? stripHtml(caption) : '',
+                      title: 'Click to view larger'
                     }),
                     buildTextElement(caption, 'lb-post-caption')
                   );
@@ -679,7 +700,7 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
                   $.each(item.tags, function (i, el) {
                     tagsList.append(
                       $('<li />', {
-                        html: '<a href="#tag=' + encodeURIComponent(el) + '" class="tag">' + el + '</a>',
+                        html: '<a href="#tag=' + encodeURIComponent(el) + '" class="tag" title="Show only updates with this tag">' + el + '</a>',
                         'class': ((i === 0) ? 'lb-first' : null)
                       })
                     );
@@ -1115,11 +1136,11 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
 
                 if (paused) {
                   start();
-                  $button.text('Pause');
+                  $button.text('Pause').attr('title', 'Stop receiving updates');
                   $toolbar.removeClass('lb-status-paused');
                 } else {
                   stop();
-                  $button.text('Resume');
+                  $button.text('Resume').attr('title', 'Resume receiving updates');
                   $toolbar.addClass('lb-status-paused');
                 }
 
@@ -1309,7 +1330,8 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
                 .append(
                   $('<a />', {
                     'class': 'lb-pause-button lb-button',
-                    'text': 'Pause'
+                    'text': 'Pause',
+                    'title': 'Stop receiving updates'
                   })
                   .bind('click', $.proxy(onPausedButtonClicked, this)),
 
@@ -1345,7 +1367,8 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
             .appendTo($this)
             .append(
               $unreadCount = $('<a />', {
-                'class': 'lb-unread-count'
+                'class': 'lb-unread-count',
+                title: 'Jump to newest update'
               })
               .hide()
               .click(function (event) {
@@ -1478,7 +1501,8 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
                   start,
                   postPosition = hash.indexOf('p');
 
-                if (postPosition > -1) {
+                // If first char is a 'p'
+                if (postPosition === 1) {
                   start = postPosition + 1;
                   // Note assumption that the hash ONLY contains an ID
                   id = hash.substring(start, hash.length);
@@ -1539,7 +1563,8 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
                 height: 'auto',
                 modal: true,
                 title: $currentTarget.attr('alt'),
-                width: 'auto'
+                width: 'auto',
+                dialogClass: 'lb-image-dialog'
               });
 
               // If the user clicks outside the dialog, close it
