@@ -1040,7 +1040,8 @@
                   start,
                   postPosition = hash.indexOf('p');
 
-                if (postPosition > -1) {
+                // If first char is a 'p'
+                if (postPosition === 1) {
                   start = postPosition + 1;
                   // Note assumption that the hash ONLY contains an ID
                   id = hash.substring(start, hash.length);
