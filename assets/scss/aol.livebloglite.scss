@@ -348,6 +348,14 @@
         .lb-toolbar {
             padding-bottom: 15px;
         }
+        .lb-button {
+            &.lb-pause-button {
+                margin-left: 8px;
+            }
+        }
+        .lb-status {
+            margin-right: 8px;
+        }
         .lb-post-info {
             width: 100%;
 
