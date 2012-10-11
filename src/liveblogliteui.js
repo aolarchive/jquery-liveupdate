@@ -1088,11 +1088,10 @@
           $this.delegate('img', 'click', function (event) {
             var $currentTarget = $(event.currentTarget),
               fullImageUrl = $currentTarget.attr('data-src'),
-              $img = $('<img />', {
-                src: (fullImageUrl) ? fullImageUrl : $currentTarget.attr('src')
-              }),
-              $imgDisplay = $('<div />');
-
+              imgSrc = (fullImageUrl) ? fullImageUrl : $currentTarget.attr('src'),
+              $img = $('<img />'),
+              $imgDisplay = $('<div />')
+                .prependTo('body');
 
             $img.bind('load', function (event) {
               var $img = $(event.currentTarget);
@@ -1112,8 +1111,9 @@
                 $imgDisplay.dialog('destroy');
               });
             });
-
-            $imgDisplay.prependTo('body');
+            
+            // Add src later, so IE <=8 will detect the load event in time
+            $img.attr('src', imgSrc);
           });
 
           // If IE 6 (or lower... oh dear)
