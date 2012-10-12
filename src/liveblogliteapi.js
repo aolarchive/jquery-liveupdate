@@ -28,7 +28,8 @@
         alive: true,
 
         // Callback prefix to use for the JSONP call
-        callbackPrefix: 'lb_' + new Date().getTime() + '_',
+        // Probably shouldn't be changed
+        callbackPrefix: 'LB_U',
 
         // The domain of the blog, i.e. http://aol.com
         url: null,
@@ -144,17 +145,17 @@
           delay = response.int * 1000;
         }
 
-        state.lastUpdate = response.last_update || 0;
+        //state.lastUpdate = response.last_update || 0;
 
-        //if (state.lastUpdate === state.timestamp) {
-          //console.log('nudge the count up by one!');
-          //state.count += 1;
-        //} else if (state.lastUpdate > state.timestamp) {
-          //console.log('reset the count to zero');
-          //state.timestamp = state.lastUpdate;
-          //state.count = 0;
-        //}
-        //console.log('lastUpdate', state.lastUpdate, 'timestamp', state.timestamp);
+        if (response.last_update === state.lastUpdate) {
+          console.log('nudge the count up by one!');
+          state.count += 1;
+        } else if (response.last_update > state.lastUpdate) {
+          console.log('reset the count to zero');
+          state.lastUpdate = response.last_update;
+          state.count = 0;
+        }
+        console.log('lastUpdate', state.lastUpdate);
 
 
         // Call fetch again after the API-recommended
@@ -274,7 +275,6 @@
         reset: function () {
           state.count = 0;
           state.lastUpdate = 0;
-          state.options.callbackPrefix = 'lb_' + new Date().getTime() + '_';
           clearTimeout(state.timer);
           methods.fetch();
         },
@@ -288,7 +288,7 @@
           var apiUrl,
             state = $this.data('lbl-state'),
             options = state.options,
-            callback = options.callbackPrefix + state.count;
+            callback = options.callbackPrefix + state.lastUpdate + '_C' + state.count;
 
           // If the trafficPing option is set to true and there's not currently
           // a setInterval stored on the state object, start pinging

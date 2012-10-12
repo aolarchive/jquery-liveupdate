@@ -1,0 +1,3 @@
+[submodule "libs/jquery/imagesloaded"]
+	path = libs/jquery/imagesloaded
+	url = git://github.com/desandro/imagesloaded.git
