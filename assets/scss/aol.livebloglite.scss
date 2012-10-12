@@ -64,14 +64,32 @@
 
     .lb-comment {
         padding-left: 50px;
+        background: #EEEEEE;
 
-        // NOTE: Data URI not supported in IE6-7; see http://jonraasch.com/blog/css-data-uris-in-all-browsers#ie
-        background: #EEEEEE inline-image('line-dot.png') no-repeat 20px -160px;
-
-        &.lb-comment-last {
+        .lb-comment-icon {
+            display: block;
+            position: absolute;
+            height: 35px;
+            width: 15px;
+            margin: {
+                top: -1em;
+                left: -35px;
+            }
+            border-left: 2px solid #AAAAAA;
+            border-bottom: 2px solid #AAAAAA;
+            @include border-radius(0 0 0 10px);
+        }
+        .lb-comment-icon-dot {
+            width: 8px;
+            height: 8px;
+            @include border-radius(50%);
+            background-color: #AAAAAA;
+            position: absolute;
+            bottom: -5px;
+            right: -2px;
         }
     }
-
+    
     .lb-post-text {
         float: left;
         display: block;
@@ -344,6 +362,10 @@
         .lb-alert {
             padding-top: 5px;
         }
+        .lb-comment-icon {
+            position: relative;
+            margin-bottom: -1em;
+        }
     }
 }
 
@@ -374,6 +396,10 @@
             li.lb-first {
                 margin-left: 0.5em;
             }
+        }
+        .lb-comment-icon {
+            position: relative;
+            margin-bottom: -1em;
         }
     }
 }

@@ -188,6 +188,13 @@
 
                   if (type === 'comment') {
                     element.addClass('lb-comment');
+                    
+                    element.prepend(
+                      $('<div class="lb-comment-icon"/>')
+                        .append(
+                          $('<div class="lb-comment-icon-dot"/>')
+                        )
+                    );
                   } else {
                     // Initialize item's comments to 0
                     if (!element.data('comments')) {
