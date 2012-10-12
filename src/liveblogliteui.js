@@ -1129,7 +1129,7 @@
               $imgDisplay.dialog({
                 height: 'auto',
                 modal: true,
-                title: $currentTarget.attr('alt'),
+                //title: $currentTarget.attr('alt'),
                 width: 'auto',
                 dialogClass: 'lb-image-dialog',
                 zIndex: 9000
