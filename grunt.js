@@ -24,6 +24,7 @@ module.exports = function (grunt) {
           'libs/aol/**/*.js',
           // Specific jQuery plugins
           'libs/jquery/jquery.ba-throttle-debounce.min.js',
+          'libs/jquery/imagesloaded/jquery.imagesloaded.js',
           // All our own JavaScript files
           'src/**/*.js'
         ],

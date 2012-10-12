@@ -81,6 +81,129 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
  * http://benalman.com/about/license/
  */
 (function(b,c){var $=b.jQuery||b.Cowboy||(b.Cowboy={}),a;$.throttle=a=function(e,f,j,i){var h,d=0;if(typeof f!=="boolean"){i=j;j=f;f=c}function g(){var o=this,m=+new Date()-d,n=arguments;function l(){d=+new Date();j.apply(o,n)}function k(){h=c}if(i&&!h){l()}h&&clearTimeout(h);if(i===c&&m>e){l()}else{if(f!==true){h=setTimeout(i?k:l,i===c?e-m:e)}}}if($.guid){g.guid=j.guid=j.guid||$.guid++}return g};$.debounce=function(d,e,f){return f===c?a(d,e,false):a(d,f,e!==false)}})(this);
+/*!
+ * jQuery imagesLoaded plugin v2.1.0
+ * http://github.com/desandro/imagesloaded
+ *
+ * MIT License. by Paul Irish et al.
+ */
+
+/*jshint curly: true, eqeqeq: true, noempty: true, strict: true, undef: true, browser: true */
+/*global jQuery: false */
+
+;(function($, undefined) {
+'use strict';
+
+// blank image data-uri bypasses webkit log warning (thx doug jones)
+var BLANK = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+
+$.fn.imagesLoaded = function( callback ) {
+	var $this = this,
+		deferred = $.isFunction($.Deferred) ? $.Deferred() : 0,
+		hasNotify = $.isFunction(deferred.notify),
+		$images = $this.find('img').add( $this.filter('img') ),
+		loaded = [],
+		proper = [],
+		broken = [];
+
+	// Register deferred callbacks
+	if ($.isPlainObject(callback)) {
+		$.each(callback, function (key, value) {
+			if (key === 'callback') {
+				callback = value;
+			} else if (deferred) {
+				deferred[key](value);
+			}
+		});
+	}
+
+	function doneLoading() {
+		var $proper = $(proper),
+			$broken = $(broken);
+
+		if ( deferred ) {
+			if ( broken.length ) {
+				deferred.reject( $images, $proper, $broken );
+			} else {
+				deferred.resolve( $images );
+			}
+		}
+
+		if ( $.isFunction( callback ) ) {
+			callback.call( $this, $images, $proper, $broken );
+		}
+	}
+
+	function imgLoaded( img, isBroken ) {
+		// don't proceed if BLANK image, or image is already loaded
+		if ( img.src === BLANK || $.inArray( img, loaded ) !== -1 ) {
+			return;
+		}
+
+		// store element in loaded images array
+		loaded.push( img );
+
+		// keep track of broken and properly loaded images
+		if ( isBroken ) {
+			broken.push( img );
+		} else {
+			proper.push( img );
+		}
+
+		// cache image and its state for future calls
+		$.data( img, 'imagesLoaded', { isBroken: isBroken, src: img.src } );
+
+		// trigger deferred progress method if present
+		if ( hasNotify ) {
+			deferred.notifyWith( $(img), [ isBroken, $images, $(proper), $(broken) ] );
+		}
+
+		// call doneLoading and clean listeners if all images are loaded
+		if ( $images.length === loaded.length ){
+			setTimeout( doneLoading );
+			$images.unbind( '.imagesLoaded' );
+		}
+	}
+
+	// if no images, trigger immediately
+	if ( !$images.length ) {
+		doneLoading();
+	} else {
+		$images.bind( 'load.imagesLoaded error.imagesLoaded', function( event ){
+			// trigger imgLoaded
+			imgLoaded( event.target, event.type === 'error' );
+		}).each( function( i, el ) {
+			var src = el.src;
+
+			// find out if this image has been already checked for status
+			// if it was, and src has not changed, call imgLoaded on it
+			var cached = $.data( el, 'imagesLoaded' );
+			if ( cached && cached.src === src ) {
+				imgLoaded( el, cached.isBroken );
+				return;
+			}
+
+			// if complete is true and browser supports natural sizes, try
+			// to check for image status manually
+			if ( el.complete && el.naturalWidth !== undefined ) {
+				imgLoaded( el, el.naturalWidth === 0 || el.naturalHeight === 0 );
+				return;
+			}
+
+			// cached images don't fire load sometimes, so we reset src, but only when
+			// dealing with IE, or image is complete (loaded) and failed manual check
+			// webkit hack from http://groups.google.com/group/jquery-dev/browse_thread/thread/eee6ab7b2da50e1f
+			if ( el.readyState || el.complete ) {
+				el.src = BLANK;
+				el.src = src;
+			}
+		});
+	}
+
+	return deferred ? deferred.promise( $this ) : $this;
+};
+
+})(jQuery);
 /**
  * AOL Liveblog Lite UI Widget
  *
@@ -111,7 +234,8 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
         alive: true,
 
         // Callback prefix to use for the JSONP call
-        callbackPrefix: 'lb_' + new Date().getTime() + '_',
+        // Probably shouldn't be changed
+        callbackPrefix: 'LB_U',
 
         // The domain of the blog, i.e. http://aol.com
         url: null,
@@ -227,18 +351,12 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
           delay = response.int * 1000;
         }
 
-        state.lastUpdate = response.last_update || 0;
-
-        //if (state.lastUpdate === state.timestamp) {
-          //console.log('nudge the count up by one!');
-          //state.count += 1;
-        //} else if (state.lastUpdate > state.timestamp) {
-          //console.log('reset the count to zero');
-          //state.timestamp = state.lastUpdate;
-          //state.count = 0;
-        //}
-        //console.log('lastUpdate', state.lastUpdate, 'timestamp', state.timestamp);
-
+        if (response.last_update === state.lastUpdate) {
+          state.count += 1;
+        } else if (response.last_update > state.lastUpdate) {
+          state.lastUpdate = response.last_update;
+          state.count = 0;
+        }
 
         // Call fetch again after the API-recommended
         // number of seconds
@@ -357,7 +475,6 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
         reset: function () {
           state.count = 0;
           state.lastUpdate = 0;
-          state.options.callbackPrefix = 'lb_' + new Date().getTime() + '_';
           clearTimeout(state.timer);
           methods.fetch();
         },
@@ -371,7 +488,7 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
           var apiUrl,
             state = $this.data('lbl-state'),
             options = state.options,
-            callback = options.callbackPrefix + state.count;
+            callback = options.callbackPrefix + state.lastUpdate + '_C' + state.count;
 
           // If the trafficPing option is set to true and there's not currently
           // a setInterval stored on the state object, start pinging
@@ -1559,14 +1676,40 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
             var $currentTarget = $(event.currentTarget),
               fullImageUrl = $currentTarget.attr('data-src'),
               imgSrc = (fullImageUrl) ? fullImageUrl : $currentTarget.attr('src'),
-              $img = $('<img />'),
+              $img = $('<img />', { src: imgSrc }),
               $imgDisplay = $('<div />')
                 .prependTo('body');
 
-            $img.bind('load', function (event) {
-              var $img = $(event.currentTarget);
+            console.log('imgSrc', imgSrc);
+
+            // Use images loaded plugin
+            // https://github.com/desandro/imagesloaded
+            $img.imagesLoaded(function () {
+              var imgWidth,
+                imgHeight,
+                $win = $(window),
+                windowPadding = 100,
+                maxWidth = $win.width() - windowPadding,
+                maxHeight = $win.height() - windowPadding;
 
               $imgDisplay.append($img);
+
+              // Width and height are not available till the image has been
+              // added to the DOM
+              imgWidth = $img.width();
+              imgHeight = $img.height();
+
+              // Make sure the image is neither wider nor higher than the
+              // window's dimensions plus the windowPadding
+              if (maxWidth < maxHeight) {
+                if ($img.width() > maxWidth) {
+                  $img.width(maxWidth);
+                }
+              } else if (maxHeight < maxWidth) {
+                if ($img.height() > maxHeight) {
+                  $img.height(maxHeight);
+                }
+              }
 
               $imgDisplay.dialog({
                 height: 'auto',
@@ -1580,10 +1723,9 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
               $('.ui-widget-overlay').bind('click', function (event) {
                 $imgDisplay.dialog('destroy');
               });
+
             });
-            
-            // Add src later, so IE <=8 will detect the load event in time
-            $img.attr('src', imgSrc);
+
           });
 
           // If IE 6 (or lower... oh dear)

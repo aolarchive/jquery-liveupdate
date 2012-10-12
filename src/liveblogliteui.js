@@ -1089,14 +1089,40 @@
             var $currentTarget = $(event.currentTarget),
               fullImageUrl = $currentTarget.attr('data-src'),
               imgSrc = (fullImageUrl) ? fullImageUrl : $currentTarget.attr('src'),
-              $img = $('<img />'),
+              $img = $('<img />', { src: imgSrc }),
               $imgDisplay = $('<div />')
                 .prependTo('body');
 
-            $img.bind('load', function (event) {
-              var $img = $(event.currentTarget);
+            console.log('imgSrc', imgSrc);
+
+            // Use images loaded plugin
+            // https://github.com/desandro/imagesloaded
+            $img.imagesLoaded(function () {
+              var imgWidth,
+                imgHeight,
+                $win = $(window),
+                windowPadding = 100,
+                maxWidth = $win.width() - windowPadding,
+                maxHeight = $win.height() - windowPadding;
 
               $imgDisplay.append($img);
+
+              // Width and height are not available till the image has been
+              // added to the DOM
+              imgWidth = $img.width();
+              imgHeight = $img.height();
+
+              // Make sure the image is neither wider nor higher than the
+              // window's dimensions plus the windowPadding
+              if (maxWidth < maxHeight) {
+                if ($img.width() > maxWidth) {
+                  $img.width(maxWidth);
+                }
+              } else if (maxHeight < maxWidth) {
+                if ($img.height() > maxHeight) {
+                  $img.height(maxHeight);
+                }
+              }
 
               $imgDisplay.dialog({
                 height: 'auto',
@@ -1110,10 +1136,9 @@
               $('.ui-widget-overlay').bind('click', function (event) {
                 $imgDisplay.dialog('destroy');
               });
+
             });
-            
-            // Add src later, so IE <=8 will detect the load event in time
-            $img.attr('src', imgSrc);
+
           });
 
           // If IE 6 (or lower... oh dear)

@@ -145,18 +145,12 @@
           delay = response.int * 1000;
         }
 
-        //state.lastUpdate = response.last_update || 0;
-
         if (response.last_update === state.lastUpdate) {
-          console.log('nudge the count up by one!');
           state.count += 1;
         } else if (response.last_update > state.lastUpdate) {
-          console.log('reset the count to zero');
           state.lastUpdate = response.last_update;
           state.count = 0;
         }
-        console.log('lastUpdate', state.lastUpdate);
-
 
         // Call fetch again after the API-recommended
         // number of seconds
