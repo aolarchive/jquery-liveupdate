@@ -1103,7 +1103,8 @@
                 modal: true,
                 title: $currentTarget.attr('alt'),
                 width: 'auto',
-                dialogClass: 'lb-image-dialog'
+                dialogClass: 'lb-image-dialog',
+                zIndex: 9000
               });
 
               // If the user clicks outside the dialog, close it
