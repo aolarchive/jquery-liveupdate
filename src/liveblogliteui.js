@@ -177,7 +177,7 @@
                 } else {
                   element.empty()
                     .addClass('lb-edited');
-                  
+
                   timestampString = timestampString + ' - edited';
                 }
 
@@ -1096,8 +1096,6 @@
               $img = $('<img />', { src: imgSrc }),
               $imgDisplay = $('<div />')
                 .prependTo('body');
-
-            console.log('imgSrc', imgSrc);
 
             // Use images loaded plugin
             // https://github.com/desandro/imagesloaded

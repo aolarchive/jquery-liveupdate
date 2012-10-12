@@ -741,7 +741,8 @@ $.fn.imagesLoaded = function( callback ) {
                   fullImageUrl,
                   $tweetButton,
                   tweetText,
-                  $postInfo;
+                  $postInfo,
+                  isNew = !element;
 
                 //console.log('type', type);
 
@@ -754,14 +755,17 @@ $.fn.imagesLoaded = function( callback ) {
                   }
                 }
 
-                if (!element) {
+                if (isNew) {
                   element = $('<p />', {
                     id: 'p' + id,
                     'class': 'lb-post'
                   })
                   .data('date', item.date.getTime());
                 } else {
-                  element.empty();
+                  element.empty()
+                    .addClass('lb-edited');
+
+                  timestampString = timestampString + ' - edited';
                 }
 
                 if (type === 'text' || type === 'comment') {
@@ -1680,8 +1684,6 @@ $.fn.imagesLoaded = function( callback ) {
               $imgDisplay = $('<div />')
                 .prependTo('body');
 
-            console.log('imgSrc', imgSrc);
-
             // Use images loaded plugin
             // https://github.com/desandro/imagesloaded
             $img.imagesLoaded(function () {
@@ -1716,7 +1718,8 @@ $.fn.imagesLoaded = function( callback ) {
                 modal: true,
                 title: $currentTarget.attr('alt'),
                 width: 'auto',
-                dialogClass: 'lb-image-dialog'
+                dialogClass: 'lb-image-dialog',
+                zIndex: 9000
               });
 
               // If the user clicks outside the dialog, close it
