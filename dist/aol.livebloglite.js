@@ -121,7 +121,7 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
 
         // Send image beacon calls to Blogsmith to track traffic
         trafficPing: true,
-        
+
         // Reference to alternate function to execute the fetch, for simulating data, for instance
         fetch: null
       },
@@ -135,7 +135,7 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
       save = function () {
         $this.data('lbl-state', state);
       },
-      
+
       /**
        * The API's data has single-letter keys for bandwidth reasons. We
        * manually normalize the data into a more human-readable
@@ -211,10 +211,10 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
 
         return normalizedData;
       },
-      
+
       /**
        * Success handler for all fetch requests
-       * @param {Object} response The raw data object returned in the fetch request 
+       * @param {Object} response The raw data object returned in the fetch request
        */
       onFetchSuccess = function (response) {
         // Set the default delay to 3 seconds
@@ -228,6 +228,17 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
         }
 
         state.lastUpdate = response.last_update || 0;
+
+        //if (state.lastUpdate === state.timestamp) {
+          //console.log('nudge the count up by one!');
+          //state.count += 1;
+        //} else if (state.lastUpdate > state.timestamp) {
+          //console.log('reset the count to zero');
+          //state.timestamp = state.lastUpdate;
+          //state.count = 0;
+        //}
+        //console.log('lastUpdate', state.lastUpdate, 'timestamp', state.timestamp);
+
 
         // Call fetch again after the API-recommended
         // number of seconds
@@ -244,8 +255,6 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
           }
         }
 
-        state.count += 1;
-
         if (response.data) {
           // If this is the first update, trigger the begin event
           if (state.first === true) {
@@ -259,10 +268,10 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
         // Save state
         save();
       },
-      
+
       /**
        * Error handler for all fetch requests
-       * @param {Object} response The raw data object returned in the fetch request 
+       * @param {Object} response The raw data object returned in the fetch request
        */
       onFetchError = function (response) {
         // Try to restart things in 10 seconds
@@ -369,13 +378,14 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
           if (options.trafficPing && !state.trafficPing) {
             methods.trafficPing();
           }
-          
+
           if (!options.fetch) {
             // The Blogsmith API uses the 'live-update' pattern in the URL which
             // needs to be defined in the blog's .htaccess
             apiUrl = options.url + 'live-update/' + options.postId + '/' + state.lastUpdate;
-  
+
             $.ajax({
+              cache: true,
               dataType: 'jsonp',
               jsonpCallback: callback,
               url: apiUrl,
@@ -1548,11 +1558,10 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
           $this.delegate('img', 'click', function (event) {
             var $currentTarget = $(event.currentTarget),
               fullImageUrl = $currentTarget.attr('data-src'),
-              $img = $('<img />', {
-                src: (fullImageUrl) ? fullImageUrl : $currentTarget.attr('src')
-              }),
-              $imgDisplay = $('<div />');
-
+              imgSrc = (fullImageUrl) ? fullImageUrl : $currentTarget.attr('src'),
+              $img = $('<img />'),
+              $imgDisplay = $('<div />')
+                .prependTo('body');
 
             $img.bind('load', function (event) {
               var $img = $(event.currentTarget);
@@ -1572,8 +1581,9 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
                 $imgDisplay.dialog('destroy');
               });
             });
-
-            $imgDisplay.prependTo('body');
+            
+            // Add src later, so IE <=8 will detect the load event in time
+            $img.attr('src', imgSrc);
           });
 
           // If IE 6 (or lower... oh dear)

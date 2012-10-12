@@ -38,7 +38,7 @@
 
         // Send image beacon calls to Blogsmith to track traffic
         trafficPing: true,
-        
+
         // Reference to alternate function to execute the fetch, for simulating data, for instance
         fetch: null
       },
@@ -52,7 +52,7 @@
       save = function () {
         $this.data('lbl-state', state);
       },
-      
+
       /**
        * The API's data has single-letter keys for bandwidth reasons. We
        * manually normalize the data into a more human-readable
@@ -128,10 +128,10 @@
 
         return normalizedData;
       },
-      
+
       /**
        * Success handler for all fetch requests
-       * @param {Object} response The raw data object returned in the fetch request 
+       * @param {Object} response The raw data object returned in the fetch request
        */
       onFetchSuccess = function (response) {
         // Set the default delay to 3 seconds
@@ -145,6 +145,17 @@
         }
 
         state.lastUpdate = response.last_update || 0;
+
+        //if (state.lastUpdate === state.timestamp) {
+          //console.log('nudge the count up by one!');
+          //state.count += 1;
+        //} else if (state.lastUpdate > state.timestamp) {
+          //console.log('reset the count to zero');
+          //state.timestamp = state.lastUpdate;
+          //state.count = 0;
+        //}
+        //console.log('lastUpdate', state.lastUpdate, 'timestamp', state.timestamp);
+
 
         // Call fetch again after the API-recommended
         // number of seconds
@@ -161,8 +172,6 @@
           }
         }
 
-        state.count += 1;
-
         if (response.data) {
           // If this is the first update, trigger the begin event
           if (state.first === true) {
@@ -176,10 +185,10 @@
         // Save state
         save();
       },
-      
+
       /**
        * Error handler for all fetch requests
-       * @param {Object} response The raw data object returned in the fetch request 
+       * @param {Object} response The raw data object returned in the fetch request
        */
       onFetchError = function (response) {
         // Try to restart things in 10 seconds
@@ -286,13 +295,14 @@
           if (options.trafficPing && !state.trafficPing) {
             methods.trafficPing();
           }
-          
+
           if (!options.fetch) {
             // The Blogsmith API uses the 'live-update' pattern in the URL which
             // needs to be defined in the blog's .htaccess
             apiUrl = options.url + 'live-update/' + options.postId + '/' + state.lastUpdate;
-  
+
             $.ajax({
+              cache: true,
               dataType: 'jsonp',
               jsonpCallback: callback,
               url: apiUrl,
