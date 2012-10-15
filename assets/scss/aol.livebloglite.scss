@@ -87,6 +87,7 @@
             position: absolute;
             bottom: -5px;
             right: -2px;
+            font-size: 1px;
         }
     }
     
@@ -350,6 +351,11 @@
         .lb-toolbar {
             padding-bottom: 15px;
         }
+        .lb-comment {
+            .lb-post-text {
+                float: none;
+            }
+        }
         .lb-post-info {
             width: 100%;
 
@@ -362,9 +368,21 @@
         .lb-alert {
             padding-top: 5px;
         }
-        .lb-comment-icon {
-            position: relative;
-            margin-bottom: -1em;
+    }
+    
+    /* Use 'close' text instead of image for button */
+    .ui-dialog .ui-dialog-titlebar-close {
+        width: auto;
+        height: auto;
+        font-weight: normal;
+        text-decoration: none;
+        cursor: pointer;
+        
+        span {
+            background: none;
+            text-indent: 0;
+            width: auto;
+            height: auto;
         }
     }
 }
@@ -383,6 +401,11 @@
         .lb-status {
             margin-right: 8px;
         }
+        .lb-comment {
+            .lb-post-text {
+                float: none;
+            }
+        }
         .lb-post-info {
             width: 100%;
 
@@ -397,9 +420,21 @@
                 margin-left: 0.5em;
             }
         }
-        .lb-comment-icon {
-            position: relative;
-            margin-bottom: -1em;
+    }
+    
+    /* Use 'close' text instead of image for button */
+    .ui-dialog .ui-dialog-titlebar-close {
+        width: auto;
+        height: auto;
+        font-weight: normal;
+        text-decoration: none;
+        cursor: pointer;
+        
+        span {
+            background: none;
+            text-indent: 0;
+            width: auto;
+            height: auto;
         }
     }
 }
