@@ -545,6 +545,7 @@
               /**
                * Scroll the post container to position the given post item at the top.
                * @param {String} id The id of post item to scroll to.
+               * @returns {Object} The jQuery object for the target item.
                */
               goToItem = function (id) {
                 var $post = $('#p' + id, $posts);
@@ -562,6 +563,8 @@
                     }
                   });
                 }
+                
+                return $post;
               },
 
               /**
@@ -1050,7 +1053,8 @@
               if (hash.length) {
                 var id,
                   start,
-                  postPosition = hash.indexOf('p');
+                  postPosition = hash.indexOf('p'),
+                  $targetItem;
 
                 // If first char is a 'p'
                 if (postPosition === 1) {
@@ -1058,7 +1062,12 @@
                   // Note assumption that the hash ONLY contains an ID
                   id = hash.substring(start, hash.length);
 
-                  goToItem(id);
+                  $targetItem = goToItem(id);
+
+                  // Scroll post container to top of main window, if permalink was valid
+                  if ($targetItem.length) {
+                    $(window).scrollTop($posts.offset().top);
+                  }
                 }
               }
 
