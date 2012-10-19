@@ -1141,13 +1141,11 @@
 
               if (diffHeight > diffWidth) {
                 // Tall images
-                console.log('tall');
                 if ($img.height() > maxHeight) {
                   $img.height(maxHeight);
                 }
               } else if (diffWidth > diffHeight) {
                 // Wide images
-                console.log('wide');
                 if ($img.width() > maxWidth) {
                   $img.width(maxWidth);
                 }
