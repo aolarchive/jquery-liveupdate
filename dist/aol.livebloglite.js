@@ -1703,40 +1703,25 @@ $.fn.imagesLoaded = function( callback ) {
             // Use images loaded plugin
             // https://github.com/desandro/imagesloaded
             $img.imagesLoaded(function () {
-              var imgWidth,
-                imgHeight,
-                diffWidth,
-                diffHeight,
-                $win = $(window),
+              var $win = $(window),
                 windowPadding = 100,
                 maxWidth = $win.width() - windowPadding,
                 maxHeight = $win.height() - windowPadding;
 
               $imgDisplay.append($img);
 
-              // Width and height are not available till the image has been
-              // added to the DOM
-              imgWidth = $img.width();
-              imgHeight = $img.height();
+              // If the image is wider than the window
+              if ($img.width() > maxWidth) {
+                // Restrict its width
+                $img.width(maxWidth);
 
-              // Use the difference between the width/height of the image and
-              // the width/height of the window to figure out whether it's the
-              // width or the height that needs to be limited to keep it within
-              // the bounds of the window
-              diffWidth = Math.abs(maxWidth - imgWidth);
-              diffHeight = Math.abs(maxHeight - imgHeight);
-
-              if (diffHeight > diffWidth) {
-                // Tall images
-                console.log('tall');
+                // If the image is still taller than the window
                 if ($img.height() > maxHeight) {
+                  // Restrict its height
                   $img.height(maxHeight);
-                }
-              } else if (diffWidth > diffHeight) {
-                // Wide images
-                console.log('wide');
-                if ($img.width() > maxWidth) {
-                  $img.width(maxWidth);
+                  // Remove the width restriction, so that the aspect ratio
+                  // will be correct
+                  $img.width('');
                 }
               }
 
