@@ -188,7 +188,7 @@
 
                   if (type === 'comment') {
                     element.addClass('lb-comment');
-                    
+
                     element.prepend(
                       $('<div class="lb-comment-icon"/>')
                         .append(
@@ -563,7 +563,7 @@
                     }
                   });
                 }
-                
+
                 return $post;
               },
 
@@ -1118,6 +1118,8 @@
             $img.imagesLoaded(function () {
               var imgWidth,
                 imgHeight,
+                diffWidth,
+                diffHeight,
                 $win = $(window),
                 windowPadding = 100,
                 maxWidth = $win.width() - windowPadding,
@@ -1130,15 +1132,24 @@
               imgWidth = $img.width();
               imgHeight = $img.height();
 
-              // Make sure the image is neither wider nor higher than the
-              // window's dimensions plus the windowPadding
-              if (maxWidth < maxHeight) {
-                if ($img.width() > maxWidth) {
-                  $img.width(maxWidth);
-                }
-              } else if (maxHeight < maxWidth) {
+              // Use the difference between the width/height of the image and
+              // the width/height of the window to figure out whether it's the
+              // width or the height that needs to be limited to keep it within
+              // the bounds of the window
+              diffWidth = Math.abs(maxWidth - imgWidth);
+              diffHeight = Math.abs(maxHeight - imgHeight);
+
+              if (diffHeight > diffWidth) {
+                // Tall images
+                console.log('tall');
                 if ($img.height() > maxHeight) {
                   $img.height(maxHeight);
+                }
+              } else if (diffWidth > diffHeight) {
+                // Wide images
+                console.log('wide');
+                if ($img.width() > maxWidth) {
+                  $img.width(maxWidth);
                 }
               }
 
