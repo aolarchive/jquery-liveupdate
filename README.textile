@@ -83,11 +83,11 @@ bc.. $('#myWidget').liveBlogLiteUi({
 h3. Available Options
 
 |_.Property|_.Type|_.Default|_.Description|
-|_.Required|
+|\4. *Required*|
 |url|string|null|The domain of the Blogsmith blog with your live blog post. Ex: http://liveupdater.aol.com|
 |postId|number|null|The id of the live blog post, i.e. 20317028. Can be found in the URL string while editing the post in question.|
 |height|number|0|Set the height of the post container. This is required for the UI slider|
-|_.Optional|
+|\4. *Optional*|
 |toolbarEnabled|boolean|false|Turns on or off toolbar functionality.|
 |tweetButtons|boolean|true|Turns on or off tweet buttons in updates.|
 
@@ -129,10 +129,10 @@ h3. Events
 h3. Available Options
 
 |_.Property|_.Type|_.Default|_.Description|
-|_.Required|
+|\4. *Required*|
 |url|string|null|The domain of the Blogsmith blog with your live blog post. Ex: http://liveupdater.aol.com|
 |postId|number|null|The id of the live blog post, i.e. 20317028. Can be found in the URL string while editing the post in question.|
-|_.Optional|
+|\4. *Optional*|
 |begin|Date Object[1]|null|Sets a time for your live blog to begin polling the API for updates.|
 |end|Date Object[1]|null|Sets a time for your live blog to stop polling the API for updates.|
 |alive|boolean|true|If set to false, your live blog will only hit the API once to fetch all available data - it will not continue polling the API.|
