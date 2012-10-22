@@ -121,6 +121,12 @@ bc. $('#myLiveBlog').liveBlogLiteApi('pause');
 
 h3. Events
 
+These events are triggered on the element used to instantiate the @$.liveBlogLiteApi()@ plugin. Ex:
+
+bc. $('#myLiveBlog').liveBlogLiteApi({ options });
+
+bc. $('#myLiveBlog').on('begin', function (event) { ... });
+
 |_.Event|_.Description|
 |begin|Fired one time after the first update is received from the API with non-empty data.|
 |end|Fired when the API is no longer polling for updates, either because alive is false, or the end option was specified, and that time has passed.|
@@ -136,7 +142,7 @@ h3. Available Options
 |begin|Date Object[1]|null|Sets a time for your live blog to begin polling the API for updates.|
 |end|Date Object[1]|null|Sets a time for your live blog to stop polling the API for updates.|
 |alive|boolean|true|If set to false, your live blog will only hit the API once to fetch all available data - it will not continue polling the API.|
-|callbackPrefix|string|'lb_' + new Date().getTime() + '_'|The prefix used for the JSONP call. Hard to envision a need to change this, but here it is!|
+|callbackPrefix|string|'LB_U'|The prefix used for the JSONP call. Probably shouldn't be changed.|
 |trafficPing|boolean|true|If true, polls the appropriate Blogsmith traffic URL every thirty seconds for analytics.|
 |fetch|function|null|Reference to alternate function to execute the fetch request, useful for simulating different data patterns, or testing the UI, for instance. Signature should be @function(state, successCallback(response), errorCallback(response))@|
 
