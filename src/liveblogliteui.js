@@ -1123,6 +1123,9 @@
 
               $imgDisplay.append($img);
 
+              // TODO: The following two image resizing blocks aren't very DRY.
+              // Think about ways to refactor.
+
               // If the image is wider than the window
               if ($img.width() > maxWidth) {
                 // Restrict its width
@@ -1135,6 +1138,21 @@
                   // Remove the width restriction, so that the aspect ratio
                   // will be correct
                   $img.width('');
+                }
+              }
+
+              // If the image is taller than the window
+              if ($img.height() > maxHeight) {
+                // Restrict its height
+                $img.height(maxHeight);
+
+                // If the image is still taller than the window
+                if ($img.width() > maxWidth) {
+                  // Restrict its width
+                  $img.width(maxWidth);
+                  // Remove the height restriction, so that the aspect ratio
+                  // will be correct
+                  $img.height('');
                 }
               }
 
