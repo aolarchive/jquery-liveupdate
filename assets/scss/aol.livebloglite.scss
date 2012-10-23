@@ -47,6 +47,37 @@
             border: 1px solid #CCCCCC;
         }
 
+        .lb-img-loading {
+            color: #fff;
+            float: left;
+            font-size: 12px;
+            margin: {
+                right: 15px;
+                bottom: 10px;
+            }
+            position: relative;
+            text-align: center;
+            text-transform: uppercase;
+
+            span {
+                background: black;
+                bottom: 0;
+                display: block;
+                left: 0;
+                line-height: 4;
+                @include opacity(0.5);
+                position: absolute;
+                right: 0;
+                text-align: center;
+                top: 0;
+            }
+
+            img {
+                margin: 0;
+            }
+        }
+
+
         a {
             color: #206994;
             text-decoration: none;
@@ -90,7 +121,7 @@
             font-size: 1px;
         }
     }
-    
+
     .lb-post-text {
         float: left;
         display: block;
@@ -369,7 +400,7 @@
             padding-top: 5px;
         }
     }
-    
+
     /* Use 'close' text instead of image for button */
     .ui-dialog .ui-dialog-titlebar-close {
         width: auto;
@@ -377,7 +408,7 @@
         font-weight: normal;
         text-decoration: none;
         cursor: pointer;
-        
+
         span {
             background: none;
             text-indent: 0;
@@ -421,7 +452,7 @@
             }
         }
     }
-    
+
     /* Use 'close' text instead of image for button */
     .ui-dialog .ui-dialog-titlebar-close {
         width: auto;
@@ -429,7 +460,7 @@
         font-weight: normal;
         text-decoration: none;
         cursor: pointer;
-        
+
         span {
             background: none;
             text-indent: 0;

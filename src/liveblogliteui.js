@@ -1110,9 +1110,22 @@
             var $currentTarget = $(event.currentTarget),
               fullImageUrl = $currentTarget.attr('data-src'),
               imgSrc = (fullImageUrl) ? fullImageUrl : $currentTarget.attr('src'),
+              $loadingContainer = $('<div />', {
+                'class': 'lb-img-loading'
+              }),
+              $loadingMessage = $('<span />', {
+                html: 'Loading&hellip;'
+              }),
               $img = $('<img />', { src: imgSrc }),
               $imgDisplay = $('<div />')
                 .prependTo('body');
+
+            $loadingContainer.insertBefore($currentTarget);
+            $currentTarget.detach().appendTo($loadingContainer);
+
+            $loadingMessage.appendTo($loadingContainer)
+              .hide()
+              .fadeIn('fast');
 
             // Use images loaded plugin
             // https://github.com/desandro/imagesloaded
@@ -1122,6 +1135,10 @@
                 maxWidth = $win.width() - windowPadding,
                 maxHeight = $win.height() - windowPadding;
 
+              // Remove the loading message
+              $currentTarget.detach().insertAfter($loadingContainer);
+              $loadingContainer.remove();
+              // Append the full-size image
               $imgDisplay.append($img);
 
               // TODO: The following two image resizing blocks aren't very DRY.
