@@ -747,9 +747,10 @@ $.fn.imagesLoaded = function( callback ) {
                 //console.log('type', type);
 
                 // If there is a tag filter present...
-                if (options.tagFilter && tags) {
-                  // If the tag is not present in this item, don't build it
-                  if ($.inArray(options.tagFilter, tags) === -1) {
+                if (options.tagFilter) {
+                  // If the item doesn't have a tag or the tag is not present
+                  // in this item, don't build it
+                  if (!tags || $.inArray(options.tagFilter, tags) === -1) {
                     // Return an empty array
                     return [];
                   }
@@ -1733,7 +1734,7 @@ $.fn.imagesLoaded = function( callback ) {
                 // Restrict its height
                 $img.height(maxHeight);
 
-                // If the image is still taller than the window
+                // If the image is still wider than the window
                 if ($img.width() > maxWidth) {
                   // Restrict its width
                   $img.width(maxWidth);
