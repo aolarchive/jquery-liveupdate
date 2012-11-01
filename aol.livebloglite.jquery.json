@@ -2,7 +2,7 @@
   "name": "aol.livebloglite",
   "title": "AOL Liveblog Lite",
   "description": "A slim way to publish data from AOL liveblogs.",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "homepage": "https://github.com/aol/liveblog-widget",
   "author": {
     "name": "Nate Eagle and Jeremy Jannotta",
