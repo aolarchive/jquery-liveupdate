@@ -143,6 +143,7 @@ h3. Available Options
 |end|Date Object[1]|null|Sets a time for your live blog to stop polling the API for updates.|
 |alive|boolean|true|If set to false, your live blog will only hit the API once to fetch all available data - it will not continue polling the API.|
 |callbackPrefix|string|'LB_U'|The prefix used for the JSONP call. Probably shouldn't be changed.|
+|pollInterval|Number|null|The delay, in seconds, between calls to the Blogsmith API. For many events, three seconds (what Blogsmith defaults to if this is set to null) is overkill. For ongoing events with infrequent updates, setting the delay to something like 30 seconds tremendously reduces resource usage.|
 |trafficPing|boolean|true|If true, polls the appropriate Blogsmith traffic URL every thirty seconds for analytics.|
 |fetch|function|null|Reference to alternate function to execute the fetch request, useful for simulating different data patterns, or testing the UI, for instance. Signature should be @function(state, successCallback(response), errorCallback(response))@|
 

@@ -41,7 +41,11 @@
         trafficPing: true,
 
         // Reference to alternate function to execute the fetch, for simulating data, for instance
-        fetch: null
+        fetch: null,
+
+        // Manually specify an interval for polling in seconds - it unset, takes the
+        // recommendation from Blogsmith, which is 3 seconds
+        pollInterval: null
       },
 
       // Used to store plugin state
@@ -139,10 +143,14 @@
         var delay = 3 * 1000,
           now = new Date();
 
-        // If response.int is greater than zero, use it as the
-        // recommended number of seconds to delay the poll
-        if (response.int > 0) {
-          delay = response.int * 1000;
+        if (state.options.pollInterval) {
+          delay = state.options.pollInterval * 1000;
+        } else {
+          // If response.int is greater than zero, use it as the
+          // recommended number of seconds to delay the poll
+          if (response.int > 0) {
+            delay = response.int * 1000;
+          }
         }
 
         if (response.last_update === state.lastUpdate) {
