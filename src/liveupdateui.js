@@ -1,16 +1,16 @@
 /**
- * AOL Liveblog Lite UI Widget
+ * AOL Live Update UI Widget
  *
  * @fileOverview A slim UI widget to publish data from AOL liveblogs.
  *
- * @see https://github.com/aol/liveblog-widget
+ * @see https://github.com/aol/jquery-liveupdate
  * @author Nate Eagle, Jeremy Jannotta
- * @requires $.fn.liveBlogLiteApi
+ * @requires $.fn.liveUpdateApi
  */
 
 (function ($) {
 
-  $.fn.liveBlogLiteUi = function (customOptions) {
+  $.fn.liveUpdateUi = function (customOptions) {
 
     var defaultOptions = {
         /**
@@ -82,9 +82,9 @@
 
       $this = $(this),
 
-      liveBlogLiteUi = function (customOptions) {
+      liveUpdateUi = function (customOptions) {
 
-        if ($.fn.liveBlogLiteApi) {
+        if ($.fn.liveUpdateApi) {
 
           var options = $.extend(true, {}, defaultOptions, customOptions),
             scrolling = false,
@@ -706,7 +706,7 @@
                * Start/resume the API, so polls for updates
                */
               start = function () {
-                $this.liveBlogLiteApi('play');
+                $this.liveUpdateApi('play');
                 paused = false;
               },
 
@@ -714,7 +714,7 @@
                * Pause the API, so no polling occurs
                */
               stop = function () {
-                $this.liveBlogLiteApi('pause');
+                $this.liveUpdateApi('pause');
                 paused = true;
               },
 
@@ -867,7 +867,7 @@
                 // Use a dummy hash, because '#' alone is equivalent to _top,
                 // which scrolls the page
                 window.location.hash = '_';
-                $this.liveBlogLiteApi('reset');
+                $this.liveUpdateApi('reset');
                 $this.trigger('begin');
               };
 
@@ -1096,7 +1096,7 @@
 
           $this.delegate('.tag', 'click', function (event) {
             options.tagFilter = $(event.currentTarget).text();
-            $this.liveBlogLiteApi('reset');
+            $this.liveUpdateApi('reset');
 
             // Manually clean up some bindings
             // TODO: separate building UI from event binding
@@ -1234,7 +1234,7 @@
           }
 
           // Begin polling the API
-          $this.liveBlogLiteApi(options);
+          $this.liveUpdateApi(options);
 
         }
 
@@ -1242,7 +1242,7 @@
 
     return this.each(function () {
       customOptions = customOptions || {};
-      liveBlogLiteUi(customOptions);
+      liveUpdateUi(customOptions);
     });
 
   };

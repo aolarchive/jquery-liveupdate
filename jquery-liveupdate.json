@@ -1,6 +1,6 @@
 {
-  "name": "aol.livebloglite",
-  "title": "AOL Liveblog Lite",
+  "name": "jquery.liveupdate",
+  "title": "Live Update",
   "description": "A slim way to publish data from AOL liveblogs.",
   "version": "0.1.6",
   "homepage": "https://github.com/aol/liveblog-widget",
@@ -10,10 +10,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/aol/liveblog-widget.git"
+    "url": "git://github.com/aol/jquery-liveupdate.git"
   },
   "bugs": {
-    "url": "https://github.com/aol/liveblog-widget/issues"
+    "url": "https://github.com/aol/jquery-liveupdate/issues"
   },
   "licenses": [
     {

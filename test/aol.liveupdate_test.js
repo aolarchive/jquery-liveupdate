@@ -22,7 +22,7 @@
       raises(block, [expected], [message])
   */
 
-  module('jQuery#livebloglite', {
+  module('jQuery#liveupdate', {
     setup: function () {
       this.elems = $('#qunit-fixture').children();
     }
@@ -30,8 +30,8 @@
 
   test('existence', function () {
     ok($, 'jQuery exists');
-    ok($.fn.liveBlogLiteApi, '$.liveBlogApi exists');
-    ok($.fn.liveBlogLiteUi, '$.liveBlogUi exists');
+    ok($.fn.liveUpdateApi, '$.liveUpdateApi exists');
+    ok($.fn.liveUpdateUi, '$.liveUpdateUi exists');
   });
 
   //test('using jQuery 1.5.2', function () {

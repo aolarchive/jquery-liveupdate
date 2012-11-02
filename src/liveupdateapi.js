@@ -1,16 +1,16 @@
 /**
- * AOL Liveblog Lite UI Widget
+ * AOL Live Update API Widget
  *
  * @fileOverview A slim API to fetch data from AOL liveblogs.
  *
- * @see https://github.com/aol/liveblog-widget
+ * @see https://github.com/aol/jquery-liveupdate
  * @author Nate Eagle, Jeremy Jannotta
  * @requires jQuery 1.5.2+
  */
 
 (function ($) {
 
-  $.fn.liveBlogLiteApi = function (method) {
+  $.fn.liveUpdateApi = function (method) {
 
     var $this = this,
       args = arguments,
@@ -318,7 +318,7 @@
 
         /**
          * Pause updates
-         * @example $('#somediv').liveBlogLiteApi('pause');
+         * @example $('#somediv').liveUpdateApi('pause');
          */
         pause: function () {
           state.paused = true;
@@ -331,7 +331,7 @@
 
         /**
          * Resume updates
-         * @example $('#somediv').liveBlogLiteApi('play');
+         * @example $('#somediv').liveUpdateApi('play');
          */
         play: function () {
           state.paused = false;

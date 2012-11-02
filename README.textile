@@ -1,23 +1,23 @@
-h1. LiveBlogLite
+h1. Documentation
 
 * "Intro":#two-light-weight-plugins-for-publishing-blogsmith-liveblog-content
-* "How to use Live Blog Lite":#how-to-use-live-blog-lite
+* "How to use Live Update":#how-to-use-live-update
 * "Blogsmith Setup":#blogsmith-setup
-* "@$.liveBlogLiteUi;@":#liveblogliteuioptions
-* "@$.liveBlogLiteApi;@":#liveblogliteapioptions
+* "@$.liveUpdateUi;@":#liveupdateuioptions
+* "@$.liveUpdateApi;@":#liveupdateapioptions
 * "Development":#development
 
-h2. Two light-weight plugins for publishing Blogsmith liveblog content
+h2. Two light-weight plugins for publishing Blogsmith Live Update content
 
 p. For the premiere, full-featured Liveblog Publisher, check out Joe Bartlett's "Liveblog Publisher":https://github.com/aoltech/liveblog-publisher.
 
 p. This is a light-weight adaptation built for use with jQuery 1.5.2 and below.
 
-p. LbL is two simple plugins. @$.liveBlogLiteApi@ fetches liveblog data using a postid and a domain and provides updates via a custom event. @$.liveBlogLiteUi@ is a simple, example implementation of the UI to respond to these updates that responds to new content, edits, comments, and deletions.
+p. LbL is two simple plugins. @$.liveUpdateApi@ fetches liveblog data using a postid and a domain and provides updates via a custom event. @$.liveUpdateUi@ is a simple, example implementation of the UI to respond to these updates that responds to new content, edits, comments, and deletions.
 
 p. *Credit where credit is due:* Liveblog Publisher (LbP) was heavily consulted in writing this lighter version. Some patterns were even copied entirely.
 
-h2. How to use Live Blog Lite
+h2. How to use Live Update
 
 h3. Requirements
 
@@ -42,7 +42,7 @@ h3. Instantiation
 Instantiate it using code along these lines:
 
 bc..  $(document).ready(function () {
-  var $myLiveBlog = $('#myLiveBlog').liveBlogLiteUi({
+  var $myLiveBlog = $('#myLiveBlog').liveUpdateUi({
     // This is an example post on the Bootcamp blog
     postId: '20317028',
     // This is the URL to the Bootcamp blog
@@ -50,7 +50,7 @@ bc..  $(document).ready(function () {
   });
 });
 
-p. The element you instantiate @$.liveBlogLiteUI@ on (here, @<div id="#myLiveBlog"></div>@) *can* have content. That content will be displayed until there are actually updates on the live blog post in question *and* the begin time has passed, if that option has been set. This allows you to have pre-event content. Once the initial conditions have been met, the element in question is emptied and refilled with live blog content.
+p. The element you instantiate @$.liveUpdateUI@ on (here, @<div id="#myLiveBlog"></div>@) *can* have content. That content will be displayed until there are actually updates on the live blog post in question *and* the begin time has passed, if that option has been set. This allows you to have pre-event content. Once the initial conditions have been met, the element in question is emptied and refilled with live blog content.
 
 That's the quick and dirty. More detailed documentation is provided below.
 
@@ -65,13 +65,13 @@ bc. RewriteRule ^live-update/([0-99]+)/([0-99]+)/?$ /index.php?&a=live-update&po
 
 Order can affect the way this works, so it needs to be close to the top of your `.htaccess` file.
 
-h2. $.liveBlogLiteUi(options)
+h2. $.liveUpdateUi(options)
 
-The Live Blog Lite UI plugin provides user interface elements for displaying live blog updates. It requires and wraps the API plugin, so if you use it you don't have to separately instnatiate the API. Also: you may pass options for the API plugin (such as `postId` and `url`) through the UI plugin.
+The Live Update UI plugin provides user interface elements for displaying live blog updates. It requires and wraps the API plugin, so if you use it you don't have to separately instnatiate the API. Also: you may pass options for the API plugin (such as `postId` and `url`) through the UI plugin.
 
 h3. Example Usage
 
-bc.. $('#myWidget').liveBlogLiteUi({
+bc.. $('#myWidget').liveUpdateUi({
   postId: '20334012',
   url: 'http://liveupdater.aol.com/',
   toolbarEnabled: true,
@@ -91,14 +91,14 @@ h3. Available Options
 |toolbarEnabled|boolean|false|Turns on or off toolbar functionality.|
 |tweetButtons|boolean|true|Turns on or off tweet buttons in updates.|
 
-h2. $.liveBlogLiteApi(options)
+h2. $.liveUpdateApi(options)
 
-The Live Blog Lite API plugin initiates a recurring poll of the Blogsmith Live Updater API. The first time, it receives all updates that currently exist on the live blog post. It begins checking the API every three seconds (or so) and only returns new or edited data. It provides this data to the jQuery object on which it's initiated as a custom "update" event.
+The Live Update API plugin initiates a recurring poll of the Blogsmith Live Updater API. The first time, it receives all updates that currently exist on the live blog post. It begins checking the API every three seconds (or so) and only returns new or edited data. It provides this data to the jQuery object on which it's initiated as a custom "update" event.
 
 h3. Example usage
 
 bc.. // Initiate the Plugin
-$('#myLiveBlog').liveBlogLiteApi({
+$('#myLiveBlog').liveUpdateApi({
   postId: 20334012,
   url: 'http://liveupdater.aol.com/'
 });
@@ -112,7 +112,7 @@ h3. Methods
 
 Use methods by passing their name as an argument to the plugin.
 
-bc. $('#myLiveBlog').liveBlogLiteApi('pause');
+bc. $('#myLiveBlog').liveUpdateApi('pause');
 
 |_.Method|_.Description|
 |pause|Pause updates from the API.|
@@ -121,9 +121,9 @@ bc. $('#myLiveBlog').liveBlogLiteApi('pause');
 
 h3. Events
 
-These events are triggered on the element used to instantiate the @$.liveBlogLiteApi()@ plugin. Ex:
+These events are triggered on the element used to instantiate the @$.liveUpdateApi()@ plugin. Ex:
 
-bc. $('#myLiveBlog').liveBlogLiteApi({ options });
+bc. $('#myLiveBlog').liveUpdateApi({ options });
 
 bc. $('#myLiveBlog').on('begin', function (event) { ... });
 
@@ -177,13 +177,13 @@ Copyright (c) 2012, AOL Inc.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met: 
+modification, are permitted provided that the following conditions are met:
 
 1. Redistributions of source code must retain the above copyright notice, this
-   list of conditions and the following disclaimer. 
+   list of conditions and the following disclaimer.
 2. Redistributions in binary form must reproduce the above copyright notice,
    this list of conditions and the following disclaimer in the documentation
-   and/or other materials provided with the distribution. 
+   and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -197,5 +197,5 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 The views and conclusions contained in the software and documentation are those
-of the authors and should not be interpreted as representing official policies, 
+of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of the FreeBSD Project.

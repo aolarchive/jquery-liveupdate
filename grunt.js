@@ -7,7 +7,7 @@ module.exports = function (grunt) {
       port: 8000,
       base: '.'
     },
-    pkg: '<json:aol.livebloglite.jquery.json>',
+    pkg: '<json:jquery-liveupdate.json>',
     meta: {
       banner: '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
         '<%= grunt.template.today("yyyy-mm-dd, h:MMTT Z") %>\n' +
@@ -37,12 +37,12 @@ module.exports = function (grunt) {
         dest: 'dist/<%= pkg.name %>.min.js'
       },
       api: {
-        src: ['src/liveblogliteapi.js'],
-        dest: 'dist/jquery.aol.liveblogliteapi.min.js'
+        src: ['src/liveupdateapi.js'],
+        dest: 'dist/jquery.liveupdateapi.min.js'
       },
       ui: {
-        src: ['src/liveblogliteui.js'],
-        dest: 'dist/jquery.aol.liveblogui.min.js'
+        src: ['src/liveupdateui.js'],
+        dest: 'dist/jquery.liveupdateui.min.js'
       }
     },
     qunit: {

@@ -81,142 +81,19 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
  * http://benalman.com/about/license/
  */
 (function(b,c){var $=b.jQuery||b.Cowboy||(b.Cowboy={}),a;$.throttle=a=function(e,f,j,i){var h,d=0;if(typeof f!=="boolean"){i=j;j=f;f=c}function g(){var o=this,m=+new Date()-d,n=arguments;function l(){d=+new Date();j.apply(o,n)}function k(){h=c}if(i&&!h){l()}h&&clearTimeout(h);if(i===c&&m>e){l()}else{if(f!==true){h=setTimeout(i?k:l,i===c?e-m:e)}}}if($.guid){g.guid=j.guid=j.guid||$.guid++}return g};$.debounce=function(d,e,f){return f===c?a(d,e,false):a(d,f,e!==false)}})(this);
-/*!
- * jQuery imagesLoaded plugin v2.1.0
- * http://github.com/desandro/imagesloaded
- *
- * MIT License. by Paul Irish et al.
- */
-
-/*jshint curly: true, eqeqeq: true, noempty: true, strict: true, undef: true, browser: true */
-/*global jQuery: false */
-
-;(function($, undefined) {
-'use strict';
-
-// blank image data-uri bypasses webkit log warning (thx doug jones)
-var BLANK = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
-
-$.fn.imagesLoaded = function( callback ) {
-	var $this = this,
-		deferred = $.isFunction($.Deferred) ? $.Deferred() : 0,
-		hasNotify = $.isFunction(deferred.notify),
-		$images = $this.find('img').add( $this.filter('img') ),
-		loaded = [],
-		proper = [],
-		broken = [];
-
-	// Register deferred callbacks
-	if ($.isPlainObject(callback)) {
-		$.each(callback, function (key, value) {
-			if (key === 'callback') {
-				callback = value;
-			} else if (deferred) {
-				deferred[key](value);
-			}
-		});
-	}
-
-	function doneLoading() {
-		var $proper = $(proper),
-			$broken = $(broken);
-
-		if ( deferred ) {
-			if ( broken.length ) {
-				deferred.reject( $images, $proper, $broken );
-			} else {
-				deferred.resolve( $images );
-			}
-		}
-
-		if ( $.isFunction( callback ) ) {
-			callback.call( $this, $images, $proper, $broken );
-		}
-	}
-
-	function imgLoaded( img, isBroken ) {
-		// don't proceed if BLANK image, or image is already loaded
-		if ( img.src === BLANK || $.inArray( img, loaded ) !== -1 ) {
-			return;
-		}
-
-		// store element in loaded images array
-		loaded.push( img );
-
-		// keep track of broken and properly loaded images
-		if ( isBroken ) {
-			broken.push( img );
-		} else {
-			proper.push( img );
-		}
-
-		// cache image and its state for future calls
-		$.data( img, 'imagesLoaded', { isBroken: isBroken, src: img.src } );
-
-		// trigger deferred progress method if present
-		if ( hasNotify ) {
-			deferred.notifyWith( $(img), [ isBroken, $images, $(proper), $(broken) ] );
-		}
-
-		// call doneLoading and clean listeners if all images are loaded
-		if ( $images.length === loaded.length ){
-			setTimeout( doneLoading );
-			$images.unbind( '.imagesLoaded' );
-		}
-	}
-
-	// if no images, trigger immediately
-	if ( !$images.length ) {
-		doneLoading();
-	} else {
-		$images.bind( 'load.imagesLoaded error.imagesLoaded', function( event ){
-			// trigger imgLoaded
-			imgLoaded( event.target, event.type === 'error' );
-		}).each( function( i, el ) {
-			var src = el.src;
-
-			// find out if this image has been already checked for status
-			// if it was, and src has not changed, call imgLoaded on it
-			var cached = $.data( el, 'imagesLoaded' );
-			if ( cached && cached.src === src ) {
-				imgLoaded( el, cached.isBroken );
-				return;
-			}
-
-			// if complete is true and browser supports natural sizes, try
-			// to check for image status manually
-			if ( el.complete && el.naturalWidth !== undefined ) {
-				imgLoaded( el, el.naturalWidth === 0 || el.naturalHeight === 0 );
-				return;
-			}
-
-			// cached images don't fire load sometimes, so we reset src, but only when
-			// dealing with IE, or image is complete (loaded) and failed manual check
-			// webkit hack from http://groups.google.com/group/jquery-dev/browse_thread/thread/eee6ab7b2da50e1f
-			if ( el.readyState || el.complete ) {
-				el.src = BLANK;
-				el.src = src;
-			}
-		});
-	}
-
-	return deferred ? deferred.promise( $this ) : $this;
-};
-
-})(jQuery);
 /**
- * AOL Liveblog Lite UI Widget
+ * AOL Live Update API Widget
  *
  * @fileOverview A slim API to fetch data from AOL liveblogs.
  *
- * @see https://github.com/aol/liveblog-widget
+ * @see https://github.com/aol/jquery-liveupdate
  * @author Nate Eagle, Jeremy Jannotta
  * @requires jQuery 1.5.2+
  */
 
 (function ($) {
 
-  $.fn.liveBlogLiteApi = function (method) {
+  $.fn.liveUpdateApi = function (method) {
 
     var $this = this,
       args = arguments,
@@ -524,7 +401,7 @@ $.fn.imagesLoaded = function( callback ) {
 
         /**
          * Pause updates
-         * @example $('#somediv').liveBlogLiteApi('pause');
+         * @example $('#somediv').liveUpdateApi('pause');
          */
         pause: function () {
           state.paused = true;
@@ -537,7 +414,7 @@ $.fn.imagesLoaded = function( callback ) {
 
         /**
          * Resume updates
-         * @example $('#somediv').liveBlogLiteApi('play');
+         * @example $('#somediv').liveUpdateApi('play');
          */
         play: function () {
           state.paused = false;
@@ -594,18 +471,18 @@ $.fn.imagesLoaded = function( callback ) {
 }(jQuery));
 
 /**
- * AOL Liveblog Lite UI Widget
+ * AOL Live Update UI Widget
  *
  * @fileOverview A slim UI widget to publish data from AOL liveblogs.
  *
- * @see https://github.com/aol/liveblog-widget
+ * @see https://github.com/aol/jquery-liveupdate
  * @author Nate Eagle, Jeremy Jannotta
- * @requires $.fn.liveBlogLiteApi
+ * @requires $.fn.liveUpdateApi
  */
 
 (function ($) {
 
-  $.fn.liveBlogLiteUi = function (customOptions) {
+  $.fn.liveUpdateUi = function (customOptions) {
 
     var defaultOptions = {
         /**
@@ -677,9 +554,9 @@ $.fn.imagesLoaded = function( callback ) {
 
       $this = $(this),
 
-      liveBlogLiteUi = function (customOptions) {
+      liveUpdateUi = function (customOptions) {
 
-        if ($.fn.liveBlogLiteApi) {
+        if ($.fn.liveUpdateApi) {
 
           var options = $.extend(true, {}, defaultOptions, customOptions),
             scrolling = false,
@@ -1301,7 +1178,7 @@ $.fn.imagesLoaded = function( callback ) {
                * Start/resume the API, so polls for updates
                */
               start = function () {
-                $this.liveBlogLiteApi('play');
+                $this.liveUpdateApi('play');
                 paused = false;
               },
 
@@ -1309,7 +1186,7 @@ $.fn.imagesLoaded = function( callback ) {
                * Pause the API, so no polling occurs
                */
               stop = function () {
-                $this.liveBlogLiteApi('pause');
+                $this.liveUpdateApi('pause');
                 paused = true;
               },
 
@@ -1462,7 +1339,7 @@ $.fn.imagesLoaded = function( callback ) {
                 // Use a dummy hash, because '#' alone is equivalent to _top,
                 // which scrolls the page
                 window.location.hash = '_';
-                $this.liveBlogLiteApi('reset');
+                $this.liveUpdateApi('reset');
                 $this.trigger('begin');
               };
 
@@ -1691,7 +1568,7 @@ $.fn.imagesLoaded = function( callback ) {
 
           $this.delegate('.tag', 'click', function (event) {
             options.tagFilter = $(event.currentTarget).text();
-            $this.liveBlogLiteApi('reset');
+            $this.liveUpdateApi('reset');
 
             // Manually clean up some bindings
             // TODO: separate building UI from event binding
@@ -1829,7 +1706,7 @@ $.fn.imagesLoaded = function( callback ) {
           }
 
           // Begin polling the API
-          $this.liveBlogLiteApi(options);
+          $this.liveUpdateApi(options);
 
         }
 
@@ -1837,7 +1714,7 @@ $.fn.imagesLoaded = function( callback ) {
 
     return this.each(function () {
       customOptions = customOptions || {};
-      liveBlogLiteUi(customOptions);
+      liveUpdateUi(customOptions);
     });
 
   };
