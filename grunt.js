@@ -29,12 +29,29 @@ module.exports = function (grunt) {
           'src/**/*.js'
         ],
         dest: 'dist/<%= pkg.name %>.js'
+      },
+      // no jQuery UI
+      distNoUi: {
+        src: [
+          // All AOL plugins
+          'libs/aol/**/*.js',
+          // Specific jQuery plugins
+          'libs/jquery/jquery.ba-throttle-debounce.min.js',
+          'libs/jquery/imagesloaded/jquery.imagesloaded.js',
+          // All our own JavaScript files
+          'src/**/*.js'
+        ],
+        dest: 'dist/<%= pkg.name %>-noui.js'
       }
     },
     min: {
       bundle: {
         src: ['<banner:meta.banner>', '<config:concat.dist.dest>'],
         dest: 'dist/<%= pkg.name %>.min.js'
+      },
+      bundleNoUi: {
+        src: ['<banner:meta.banner>', '<config:concat.distNoUi.dest>'],
+        dest: 'dist/<%= pkg.name %>-noui.min.js'
       },
       api: {
         src: ['src/liveupdateapi.js'],
