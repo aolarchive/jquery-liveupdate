@@ -20,6 +20,12 @@
          */
         toolbarEnabled: false,
         /**
+         * Whether to show the timeline slider and label UI in the toolbar.
+         * @type Boolean
+         * @default true
+         */
+        timelineEnabled: true,
+        /**
          * Number of items to show for pagination. If 0 or not a positive integer, pagination is disabled.
          * @type Number
          * @default 0
@@ -888,32 +894,39 @@
                     'text': 'Pause',
                     'title': 'Stop receiving updates'
                   })
-                  .bind('click', $.proxy(onPausedButtonClicked, this)),
-
-                  $('<div />', {
-                    'class': 'lb-timeline'
-                  })
-                  .append(
-                    $('<p />', {
-                      'class': 'lb-timeline-label',
-                      text: 'Waiting for updates...'
-                    }),
-                    $slider = $('<div />', {
-                      'class': 'lb-timeline-slider'
-                    })
-                  ),
-
-                  $status = $('<span />', {
-                      'class': 'lb-status'
-                    })
-                    .hide()
+                  .bind('click', $.proxy(onPausedButtonClicked, this))
                 )
               );
+                
+              if (options.timelineEnabled) {
+                $('<div />', {
+                  'class': 'lb-timeline'
+                })
+                .append(
+                  $('<p />', {
+                    'class': 'lb-timeline-label',
+                    text: 'Waiting for updates...'
+                  }),
+                  $slider = $('<div />', {
+                    'class': 'lb-timeline-slider'
+                  })
+                )
+                .appendTo($toolbar);
+              }
 
-              $slider.slider({
-                slide: onSliderMove,
-                disabled: true
-              });
+              $status = $('<span />', {
+                  'class': 'lb-status'
+                }
+              )
+              .hide()
+              .appendTo($toolbar);
+              
+              if ($slider) {
+                $slider.slider({
+                  slide: onSliderMove,
+                  disabled: true
+                });
+              }
             }
 
             $alert = $('<div />', {
