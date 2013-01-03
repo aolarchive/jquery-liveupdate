@@ -1,81 +1,35 @@
 
-#myLiveBlog {
-    height: 250px;
-    overflow-y: auto;
-    overflow-x: hidden;
+#aol-content {
+	.lb {
+		font-family: inherit; 
+		font-size: 14px;
+		
+		.lb-post-container {
+			height: 600px; 
+			border-bottom: 2px solid #AAAAAA;
+		}
+		
+		.lb-post {
+			margin-bottom: 0px; 
+			line-height: normal;
+			
+			img {
+				height:auto;
+			}
+		}
+		
+		.lb-post-timestamp {
+			line-height: 15px;
+		}
+		
+		.lb-post-tags li {
+			background: none; 
+			padding: 0;
+		}
+	}
+}
 
-    &.lb {
-
-        padding-right: 10px;
-
-        .lb-post {
-            border-bottom: 1px dotted #AAAAAA;
-            clear: both;
-            display: block;
-            /*float: left;*/
-            margin-bottom: 1em;
-            overflow: hidden;
-            padding-bottom: 1em;
-            padding: 0;
-
-            img {
-                float: left;
-                margin-right: 10px;
-                margin-bottom: 5px;
-            }
-
-        }
-
-        .lb-comment {
-            padding-left: 30px;
-            background-color: #EEEEEE;
-        }
-
-        .lb-post-text {
-            float: left;
-            display: block;
-            clear: both;
-        }
-
-        .lb-post-caption {
-        }
-
-        .lb-post-timestamp {
-            clear: both;
-            color: #777777;
-            display: block;
-            float: left;
-            font-size: 0.8em;
-            line-height: 17px;
-            position: relative;
-
-            .twitter-share-button {
-                // Config
-                $tweetButtonWidth: 56px;
-                $leftPadding: 5px;
-
-                bottom: 0;
-                position: absolute;
-                right: ($tweetButtonWidth + $leftPadding) * -1;
-            }
-        }
-
-        .lb-post-tags {
-            float: left;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            font-size: 0.8em;
-        }
-        .lb-post-tags li {
-            float: left;
-            list-style: none;
-            margin: 0 0 0 1em;
-            padding: 0px 3px;
-            background-color: #AAAAAA;
-            color: #FFFFFF;
-            border-radius: 2px;
-        }
-
-    }
+.IE7 #aol-content .lb .lb-post, 
+.IE #aol-content .lb .lb-post {
+	margin-bottom: 0;
 }
