@@ -67,6 +67,7 @@ div.feedback {margin-bottom:25px}
 </style>
 
 <link rel="stylesheet" href="../assets/dev/css/aol.liveupdate.aolcom.css" />
+<link rel="stylesheet" href="../assets/dev/css/aol.liveupdate.css" />
 
 </head>
 <body class="lady">
@@ -1013,7 +1014,14 @@ $(document).ready(function () {
     $myLiveBlog.liveUpdateUi({
         postId: '20334012',
         url: 'http://liveupdater.aol.com/',
-        tweetButtons: false
+        tweetButtons: false,
+        toolbarEnabled: true,
+        timelineEnabled: false,
+        height: 250,
+        thumbnailDimensions: {
+          width: 100,
+          height: 100
+        }
     });
 });
 </script>
