@@ -2,7 +2,7 @@
   "name": "jquery.liveupdate",
   "title": "Live Update",
   "description": "A slim way to publish data from AOL liveblogs.",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "homepage": "https://github.com/aol/liveblog-widget",
   "author": {
     "name": "Nate Eagle and Jeremy Jannotta",
