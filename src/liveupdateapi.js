@@ -45,7 +45,11 @@
 
         // Manually specify an interval for polling in seconds - it unset, takes the
         // recommendation from Blogsmith, which is 3 seconds
-        pollInterval: null
+        pollInterval: null,
+
+        // If jQuery Sonar is present, pause update polls if the container
+        // is off-screen.
+        sonar: true
       },
 
       // Used to store plugin state
@@ -221,6 +225,18 @@
             // Make sure options.url has a trailing slash
             if (state.options.url && state.options.url.substring(state.options.url.length - 1) !== '/') {
               state.options.url += '/';
+            }
+
+            if (state.options.sonar) {
+              $this.bind('scrollin', function (event) {
+                // Turn polling on when the element is visible
+                methods.live();
+              });
+
+              $this.bind('scrollout', function (event) {
+                // Turn polling off when the element is offscreen
+                methods.die();
+              });
             }
 
             // Save state

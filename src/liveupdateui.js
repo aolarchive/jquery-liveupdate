@@ -78,7 +78,7 @@
          * Display only the recent n posts
          * @type Number
          **/
-        postLimit: 10
+        postLimit: null
       },
       /**
        * Simple way to strip html tags
