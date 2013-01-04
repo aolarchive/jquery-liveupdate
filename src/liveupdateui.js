@@ -73,7 +73,12 @@
         thumbnailDimensions: {
           height: 100,
           width: null
-        }
+        },
+        /**
+         * Display only the recent n posts
+         * @type Number
+         **/
+        postLimit: 10
       },
       /**
        * Simple way to strip html tags
@@ -897,7 +902,7 @@
                   .bind('click', $.proxy(onPausedButtonClicked, this))
                 )
               );
-                
+
               if (options.timelineEnabled) {
                 $('<div />', {
                   'class': 'lb-timeline'
@@ -920,7 +925,7 @@
               )
               .hide()
               .appendTo($toolbar);
-              
+
               if ($slider) {
                 $slider.slider({
                   slide: onSliderMove,
@@ -993,6 +998,13 @@
                 newUnreadItems = 0;
 
               if (data.updates) {
+
+                if (options.postLimit) {
+                  if (options.postLimit < data.updates.length) {
+                    data.updates.splice(0, data.updates.length - options.postLimit);
+                  }
+                }
+
                 // Init the begin time if not set yet
                 if (beginTime === 0) {
                   beginTime = (new Date()).getTime();
@@ -1000,6 +1012,15 @@
 
                 // Add items to the DOM
                 addItems(data.updates);
+
+                if (options.postLimit) {
+                  var posts = $posts.find('.lb-post');
+
+                  if (posts.length > options.postLimit) {
+                    var numberToRemove = posts.length - options.postLimit;
+                    posts.slice(-numberToRemove).remove();
+                  }
+                }
 
                 // Update the slider's range and position
                 initSlider();
