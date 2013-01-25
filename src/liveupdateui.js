@@ -75,6 +75,15 @@
           width: null
         },
         /**
+         * Filter of which files to exclude from thumbnail generation - only 
+         * applicable when thumbnails is true. Should be a comma-separated list 
+         * of file patterns, that when matched against an image url, will not 
+         * generate a thumbnail.
+         * @type String
+         * @default null
+         */
+        thumbnailExcludeFilter: null,
+        /**
          * Display only the recent n posts
          * @type Number
          **/
@@ -120,6 +129,11 @@
           // Make sure linkParams don't begin with a delimiter
           if (options.linkParams && (options.linkParams.charAt(0) === '?' || options.linkParams.charAt(0) === '&')) {
             options.linkParams = options.linkParams.substr(1);
+          }
+          
+          // Normalize the thumbnail exclude filter
+          if (options.thumbnailExcludeFilter) {
+            options.thumbnailExcludeFilter = $.trim(options.thumbnailExcludeFilter);
           }
 
           // Listen to 'begin' event from API, to initialize and build the widget
@@ -215,7 +229,7 @@
                   }
 
                 } else if (type === 'image') {
-                  if (options.thumbnails) {
+                  if (options.thumbnails && imageThumbnailAllowed(data)) {
                     // Store a reference to the full-sized image
                     fullImageUrl = data;
                     if (options.dims) {
@@ -666,6 +680,33 @@
                 tmp.innerHtml = text;
 
                 return $tweetButton;
+              },
+              
+              /**
+               * Return boolean whether the given image url is allowed 
+               * thumbnail generation, based on options.thumbnailExlcudeFilter.
+               * @param {String} url The thumbnail image url
+               * @returns {Boolean} Whether to allow thumbnail generation for image 
+               */
+              imageThumbnailAllowed = function (url) {
+                var allow = true,
+                  filters, pattern;
+                
+                if (url && options.thumbnailExcludeFilter) {
+                  filters = String(options.thumbnailExcludeFilter).split(/\s*,\s*/i);
+                  
+                  $.each(filters, function (i, filter) {
+                    if (filter) {
+                      pattern = new RegExp(filter, 'i');
+                      if (pattern.test(url)) {
+                        allow = false;
+                        return false;
+                      }
+                    }
+                  });
+                }
+                
+                return allow;
               },
 
               /**
