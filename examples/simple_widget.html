@@ -32,6 +32,9 @@
                   console.log('end');
                 })
                 */
+                .bind('status', function (event) {
+                  console.log('status: '+event.status);
+                })
                 .liveUpdateUi({
                   // This is an example post on the liveupdater blog
                   postId: '20334012',

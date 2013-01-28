@@ -145,8 +145,26 @@
       onFetchSuccess = function (response) {
         // Set the default delay to 3 seconds
         var delay = 3 * 1000,
-          now = new Date();
+          now = new Date(),
+          postStatus = null;
 
+        // Determine postStatus based on response
+        if (String(response.status).toLowerCase() === 'error') {
+          postStatus = 'disabled';
+        } else if (response.int === 0 && response.last_update === 0) {
+          postStatus = 'notstarted';
+        } else if (response.int === 0 && response.last_update > 0) {
+          postStatus = 'completed';
+        } else {
+          postStatus = 'live';
+        }
+        
+        // Trigger a 'status' event whenever postStatus changes
+        if (state.postStatus !== postStatus) {
+          state.postStatus = postStatus;
+          $this.trigger({ type: 'status', status: postStatus });
+        }
+        
         if (state.options.pollInterval) {
           delay = state.options.pollInterval * 1000;
         } else {
