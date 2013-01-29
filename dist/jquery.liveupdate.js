@@ -351,8 +351,26 @@ $.fn.imagesLoaded = function( callback ) {
       onFetchSuccess = function (response) {
         // Set the default delay to 3 seconds
         var delay = 3 * 1000,
-          now = new Date();
+          now = new Date(),
+          postStatus = null;
 
+        // Determine postStatus based on response
+        if (String(response.status).toLowerCase() === 'error') {
+          postStatus = 'disabled';
+        } else if (response.int === 0 && response.last_update === 0) {
+          postStatus = 'notstarted';
+        } else if (response.int === 0 && response.last_update > 0) {
+          postStatus = 'completed';
+        } else {
+          postStatus = 'live';
+        }
+        
+        // Trigger a 'status' event whenever postStatus changes
+        if (state.postStatus !== postStatus) {
+          state.postStatus = postStatus;
+          $this.trigger({ type: 'status', status: postStatus });
+        }
+        
         if (state.options.pollInterval) {
           delay = state.options.pollInterval * 1000;
         } else {
@@ -686,6 +704,15 @@ $.fn.imagesLoaded = function( callback ) {
           width: null
         },
         /**
+         * Filter of which files to exclude from thumbnail generation - only 
+         * applicable when thumbnails is true. Should be a comma-separated list 
+         * of file patterns, that when matched against an image url, will not 
+         * generate a thumbnail.
+         * @type String
+         * @default null
+         */
+        thumbnailExcludeFilter: null,
+        /**
          * Display only the recent n posts
          * @type Number
          **/
@@ -731,6 +758,11 @@ $.fn.imagesLoaded = function( callback ) {
           // Make sure linkParams don't begin with a delimiter
           if (options.linkParams && (options.linkParams.charAt(0) === '?' || options.linkParams.charAt(0) === '&')) {
             options.linkParams = options.linkParams.substr(1);
+          }
+          
+          // Normalize the thumbnail exclude filter
+          if (options.thumbnailExcludeFilter) {
+            options.thumbnailExcludeFilter = $.trim(options.thumbnailExcludeFilter);
           }
 
           // Listen to 'begin' event from API, to initialize and build the widget
@@ -826,7 +858,7 @@ $.fn.imagesLoaded = function( callback ) {
                   }
 
                 } else if (type === 'image') {
-                  if (options.thumbnails) {
+                  if (options.thumbnails && imageThumbnailAllowed(data)) {
                     // Store a reference to the full-sized image
                     fullImageUrl = data;
                     if (options.dims) {
@@ -1277,6 +1309,33 @@ $.fn.imagesLoaded = function( callback ) {
                 tmp.innerHtml = text;
 
                 return $tweetButton;
+              },
+              
+              /**
+               * Return boolean whether the given image url is allowed 
+               * thumbnail generation, based on options.thumbnailExlcudeFilter.
+               * @param {String} url The thumbnail image url
+               * @returns {Boolean} Whether to allow thumbnail generation for image 
+               */
+              imageThumbnailAllowed = function (url) {
+                var allow = true,
+                  filters, pattern;
+                
+                if (url && options.thumbnailExcludeFilter) {
+                  filters = String(options.thumbnailExcludeFilter).split(/\s*,\s*/i);
+                  
+                  $.each(filters, function (i, filter) {
+                    if (filter) {
+                      pattern = new RegExp(filter, 'i');
+                      if (pattern.test(url)) {
+                        allow = false;
+                        return false;
+                      }
+                    }
+                  });
+                }
+                
+                return allow;
               },
 
               /**
