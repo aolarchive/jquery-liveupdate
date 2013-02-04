@@ -87,7 +87,22 @@
          * Display only the recent n posts
          * @type Number
          **/
-        postLimit: null
+        postLimit: null,
+        /**
+         * Set various options for how bloggers are rendered, based on each 
+         * memberId sent from the server.
+         * 
+         * Example:
+         * {
+         *   '987654321': {
+         *     profileImage: 'http://www.gravatar.com/avatar/some-hash.png',
+         *     featured: true
+         *   }
+         * }
+         * 
+         * @type Object
+         */
+        memberSettings: null
       },
       /**
        * Simple way to strip html tags
@@ -174,13 +189,14 @@
                   tags = item.tags,
                   timestamp = item.date,
                   memberId = item.memberId,
-                  timestampString = '<a href="#p' + id + '">' + getFormattedDateTime(timestamp) + '</a> by ' + item.memberName,
+                  timestampString = '<a href="#p' + id + '">' + getFormattedDateTime(timestamp) + '</a> by <span class="lb-blogger-name">' + item.memberName + '</span>',
                   imageUrl,
                   fullImageUrl,
                   $tweetButton,
                   tweetText,
                   $postInfo,
-                  isNew = !element;
+                  isNew = !element,
+                  isFeatured = Boolean(options.memberSettings && options.memberSettings[memberId] && options.memberSettings[memberId].featured === true);
 
                 //console.log('type', type);
 
@@ -199,7 +215,8 @@
                     id: 'p' + id,
                     'class': 'lb-post'
                   })
-                  .data('date', item.date.getTime());
+                  .data('date', item.date.getTime())
+                  .toggleClass('lb-featured', isFeatured);
                 } else {
                   element.empty()
                     .addClass('lb-edited');

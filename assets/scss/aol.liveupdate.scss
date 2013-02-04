@@ -20,18 +20,14 @@
         border-bottom: 1px dotted #AAAAAA;
         overflow: hidden;
         padding: {
-            top: 0;
+            top: 1em;
             right: 10px;
-            bottom: 0;
+            bottom: 1em;
             left: 0;
         }
         margin: {
             bottom: 0;
             top: 0;
-        }
-        padding: {
-            bottom: 1em;
-            top: 1em;
         }
 
         img {
@@ -92,6 +88,17 @@
            /*background-color: yellow;*/
         }
     }
+    
+    .lb-featured {
+      /*background-color: #e8f3ff;*/
+      border-left: 10px solid #E6248A;
+      padding-left: 15px;
+    }
+    
+    .lb-featured .lb-blogger-name {
+      font-size: 1.4em;
+      color: #E6248A;
+    }
 
     .lb-comment {
         padding-left: 50px;
@@ -120,6 +127,11 @@
             right: -2px;
             font-size: 1px;
         }
+    }
+    
+    .lb-comment.lb-featured {
+      /*background-color: #dce6f2;*/
+     border-left: 10px solid #E6248A;
     }
 
     .lb-post-text {
