@@ -1229,7 +1229,7 @@
             //$this.find('.lb-post-container').scrollTop('0');
           });
 
-          $this.delegate('img', 'click', function (event) {
+          $this.delegate('img:not(.lb-profile-image)', 'click', function (event) {
             var $currentTarget = $(event.currentTarget),
               fullImageUrl = $currentTarget.attr('data-src'),
               imgSrc = (fullImageUrl) ? fullImageUrl : $currentTarget.attr('src'),
