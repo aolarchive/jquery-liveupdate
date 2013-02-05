@@ -195,6 +195,7 @@
                   $tweetButton,
                   tweetText,
                   $postInfo,
+                  $commentIcon,
                   $postAuthorTab,
                   $profileImage,
                   isNew = !element,
@@ -243,7 +244,7 @@
                     element.addClass('lb-comment');
 
                     element.prepend(
-                      $('<div class="lb-comment-icon"/>')
+                      $commentIcon = $('<div class="lb-comment-icon"/>')
                         .append(
                           $('<div class="lb-comment-icon-dot"/>')
                         )
@@ -305,7 +306,9 @@
                   if (memberSettings.profileImage) {
                     $profileImage = $('<img/>', {
                       'class': 'lb-profile-image',
-                      src: memberSettings.profileImage
+                      src: memberSettings.profileImage,
+                      alt: item.memberName,
+                      title: item.memberName
                     }).appendTo($postAuthorTab);
                   }
 
@@ -313,8 +316,12 @@
                     $profileImage.after('<span class="lb-blogger-name">' + item.memberName + '</span>');
                     $postAuthorTab.addClass('is-featured');
                   }
-
-                  element.prepend($postAuthorTab);
+                  
+                  if ($commentIcon) {
+                    $postAuthorTab.insertAfter($commentIcon);
+                  } else {
+                    element.prepend($postAuthorTab);
+                  }
                 }
 
                 if (item.tags && item.tags.length) {

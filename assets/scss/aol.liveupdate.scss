@@ -151,7 +151,7 @@
     .lb-post-author-tab {
       float: left;
       margin: {
-        right: 10px;
+        right: 15px;
       }
 
       &.is-featured {
@@ -168,7 +168,7 @@
         margin: {
           top: 0;
           right: 0;
-          bottom: 10px;
+          bottom: 0;
           left: 0;
         };
         padding: 0;
@@ -181,6 +181,9 @@
         float: left;
         font: {
           size: 14px;
+        }
+        margin: {
+          top: 10px;
         }
       }
     }
@@ -422,7 +425,16 @@
             padding-bottom: 15px;
         }
         .lb-comment {
+            .lb-comment-icon {
+                left: 50px;
+            }
             .lb-post-text {
+                float: none;
+            }
+        }
+        .lb-post-author-tab {
+            .lb-blogger-name {
+                display: block;
                 float: none;
             }
         }
@@ -472,7 +484,16 @@
             margin-right: 8px;
         }
         .lb-comment {
+            .lb-comment-icon {
+                left: 50px;
+            }
             .lb-post-text {
+                float: none;
+            }
+        }
+        .lb-post-author-tab {
+            .lb-blogger-name {
+                display: block;
                 float: none;
             }
         }
