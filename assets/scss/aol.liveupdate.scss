@@ -30,15 +30,6 @@
             top: 0;
         }
 
-        &.lb-featured {
-          padding: {
-            top: 10px;
-            right: 10px;
-            bottom: 10px;
-            left: 0;
-          }
-        }
-
         img {
             cursor: pointer;
             float: left;
@@ -128,11 +119,6 @@
         }
     }
 
-    .lb-comment.lb-featured {
-      /*background-color: #dce6f2;*/
-     border-left: 10px solid #E6248A;
-    }
-
     .lb-post-text {
         /*float: left;*/
         display: block;
@@ -163,14 +149,17 @@
     }
 
     .lb-post-author-tab {
-      background: {
-        color: #dce6f2;
-      }
       float: left;
       margin: {
         right: 10px;
       }
-      padding: 10px;
+
+      &.is-featured {
+        background: {
+          color: hsl(0, 0%, 80%);
+        }
+        padding: 10px;
+      }
 
       .lb-profile-image {
         border: none;
@@ -188,7 +177,11 @@
 
       .lb-blogger-name {
         clear: left;
+        color: hsl(0, 0%, 40%);
         float: left;
+        font: {
+          size: 14px;
+        }
       }
     }
 

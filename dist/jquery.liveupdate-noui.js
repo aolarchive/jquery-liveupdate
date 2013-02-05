@@ -784,6 +784,7 @@
 
                   if (memberSettings.featured) {
                     $profileImage.after('<span class="lb-blogger-name">' + item.memberName + '</span>');
+                    $postAuthorTab.addClass('is-featured');
                   }
 
                   element.prepend($postAuthorTab);
