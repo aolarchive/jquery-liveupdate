@@ -81,129 +81,6 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
  * http://benalman.com/about/license/
  */
 (function(b,c){var $=b.jQuery||b.Cowboy||(b.Cowboy={}),a;$.throttle=a=function(e,f,j,i){var h,d=0;if(typeof f!=="boolean"){i=j;j=f;f=c}function g(){var o=this,m=+new Date()-d,n=arguments;function l(){d=+new Date();j.apply(o,n)}function k(){h=c}if(i&&!h){l()}h&&clearTimeout(h);if(i===c&&m>e){l()}else{if(f!==true){h=setTimeout(i?k:l,i===c?e-m:e)}}}if($.guid){g.guid=j.guid=j.guid||$.guid++}return g};$.debounce=function(d,e,f){return f===c?a(d,e,false):a(d,f,e!==false)}})(this);
-/*!
- * jQuery imagesLoaded plugin v2.1.0
- * http://github.com/desandro/imagesloaded
- *
- * MIT License. by Paul Irish et al.
- */
-
-/*jshint curly: true, eqeqeq: true, noempty: true, strict: true, undef: true, browser: true */
-/*global jQuery: false */
-
-;(function($, undefined) {
-'use strict';
-
-// blank image data-uri bypasses webkit log warning (thx doug jones)
-var BLANK = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
-
-$.fn.imagesLoaded = function( callback ) {
-	var $this = this,
-		deferred = $.isFunction($.Deferred) ? $.Deferred() : 0,
-		hasNotify = $.isFunction(deferred.notify),
-		$images = $this.find('img').add( $this.filter('img') ),
-		loaded = [],
-		proper = [],
-		broken = [];
-
-	// Register deferred callbacks
-	if ($.isPlainObject(callback)) {
-		$.each(callback, function (key, value) {
-			if (key === 'callback') {
-				callback = value;
-			} else if (deferred) {
-				deferred[key](value);
-			}
-		});
-	}
-
-	function doneLoading() {
-		var $proper = $(proper),
-			$broken = $(broken);
-
-		if ( deferred ) {
-			if ( broken.length ) {
-				deferred.reject( $images, $proper, $broken );
-			} else {
-				deferred.resolve( $images );
-			}
-		}
-
-		if ( $.isFunction( callback ) ) {
-			callback.call( $this, $images, $proper, $broken );
-		}
-	}
-
-	function imgLoaded( img, isBroken ) {
-		// don't proceed if BLANK image, or image is already loaded
-		if ( img.src === BLANK || $.inArray( img, loaded ) !== -1 ) {
-			return;
-		}
-
-		// store element in loaded images array
-		loaded.push( img );
-
-		// keep track of broken and properly loaded images
-		if ( isBroken ) {
-			broken.push( img );
-		} else {
-			proper.push( img );
-		}
-
-		// cache image and its state for future calls
-		$.data( img, 'imagesLoaded', { isBroken: isBroken, src: img.src } );
-
-		// trigger deferred progress method if present
-		if ( hasNotify ) {
-			deferred.notifyWith( $(img), [ isBroken, $images, $(proper), $(broken) ] );
-		}
-
-		// call doneLoading and clean listeners if all images are loaded
-		if ( $images.length === loaded.length ){
-			setTimeout( doneLoading );
-			$images.unbind( '.imagesLoaded' );
-		}
-	}
-
-	// if no images, trigger immediately
-	if ( !$images.length ) {
-		doneLoading();
-	} else {
-		$images.bind( 'load.imagesLoaded error.imagesLoaded', function( event ){
-			// trigger imgLoaded
-			imgLoaded( event.target, event.type === 'error' );
-		}).each( function( i, el ) {
-			var src = el.src;
-
-			// find out if this image has been already checked for status
-			// if it was, and src has not changed, call imgLoaded on it
-			var cached = $.data( el, 'imagesLoaded' );
-			if ( cached && cached.src === src ) {
-				imgLoaded( el, cached.isBroken );
-				return;
-			}
-
-			// if complete is true and browser supports natural sizes, try
-			// to check for image status manually
-			if ( el.complete && el.naturalWidth !== undefined ) {
-				imgLoaded( el, el.naturalWidth === 0 || el.naturalHeight === 0 );
-				return;
-			}
-
-			// cached images don't fire load sometimes, so we reset src, but only when
-			// dealing with IE, or image is complete (loaded) and failed manual check
-			// webkit hack from http://groups.google.com/group/jquery-dev/browse_thread/thread/eee6ab7b2da50e1f
-			if ( el.readyState || el.complete ) {
-				el.src = BLANK;
-				el.src = src;
-			}
-		});
-	}
-
-	return deferred ? deferred.promise( $this ) : $this;
-};
-
-})(jQuery);
 /**
  * AOL Live Update API Widget
  *
@@ -704,9 +581,9 @@ $.fn.imagesLoaded = function( callback ) {
           width: null
         },
         /**
-         * Filter of which files to exclude from thumbnail generation - only 
-         * applicable when thumbnails is true. Should be a comma-separated list 
-         * of file patterns, that when matched against an image url, will not 
+         * Filter of which files to exclude from thumbnail generation - only
+         * applicable when thumbnails is true. Should be a comma-separated list
+         * of file patterns, that when matched against an image url, will not
          * generate a thumbnail.
          * @type String
          * @default null
@@ -716,7 +593,22 @@ $.fn.imagesLoaded = function( callback ) {
          * Display only the recent n posts
          * @type Number
          **/
-        postLimit: null
+        postLimit: null,
+        /**
+         * Set various options for how bloggers are rendered, based on each
+         * memberId sent from the server.
+         *
+         * Example:
+         * {
+         *   '987654321': {
+         *     profileImage: 'http://www.gravatar.com/avatar/some-hash.png',
+         *     featured: true
+         *   }
+         * }
+         *
+         * @type Object
+         */
+        memberSettings: null
       },
       /**
        * Simple way to strip html tags
@@ -759,7 +651,7 @@ $.fn.imagesLoaded = function( callback ) {
           if (options.linkParams && (options.linkParams.charAt(0) === '?' || options.linkParams.charAt(0) === '&')) {
             options.linkParams = options.linkParams.substr(1);
           }
-          
+
           // Normalize the thumbnail exclude filter
           if (options.thumbnailExcludeFilter) {
             options.thumbnailExcludeFilter = $.trim(options.thumbnailExcludeFilter);
@@ -803,13 +695,24 @@ $.fn.imagesLoaded = function( callback ) {
                   tags = item.tags,
                   timestamp = item.date,
                   memberId = item.memberId,
-                  timestampString = '<a href="#p' + id + '">' + getFormattedDateTime(timestamp) + '</a> by ' + item.memberName,
+                  timestampString,
                   imageUrl,
                   fullImageUrl,
                   $tweetButton,
                   tweetText,
                   $postInfo,
-                  isNew = !element;
+                  $postAuthorTab,
+                  $profileImage,
+                  isNew = !element,
+                  memberSettings = options.memberSettings[memberId] || {};
+
+                // Construct the timestamp
+                timestampString = '<a href="#p' + id + '">' + getFormattedDateTime(timestamp) + '</a>';
+
+                // If this author is not featured, add the credit to the timestamp
+                if (!memberSettings.featured) {
+                  timestampString += ' by <span class="lb-blogger-name">' + item.memberName + '</span>';
+                }
 
                 //console.log('type', type);
 
@@ -828,7 +731,8 @@ $.fn.imagesLoaded = function( callback ) {
                     id: 'p' + id,
                     'class': 'lb-post'
                   })
-                  .data('date', item.date.getTime());
+                  .data('date', item.date.getTime())
+                  .toggleClass('lb-featured', memberSettings.featured || false);
                 } else {
                   element.empty()
                     .addClass('lb-edited');
@@ -897,6 +801,26 @@ $.fn.imagesLoaded = function( callback ) {
                     })
                   )
                 );
+
+                if (memberSettings.profileImage || memberSettings.featured) {
+                  $postAuthorTab = $('<span/>', {
+                    'class': 'lb-post-author-tab'
+                  });
+
+                  // Use a profile image if one has been provided in the settings
+                  if (memberSettings.profileImage) {
+                    $profileImage = $('<img/>', {
+                      'class': 'lb-profile-image',
+                      src: memberSettings.profileImage
+                    }).appendTo($postAuthorTab);
+                  }
+
+                  if (memberSettings.featured) {
+                    $profileImage.after('<span class="lb-blogger-name">' + item.memberName + '</span>');
+                  }
+
+                  element.prepend($postAuthorTab);
+                }
 
                 if (item.tags && item.tags.length) {
                   var tagsList = $('<ul />', {
@@ -1310,20 +1234,20 @@ $.fn.imagesLoaded = function( callback ) {
 
                 return $tweetButton;
               },
-              
+
               /**
-               * Return boolean whether the given image url is allowed 
+               * Return boolean whether the given image url is allowed
                * thumbnail generation, based on options.thumbnailExlcudeFilter.
                * @param {String} url The thumbnail image url
-               * @returns {Boolean} Whether to allow thumbnail generation for image 
+               * @returns {Boolean} Whether to allow thumbnail generation for image
                */
               imageThumbnailAllowed = function (url) {
                 var allow = true,
                   filters, pattern;
-                
+
                 if (url && options.thumbnailExcludeFilter) {
                   filters = String(options.thumbnailExcludeFilter).split(/\s*,\s*/i);
-                  
+
                   $.each(filters, function (i, filter) {
                     if (filter) {
                       pattern = new RegExp(filter, 'i');
@@ -1334,7 +1258,7 @@ $.fn.imagesLoaded = function( callback ) {
                     }
                   });
                 }
-                
+
                 return allow;
               },
 

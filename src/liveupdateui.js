@@ -75,9 +75,9 @@
           width: null
         },
         /**
-         * Filter of which files to exclude from thumbnail generation - only 
-         * applicable when thumbnails is true. Should be a comma-separated list 
-         * of file patterns, that when matched against an image url, will not 
+         * Filter of which files to exclude from thumbnail generation - only
+         * applicable when thumbnails is true. Should be a comma-separated list
+         * of file patterns, that when matched against an image url, will not
          * generate a thumbnail.
          * @type String
          * @default null
@@ -89,9 +89,9 @@
          **/
         postLimit: null,
         /**
-         * Set various options for how bloggers are rendered, based on each 
+         * Set various options for how bloggers are rendered, based on each
          * memberId sent from the server.
-         * 
+         *
          * Example:
          * {
          *   '987654321': {
@@ -99,7 +99,7 @@
          *     featured: true
          *   }
          * }
-         * 
+         *
          * @type Object
          */
         memberSettings: null
@@ -145,7 +145,7 @@
           if (options.linkParams && (options.linkParams.charAt(0) === '?' || options.linkParams.charAt(0) === '&')) {
             options.linkParams = options.linkParams.substr(1);
           }
-          
+
           // Normalize the thumbnail exclude filter
           if (options.thumbnailExcludeFilter) {
             options.thumbnailExcludeFilter = $.trim(options.thumbnailExcludeFilter);
@@ -189,14 +189,24 @@
                   tags = item.tags,
                   timestamp = item.date,
                   memberId = item.memberId,
-                  timestampString = '<a href="#p' + id + '">' + getFormattedDateTime(timestamp) + '</a> by <span class="lb-blogger-name">' + item.memberName + '</span>',
+                  timestampString,
                   imageUrl,
                   fullImageUrl,
                   $tweetButton,
                   tweetText,
                   $postInfo,
+                  $postAuthorTab,
+                  $profileImage,
                   isNew = !element,
-                  isFeatured = Boolean(options.memberSettings && options.memberSettings[memberId] && options.memberSettings[memberId].featured === true);
+                  memberSettings = options.memberSettings[memberId] || {};
+
+                // Construct the timestamp
+                timestampString = '<a href="#p' + id + '">' + getFormattedDateTime(timestamp) + '</a>';
+
+                // If this author is not featured, add the credit to the timestamp
+                if (!memberSettings.featured) {
+                  timestampString += ' by <span class="lb-blogger-name">' + item.memberName + '</span>';
+                }
 
                 //console.log('type', type);
 
@@ -216,7 +226,7 @@
                     'class': 'lb-post'
                   })
                   .data('date', item.date.getTime())
-                  .toggleClass('lb-featured', isFeatured);
+                  .toggleClass('lb-featured', memberSettings.featured || false);
                 } else {
                   element.empty()
                     .addClass('lb-edited');
@@ -285,6 +295,26 @@
                     })
                   )
                 );
+
+                if (memberSettings.profileImage || memberSettings.featured) {
+                  $postAuthorTab = $('<span/>', {
+                    'class': 'lb-post-author-tab'
+                  });
+
+                  // Use a profile image if one has been provided in the settings
+                  if (memberSettings.profileImage) {
+                    $profileImage = $('<img/>', {
+                      'class': 'lb-profile-image',
+                      src: memberSettings.profileImage
+                    }).appendTo($postAuthorTab);
+                  }
+
+                  if (memberSettings.featured) {
+                    $profileImage.after('<span class="lb-blogger-name">' + item.memberName + '</span>');
+                  }
+
+                  element.prepend($postAuthorTab);
+                }
 
                 if (item.tags && item.tags.length) {
                   var tagsList = $('<ul />', {
@@ -698,20 +728,20 @@
 
                 return $tweetButton;
               },
-              
+
               /**
-               * Return boolean whether the given image url is allowed 
+               * Return boolean whether the given image url is allowed
                * thumbnail generation, based on options.thumbnailExlcudeFilter.
                * @param {String} url The thumbnail image url
-               * @returns {Boolean} Whether to allow thumbnail generation for image 
+               * @returns {Boolean} Whether to allow thumbnail generation for image
                */
               imageThumbnailAllowed = function (url) {
                 var allow = true,
                   filters, pattern;
-                
+
                 if (url && options.thumbnailExcludeFilter) {
                   filters = String(options.thumbnailExcludeFilter).split(/\s*,\s*/i);
-                  
+
                   $.each(filters, function (i, filter) {
                     if (filter) {
                       pattern = new RegExp(filter, 'i');
@@ -722,7 +752,7 @@
                     }
                   });
                 }
-                
+
                 return allow;
               },
 
