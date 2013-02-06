@@ -154,13 +154,6 @@
         right: 15px;
       }
 
-      &.is-featured {
-        background: {
-          color: hsl(0, 0%, 80%);
-        }
-        padding: 10px;
-      }
-
       .lb-profile-image {
         border: none;
         cursor: auto;
@@ -173,6 +166,7 @@
         };
         padding: 0;
         width: auto;
+        max-height: 100px;
       }
 
       .lb-blogger-name {
@@ -182,8 +176,20 @@
         font: {
           size: 14px;
         }
+      }
+    }
+    
+    .lb-featured {
+      .lb-post-author-tab {
+        background: {
+          color: hsl(0, 0%, 80%);
+        }
+        padding: 10px;
+      }
+      
+      .lb-profile-image {
         margin: {
-          top: 10px;
+          bottom: 10px;
         }
       }
     }
@@ -438,6 +444,13 @@
                 float: none;
             }
         }
+        .lb-featured {
+          .lb-profile-image {
+            margin: {
+              bottom: 0;
+            }
+          }
+        }
         .lb-post-info {
             width: 100%;
 
@@ -496,6 +509,13 @@
                 display: block;
                 float: none;
             }
+        }
+        .lb-featured {
+          .lb-profile-image {
+            margin: {
+              bottom: 0;
+            }
+          }
         }
         .lb-post-info {
             width: 100%;

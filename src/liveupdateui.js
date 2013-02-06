@@ -199,7 +199,10 @@
                   $postAuthorTab,
                   $profileImage,
                   isNew = !element,
-                  memberSettings = options.memberSettings[memberId] || {};
+                  memberSettings = $.extend({
+                    profileImage: null,
+                    featured: false
+                  }, options.memberSettings && options.memberSettings[memberId]);
 
                 // Construct the timestamp
                 timestampString = '<a href="#p' + id + '">' + getFormattedDateTime(timestamp) + '</a>';
@@ -313,8 +316,7 @@
                   }
 
                   if (memberSettings.featured) {
-                    $profileImage.after('<span class="lb-blogger-name">' + item.memberName + '</span>');
-                    $postAuthorTab.addClass('is-featured');
+                    $postAuthorTab.append('<span class="lb-blogger-name">' + item.memberName + '</span>');
                   }
                   
                   if ($commentIcon) {
