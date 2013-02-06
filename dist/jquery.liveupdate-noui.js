@@ -791,10 +791,14 @@ $.fn.imagesLoaded = function( callback ) {
                   $tweetButton,
                   tweetText,
                   $postInfo,
+                  $commentIcon,
                   $postAuthorTab,
                   $profileImage,
                   isNew = !element,
-                  memberSettings = options.memberSettings[memberId] || {};
+                  memberSettings = $.extend({
+                    profileImage: null,
+                    featured: false
+                  }, options.memberSettings && options.memberSettings[memberId]);
 
                 // Construct the timestamp
                 timestampString = '<a href="#p' + id + '">' + getFormattedDateTime(timestamp) + '</a>';
@@ -839,7 +843,7 @@ $.fn.imagesLoaded = function( callback ) {
                     element.addClass('lb-comment');
 
                     element.prepend(
-                      $('<div class="lb-comment-icon"/>')
+                      $commentIcon = $('<div class="lb-comment-icon"/>')
                         .append(
                           $('<div class="lb-comment-icon-dot"/>')
                         )
@@ -901,16 +905,21 @@ $.fn.imagesLoaded = function( callback ) {
                   if (memberSettings.profileImage) {
                     $profileImage = $('<img/>', {
                       'class': 'lb-profile-image',
-                      src: memberSettings.profileImage
+                      src: memberSettings.profileImage,
+                      alt: item.memberName,
+                      title: item.memberName
                     }).appendTo($postAuthorTab);
                   }
 
                   if (memberSettings.featured) {
-                    $profileImage.after('<span class="lb-blogger-name">' + item.memberName + '</span>');
-                    $postAuthorTab.addClass('is-featured');
+                    $postAuthorTab.append('<span class="lb-blogger-name">' + item.memberName + '</span>');
                   }
-
-                  element.prepend($postAuthorTab);
+                  
+                  if ($commentIcon) {
+                    $postAuthorTab.insertAfter($commentIcon);
+                  } else {
+                    element.prepend($postAuthorTab);
+                  }
                 }
 
                 if (item.tags && item.tags.length) {
