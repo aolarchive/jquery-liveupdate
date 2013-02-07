@@ -310,7 +310,7 @@
                     $profileImage = $('<img/>', {
                       'class': 'lb-profile-image',
                       src: memberSettings.profileImage,
-                      alt: item.memberName,
+                      alt: '',
                       title: item.memberName
                     }).appendTo($postAuthorTab);
                   }

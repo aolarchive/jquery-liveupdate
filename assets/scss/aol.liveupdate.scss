@@ -166,16 +166,20 @@
         };
         padding: 0;
         width: auto;
-        max-height: 100px;
+        max-height: 50px;
       }
 
       .lb-blogger-name {
-        clear: left;
+        /*clear: left;*/
         color: hsl(0, 0%, 40%);
         float: left;
         font: {
-          size: 14px;
+          size: 12px;
         }
+        margin: {
+          left: 10px;
+        }
+        max-width: 50px;
       }
     }
     
@@ -189,7 +193,7 @@
       
       .lb-profile-image {
         margin: {
-          bottom: 10px;
+          /*bottom: 10px;*/
         }
       }
     }
