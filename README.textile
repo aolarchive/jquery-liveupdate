@@ -30,8 +30,8 @@ h3. Files
 
 The plugins' JS and CSS are hosted as a bundle on AOL's global origin server.
 
-JS: "http://o.aolcdn.com/os/aol/livebloglite/aol.livebloglite.min.js":http://o.aolcdn.com/os/aol/livebloglite/aol.livebloglite.min.js
-CSS: "http://o.aolcdn.com/os/aol/livebloglite/aol.livebloglite.css":http://o.aolcdn.com/os/aol/livebloglite/aol.livebloglite.css
+JS: "http://o.aolcdn.com/os/aol/liveupdate/jquery.liveudpate.min.js":http://o.aolcdn.com/os/aol/liveupdate/jquery.liveupdate.min.js
+CSS: "http://o.aolcdn.com/os/aol/liveupdate/aol.liveupdate.css":http://o.aolcdn.com/os/aol/liveupdate/aol.liveupdate.css
 
 Include them on your page.
 
@@ -89,7 +89,21 @@ h3. Available Options
 |height|number|0|Set the height of the post container. This is required for the UI slider|
 |\4. *Optional*|
 |toolbarEnabled|boolean|false|Turns on or off toolbar functionality.|
+|timelineEnabled|boolean|true|Turns on or off the timeline slider UI in the toolbar.|
 |tweetButtons|boolean|true|Turns on or off tweet buttons in updates.|
+|linkParams|string|null|URL params to append to all outgoing links within the post text; Ex: 'icid=aol123'|
+|thumbnails|boolean|true|Whether to show a thumbnail for uploaded images. If set to false, will show the full image instead.|
+|dims|boolean|true|Whether to use DIMS for thumbnails. If false, uses default thumbnails from Blogsmith. Only applicable if thumbnails is true.|
+|thumbnailDimensions|object|{ height:100, width:null }|Dimension restrictions for thumbnail images. only applicable if dims is true.|
+|thumbnailExcludeFilter|string|null|Filter of which files to exclude from thumbnail generation. Should be a comma-separated list of file patterns. Only applicable when thumbnails is true. Ex: '.gif'|
+|postLimit|number|null|Display only the recent n posts.|
+|memberSettings|object|null|Set various options for how bloggers are rendered, based on each memberId sent from the server. Ex: 
+{
+  '987654321': {
+    profileImage: 'http://www.gravatar.com/avatar/some-hash.png',
+    featured: true
+  }
+}|
 
 h2. $.liveUpdateApi(options)
 
