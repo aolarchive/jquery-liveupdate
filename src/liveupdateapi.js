@@ -247,10 +247,8 @@
 
             if (state.options.sonar) {
               $this.bind('scrollin', function (event) {
-                if (state.options.alive) {
-                  // Turn polling on when the element is visible
-                  methods.live();
-                }
+                // Turn polling on when the element is visible
+                methods.live();
               });
 
               $this.bind('scrollout', function (event) {
