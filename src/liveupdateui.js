@@ -66,8 +66,9 @@
          */
         dims: true,
         /**
-         * Dimension restrictions for thumbnail images - only applicable if
-         * using DIMS
+         * Dimension restrictions for thumbnail images. If dims is true, uses  
+         * this for resizing; else if thumbnails is false, uses this for setting 
+         * max-width and max-height CSS.
          * @type Object
          **/
         thumbnailDimensions: {
@@ -192,6 +193,7 @@
                   timestampString,
                   imageUrl,
                   fullImageUrl,
+                  $image,
                   $tweetButton,
                   tweetText,
                   $postInfo,
@@ -277,7 +279,7 @@
                   }
 
                   element.append(
-                    $('<img />', {
+                    $image = $('<img />', {
                       // Use the thumbnail version of the image
                       src: imageUrl,
                       'data-src': fullImageUrl || '',
@@ -286,6 +288,11 @@
                     }),
                     buildTextElement(caption, 'lb-post-caption')
                   );
+                  
+                  if (options.thumbnailDimensions && (!options.thumbnails || imageUrl === data)) {
+                    $image.css('max-width', options.thumbnailDimensions.width || null);
+                    $image.css('max-height', options.thumbnailDimensions.height || null);
+                  }
                 }
 
                 element.append(
