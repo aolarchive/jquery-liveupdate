@@ -11,9 +11,9 @@ h2. Two light-weight plugins for publishing Blogsmith Live Update content
 
 p. For the premiere, full-featured Liveblog Publisher, check out Joe Bartlett's "Liveblog Publisher":https://github.com/aoltech/liveblog-publisher.
 
-p. This is a light-weight adaptation built for use with jQuery 1.5.2 and below.
+p. This is a light-weight adaptation built for use with jQuery 1.5.2 and above.
 
-p. LbL is two simple plugins. @$.liveUpdateApi@ fetches liveblog data using a postid and a domain and provides updates via a custom event. @$.liveUpdateUi@ is a simple, example implementation of the UI to respond to these updates that responds to new content, edits, comments, and deletions.
+p. Live Update is two simple plugins. @$.liveUpdateApi@ fetches liveblog data using a postid and a domain and provides updates via a custom event. @$.liveUpdateUi@ is a simple, example implementation of the UI to respond to these updates that responds to new content, edits, comments, and deletions.
 
 p. *Credit where credit is due:* Liveblog Publisher (LbP) was heavily consulted in writing this lighter version. Some patterns were even copied entirely.
 
@@ -21,7 +21,7 @@ h2. How to use Live Update
 
 h3. Requirements
 
-LbL officially requires jQuery 1.5.2 or higher. (It has been tested to work as low as jQuery 1.4.2, however, but we don't recommend it.)
+Live Update officially requires jQuery 1.5.2 or higher. (It has been tested to work as low as jQuery 1.4.2, however, but we don't recommend it.)
 
 The following browsers have been tested with known support, for both the Javascript and CSS:
 IE (6+), Chrome (11+), Firefox (3.6+), Safari (3+), Opera (9+)
@@ -94,7 +94,7 @@ h3. Available Options
 |linkParams|string|null|URL params to append to all outgoing links within the post text; Ex: 'icid=aol123'|
 |thumbnails|boolean|true|Whether to show a thumbnail for uploaded images. If set to false, will show the full image instead.|
 |dims|boolean|true|Whether to use DIMS for thumbnails. If false, uses default thumbnails from Blogsmith. Only applicable if thumbnails is true.|
-|thumbnailDimensions|object|{ height:100, width:null }|Dimension restrictions for thumbnail images. only applicable if dims is true.|
+|thumbnailDimensions|object|{ height:100, width:null }|Dimension restrictions for thumbnail images. If dims is true, uses this for resizing; else if thumbnails is false, uses this for setting max-width and max-height CSS.|
 |thumbnailExcludeFilter|string|null|Filter of which files to exclude from thumbnail generation. Should be a comma-separated list of file patterns. Only applicable when thumbnails is true. Ex: '.gif'|
 |postLimit|number|null|Display only the recent n posts.|
 |memberSettings|object|null|Set various options for how bloggers are rendered, based on each memberId sent from the server. Ex: 
@@ -145,6 +145,7 @@ bc. $('#myLiveBlog').on('begin', function (event) { ... });
 |begin|Fired one time after the first update is received from the API with non-empty data.|
 |end|Fired when the API is no longer polling for updates, either because alive is false, or the end option was specified, and that time has passed.|
 |update|Fired every time non-empty data is received from the API. Passes the normalized response data object with the event.|
+|status|Fired whenever the liveblog status changes. Includes 'status' property that is one of: (disabled, notstarted, completed, live)|
 
 h3. Available Options
 
