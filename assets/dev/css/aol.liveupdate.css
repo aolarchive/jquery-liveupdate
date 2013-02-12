@@ -1499,14 +1499,13 @@
 .lb .lb-post img {
   cursor: pointer;
   float: left;
-  height: 100px;
+  height: auto;
   width: auto;
   margin-right: 15px;
-  margin-bottom: 10px;
   padding: 2px;
   border: 1px solid #CCCCCC;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\0000346}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\0000345}}
 .lb .lb-post .lb-img-loading {
   color: #fff;
   float: left;
@@ -1517,7 +1516,7 @@
   text-align: center;
   text-transform: uppercase;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\0000358}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\0000357}}
 .lb .lb-post .lb-img-loading span {
   background: black;
   bottom: 0;
@@ -1531,30 +1530,30 @@
   text-align: center;
   top: 0;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\0000371}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\0000370}}
 .lb .lb-post .lb-img-loading img {
   margin: 0;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\0000377}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\0000376}}
 .lb .lb-post a {
   color: #206994;
   text-decoration: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\0000381}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\0000380}}
 .lb .lb-post a:hover {
   color: #206994;
   text-decoration: underline;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\0000387}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\0000386}}
 .lb .lb-post.lb-top {
   /*background-color: yellow;*/
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\0000393}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\0000392}}
 .lb .lb-comment {
   padding-left: 50px;
   background: #EEEEEE;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\0000397}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\0000396}}
 .lb .lb-comment .lb-comment-icon {
   display: block;
   position: absolute;
@@ -1570,7 +1569,7 @@
   -o-border-radius: 0 0 0 10px;
   border-radius: 0 0 0 10px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003110}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003109}}
 .lb .lb-comment .lb-comment-icon-dot {
   width: 8px;
   height: 8px;
@@ -1585,37 +1584,38 @@
   right: -2px;
   font-size: 1px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003122}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003121}}
 .lb .lb-post-text {
   /*float: left;*/
   display: block;
   /*clear: both;*/
   margin-bottom: 5px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003129}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003128}}
 .lb .lb-post-caption {
   display: block;
+  margin-bottom: 5px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003133}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003135}}
 .lb .lb-post-info {
   /*float: left;*/
   /*clear: both;*/
   min-height: 20px;
   position: relative;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003139}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003141}}
 .lb .lb-post-info .twitter-share-button {
   bottom: -2px;
   /*@include inline-block();*/
   position: absolute;
   right: -66px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003151}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003153}}
 .lb .lb-post-author-tab {
   float: left;
   margin-right: 15px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003157}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003159}}
 .lb .lb-post-author-tab .lb-profile-image {
   border: none;
   cursor: auto;
@@ -1628,7 +1628,7 @@
   width: auto;
   max-height: 50px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003172}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003174}}
 .lb .lb-post-author-tab .lb-blogger-name {
   /*clear: left;*/
   color: #666666;
@@ -1636,17 +1636,17 @@
   font-size: 12px;
   max-width: 50px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003184}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003186}}
 .lb .lb-featured .lb-post-author-tab {
   background-color: #cccccc;
   padding: 10px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003191}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003193}}
 .lb .lb-featured .lb-profile-image {
   /*bottom: 10px;*/
   margin-right: 10px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003199}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003201}}
 .lb .lb-post-timestamp {
   display: -moz-inline-stack;
   display: inline-block;
@@ -1660,7 +1660,7 @@
   font-size: 0.7em;
   line-height: 17px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003208}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003210}}
 .lb .lb-post-tags {
   display: -moz-inline-stack;
   display: inline-block;
@@ -1674,13 +1674,13 @@
   padding: 0;
   font-size: 0.7em;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003216}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003218}}
 .lb .lb-post-tags li {
   float: left;
   list-style: none;
   margin: 0 0 0 1em;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003221}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003223}}
 .lb .lb-post-tags li a {
   display: block;
   -webkit-border-radius: 2px;
@@ -1698,13 +1698,13 @@
   -o-transition: all 0.2s;
   transition: all 0.2s;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003231}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003233}}
 .lb .lb-post-tags li a:hover {
   background: #666;
   color: #fff;
   text-decoration: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003239}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003241}}
 .lb .lb-post-comments-label {
   display: block;
   float: left;
@@ -1721,7 +1721,7 @@
   padding-left: 50px;
   border-top: 1px dotted #AAAAAA;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003262}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003264}}
 .lb .lb-toolbar {
   float: left;
   width: 100%;
@@ -1733,7 +1733,7 @@
   -o-border-radius: 4px;
   border-radius: 4px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003269}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003271}}
 .lb .lb-toolbar.lb-status-paused {
   background-color: lightYellow;
   -webkit-animation: colorPulse 1s infinite alternate;
@@ -1742,7 +1742,7 @@
   -o-animation: colorPulse 1s infinite alternate;
   animation: colorPulse 1s infinite alternate;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003275}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003277}}
 .lb .lb-button {
   display: block;
   float: left;
@@ -1764,45 +1764,45 @@
   -o-transition: all 0.2s;
   transition: all 0.2s;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003290}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003292}}
 .lb .lb-button:hover, .lb .lb-button.lb-hover {
   color: #000000;
   background-color: #CCCCCC;
   border: 1px solid #AAAAAA;
   text-decoration: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003297}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003299}}
 .lb .lb-button.lb-pause-button {
   width: 70px;
   margin: 15px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003302}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003304}}
 .lb .lb-button.lb-more-button {
   display: inline-block;
   width: 100%;
   padding: 6px 0px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003309}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003311}}
 .lb .lb-timeline {
   display: block;
   float: left;
   margin: 15px;
   vertical-align: middle;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003316}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003318}}
 .lb .lb-timeline-slider {
   display: block;
   font-size: 11px;
   height: 10px;
   width: 300px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003323}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003325}}
 .lb .lb-timeline-label {
   display: block;
   font-size: 0.7em;
   margin: 0 0 5px 0;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003329}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003331}}
 .lb .lb-status {
   display: block;
   float: right;
@@ -1821,29 +1821,29 @@
   font-size: 12px;
   text-transform: uppercase;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003343}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003345}}
 .lb .lb-status.lb-status-live {
   color: #CC0000;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003363}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003365}}
 .lb .lb-alert {
   background-color: #ffff99;
   clear: left;
   font-size: 12px;
   padding: 10px 15px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003369}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003371}}
 .lb .lb-alert a {
   color: #206994;
   text-decoration: none;
   cursor: pointer;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003374}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003376}}
 .lb .lb-alert a:hover {
   color: #206994;
   text-decoration: underline;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003380}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003382}}
 .lb .lb-alert .lb-unread-count {
   display: inline;
   padding: 2px 6px;
@@ -1861,13 +1861,13 @@
   transition: all 0.2s;
   border: 1px solid #CC0000;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003390}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003392}}
 .lb .lb-alert .lb-unread-count:hover {
   color: #FFFFFF;
   text-decoration: none;
   background-color: lightsalmon;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003398}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003400}}
 .lb .lb-post-container {
   float: left;
   width: 100%;
@@ -1876,69 +1876,69 @@
   position: relative;
   margin-top: 20px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003407}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003409}}
 .lb .lb-top {
   /*background-color: green;*/
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003410}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003412}}
 .lb .highlight {
   /*background-color: red;*/
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003416}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003418}}
 .ui-dialog.lb-image-dialog {
   font-size: 12px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003419}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003421}}
 .ui-dialog.lb-image-dialog .ui-dialog-title {
   font-size: 1.1em;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003423}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003425}}
 .ui-dialog.lb-image-dialog .ui-dialog-content {
   text-align: center;
 }
 
 /* Styles for IE7 */
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003430}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003432}}
 *:first-child + html {
   /* Use 'close' text instead of image for button */
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003432}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003434}}
 *:first-child + html .lb .lb-toolbar {
   padding-bottom: 15px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003436}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003438}}
 *:first-child + html .lb .lb-comment .lb-comment-icon {
   left: 50px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003439}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003441}}
 *:first-child + html .lb .lb-comment .lb-post-text {
   float: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003444}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003446}}
 *:first-child + html .lb .lb-post-author-tab .lb-blogger-name {
   display: block;
   float: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003450}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003452}}
 *:first-child + html .lb .lb-featured .lb-profile-image {
   margin-bottom: 0;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003456}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003458}}
 *:first-child + html .lb .lb-post-info {
   width: 100%;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003459}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003461}}
 *:first-child + html .lb .lb-post-info .twitter-share-button {
   right: auto;
   bottom: -1px;
   margin-left: 10px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003465}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003467}}
 *:first-child + html .lb .lb-alert {
   padding-top: 5px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003471}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003473}}
 *:first-child + html .ui-dialog .ui-dialog-titlebar-close {
   width: auto;
   height: auto;
@@ -1946,7 +1946,7 @@
   text-decoration: none;
   cursor: pointer;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003478}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003480}}
 *:first-child + html .ui-dialog .ui-dialog-titlebar-close span {
   background: none;
   text-indent: 0;
@@ -1955,54 +1955,54 @@
 }
 
 /* Styles for IE 6 and below */
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003488}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003490}}
 * html {
   /* Use 'close' text instead of image for button */
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003490}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003492}}
 * html .lb .lb-toolbar {
   padding-bottom: 15px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003494}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003496}}
 * html .lb .lb-button.lb-pause-button {
   margin-left: 8px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003498}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003500}}
 * html .lb .lb-status {
   margin-right: 8px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003502}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003504}}
 * html .lb .lb-comment .lb-comment-icon {
   left: 50px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003505}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003507}}
 * html .lb .lb-comment .lb-post-text {
   float: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003510}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003512}}
 * html .lb .lb-post-author-tab .lb-blogger-name {
   display: block;
   float: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003516}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003518}}
 * html .lb .lb-featured .lb-profile-image {
   margin-bottom: 0;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003522}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003524}}
 * html .lb .lb-post-info {
   width: 100%;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003525}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003527}}
 * html .lb .lb-post-info .twitter-share-button {
   right: auto;
   bottom: -1px;
   margin-left: 10px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003532}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003534}}
 * html .lb .lb-post-tags li.lb-first {
   margin-left: 0.5em;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003539}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003541}}
 * html .ui-dialog .ui-dialog-titlebar-close {
   width: auto;
   height: auto;
@@ -2010,7 +2010,7 @@
   text-decoration: none;
   cursor: pointer;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003546}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.scss}line{font-family:\00003548}}
 * html .ui-dialog .ui-dialog-titlebar-close span {
   background: none;
   text-indent: 0;
