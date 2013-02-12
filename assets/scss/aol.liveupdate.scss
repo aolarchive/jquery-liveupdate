@@ -37,7 +37,6 @@
             width: auto;
             margin: {
                 right: 15px;
-                bottom: 10px;
             }
             padding: 2px;
             border: 1px solid #CCCCCC;
@@ -128,6 +127,9 @@
 
     .lb-post-caption {
       display: block;
+      margin: {
+        bottom: 5px;
+      }
     }
 
     .lb-post-info {
