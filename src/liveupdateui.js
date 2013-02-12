@@ -354,7 +354,8 @@
 
                     // Re-render tweet buttons
                     // https://dev.twitter.com/discussions/6860
-                    twttr.widgets.load();
+                    // NOTE: Must pass in element to re-render, otherwise scans entire document
+                    twttr.widgets.load(element.get(0));
                   });
 
                 }
