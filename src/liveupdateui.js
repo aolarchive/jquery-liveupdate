@@ -70,7 +70,7 @@
          * this for resizing; else if thumbnails is false, uses this for setting 
          * max-width and max-height CSS.
          * @type Object
-         **/
+         */
         thumbnailDimensions: {
           height: 100,
           width: null
@@ -87,7 +87,7 @@
         /**
          * Display only the recent n posts
          * @type Number
-         **/
+         */
         postLimit: null,
         /**
          * Set various options for how bloggers are rendered, based on each
@@ -103,7 +103,12 @@
          *
          * @type Object
          */
-        memberSettings: null
+        memberSettings: null,
+        /**
+         * Image URL to use as placeholder image before the original image is loaded.
+         * @type String
+         */
+        placeholderImage: 'http://o.aolcdn.com/js/x.gif'
       },
       /**
        * Simple way to strip html tags
@@ -239,6 +244,9 @@
 
                   timestampString = timestampString + ' - edited';
                 }
+                
+                // Default imagesLoaded to false so knows to load images in post item
+                element.data('imagesLoaded', false);
 
                 if (type === 'text' || type === 'comment') {
                   element.append(
@@ -280,11 +288,12 @@
 
                   element.append(
                     $image = $('<img />', {
-                      // Use the thumbnail version of the image
-                      src: imageUrl,
-                      'data-src': fullImageUrl || '',
+                      src: options.placeholderImage, // Placeholder image
+                      'data-src': imageUrl || '', // Store url for thumbnail version of the image
+                      'data-full-src': fullImageUrl || '', // Store the url for full sized image
                       alt: (caption) ? stripHtml(caption) : '',
-                      title: 'Click to view larger'
+                      title: 'Click to view larger',
+                      'class': 'lb-pending'
                     }),
                     buildTextElement(caption, 'lb-post-caption')
                   );
@@ -315,8 +324,9 @@
                   // Use a profile image if one has been provided in the settings
                   if (memberSettings.profileImage) {
                     $profileImage = $('<img/>', {
-                      'class': 'lb-profile-image',
-                      src: memberSettings.profileImage,
+                      'class': 'lb-profile-image lb-pending',
+                      src: options.placeholderImage,  // Placeholder image
+                      'data-src': memberSettings.profileImage, // Store url for original image
                       alt: '',
                       title: item.memberName
                     }).appendTo($postAuthorTab);
@@ -921,6 +931,43 @@
 
                 return $topItem;
               },
+              
+              /**
+               * Check whether a post item is visible in the scroll container.
+               * 
+               * @param {Element} item The element for the post item
+               * @param {Boolean} full Whether to require an item's full 
+               *   height to check if visible, versus any part of it; default is false
+               * @param {Number} distance The distance in pixels of an item 
+               *   to check if visible; only useful if full is false; default is 0
+               * @returns {Boolean} Whether the item is considered visible
+               */
+              isItemVisible = function (item, full, distance) {
+                item = $(item);
+                full = full != null ? full : false;
+                distance = distance != null ? distance : 0;
+                
+                var containerHeight = $posts.height(),
+                  height = item.height(),
+                  positionTop = item.position().top,
+                  positionBottom = positionTop + height;
+                  
+                if (full === true) {
+                  distance = height;
+                }
+                /*
+                console.log({
+                  id: item.attr('id'),
+                  height: height,
+                  positionTop: positionTop,
+                  positionBottom: positionBottom,
+                  containerHeight: containerHeight,
+                  distance: distance
+                });
+                */
+               
+                return (positionBottom > distance && positionTop < (containerHeight - distance));
+              },
 
               /**
                * On container scroll event, set slider value based on the top most visible post item
@@ -986,6 +1033,44 @@
                 window.location.hash = '_';
                 $this.liveUpdateApi('reset');
                 $this.trigger('begin');
+              },
+              
+              /**
+               * Load all images under a DOM container, by setting their 'src' 
+               * attributes to the 'data-src' value.
+               * 
+               * @param {jQuery} container Optional DOM element to serach under 
+               *   for images; defaults to .lb-post-container
+               */
+              loadImages = function (container) {
+                container = $(container || $posts);
+                
+                container.find('img[data-src]').each(function (i, img) {
+                  var $img = $(img);
+                  $img.attr('src', $img.attr('data-src'))
+                    .removeAttr('data-src')
+                    .removeClass('lb-pending');
+                });
+              },
+              
+              /**
+               * Iterate over all post items, and load their images, if they 
+               * haven't already loaded.
+               */
+              onLoadImages = function (event) {
+                // Exit if event wasn't initiated by user
+                if (event && !event.originalEvent) {
+                  return;
+                }
+                
+                $posts.children('.lb-post').each(function (i, item) {
+                  var $item = $(item);
+                  
+                  if (!$item.data('imagesLoaded') && isItemVisible($item)) {
+                    loadImages($item);
+                    $item.data('imagesLoaded', true);
+                  }
+                });
               };
 
             /*
@@ -1091,7 +1176,8 @@
               'class': 'lb-post-container'
             })
             .appendTo($this)
-            .scroll($.throttle(250, onContainerScroll));
+            .scroll($.throttle(250, onContainerScroll))
+            .scroll($.throttle(500, onLoadImages));
 
             if (options.height && options.height > 0) {
               $posts.height(options.height);
@@ -1211,6 +1297,8 @@
                   }
                 }
               }
+              
+              onLoadImages();
 
               receivedFirstUpdate = true;
             });
@@ -1248,7 +1336,7 @@
 
           $this.delegate('img:not(.lb-profile-image)', 'click', function (event) {
             var $currentTarget = $(event.currentTarget),
-              fullImageUrl = $currentTarget.attr('data-src'),
+              fullImageUrl = $currentTarget.attr('data-full-src'),
               imgSrc = (fullImageUrl) ? fullImageUrl : $currentTarget.attr('src'),
               $loadingContainer = $('<div />', {
                 'class': 'lb-img-loading'
