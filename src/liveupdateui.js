@@ -156,6 +156,19 @@
           if (options.thumbnailExcludeFilter) {
             options.thumbnailExcludeFilter = $.trim(options.thumbnailExcludeFilter);
           }
+          
+          // Preload the placeholder image
+          if (options.placeholderImage) {
+            var placeholderImage = new Image();
+            placeholderImage.src = options.placeholderImage;
+          }
+          
+          // Dynamically set dimensions for pending images, based on thumbnailDimensions
+          if (options.thumbnailDimensions) {
+            var imgHeight = options.thumbnailDimensions.height || '';
+            $('<style>.lb .lb-post img.lb-pending { height:' + imgHeight + 'px; }</style>')
+              .appendTo('head');
+          }
 
           // Listen to 'begin' event from API, to initialize and build the widget
           $this.bind('begin', function (event) {
@@ -1066,7 +1079,7 @@
                 $posts.children('.lb-post').each(function (i, item) {
                   var $item = $(item);
                   
-                  if (!$item.data('imagesLoaded') && isItemVisible($item)) {
+                  if (!$item.data('imagesLoaded') && isItemVisible($item, false, -500)) {
                     loadImages($item);
                     $item.data('imagesLoaded', true);
                   }
@@ -1177,7 +1190,7 @@
             })
             .appendTo($this)
             .scroll($.throttle(250, onContainerScroll))
-            .scroll($.throttle(500, onLoadImages));
+            .scroll($.throttle(300, onLoadImages));
 
             if (options.height && options.height > 0) {
               $posts.height(options.height);
