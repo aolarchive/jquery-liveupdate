@@ -29,6 +29,7 @@
             bottom: 0;
             top: 0;
         }
+        @include transition(opacity 0.4s);
 
         img {
             cursor: pointer;
@@ -425,6 +426,11 @@
     }
     .highlight {
         /*background-color: red;*/
+    }
+    
+    .lb-hidden {
+      display: none;
+      @include opacity(0.1);
     }
 }
 

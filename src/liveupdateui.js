@@ -447,61 +447,107 @@
               /**
                * Add data item into the DOM.
                * @param {Object} item The item to add.
+               * @param {Boolean} addToTop Whether to add item to top of posts, vs. bottom; default is true.
                * @param {Object|null} afterElement The optional jQuery object after which to position the new item.
                */
-              addItem = function (item, afterElement) {
+              addItem = function (item, addToTop, afterElement) {
+                addToTop = addToTop != null ? addToTop : true;
                 var $item = $('#p' + item.id, $posts),
                   $parent = null,
                   height = 0,
                   scrollTop = $posts.scrollTop(),
-                  $commentsLabel;
+                  $commentsLabel,
+                  $commentsList,
+                  
+                  /*
+                   * Update comment and parent's meta data, after adding comment to DOM
+                   */
+                  updateCommentUponAdd = function ($comment, $parentPost) {
+                    // Give comment the timestamp of its parent post, for navigation
+                    $item.data('date', $parentPost.data('date'));
+              
+                    // Add class to last comment in a row
+                    $comment.next('.lb-comment').andSelf()
+                      .last().addClass('lb-comment-last')
+                      .prev().removeClass('lb-comment-last');
+
+                    // Increment the parent's comments count
+                    $parentPost.data('comments', $parentPost.data('comments') + 1);
+
+                    // Add the comments label to parent item, if needed
+                    if ($parentPost.data('comments') > 0) {
+                      $commentsLabel = $parentPost.find('.lb-post-comments-label');
+                      if (!$commentsLabel.length) {
+                        $parentPost.append(
+                          $commentsLabel = $('<span />', {
+                            'class': 'lb-post-comments-label',
+                            'text': 'Comments'
+                          })
+                        );
+                      }
+                    }
+                  };
 
                 if (!$item.length) {
                   $item = buildItem(item);
 
                   if ($item.length) {
-                    $item.hide();
+                    //$item.hide();
+                    if (receivedFirstUpdate) {
+                      $item.addClass('lb-hidden');
+                    }
 
-                    if (item.type === 'comment' && item.p) {
+                    // Add an item after it's parent post, if parent provided
+                    if (item.p) {
                       $parent = $('#p' + item.p, $posts);
 
                       if ($parent.length) {
-                        // Give comment the timestamp of its parent post, for navigation
-                        $item.data('date', $parent.data('date'));
-
-                        // Append comment directly after its parent post
-                        $item.insertAfter($parent);
-
-                        // Add class to last comment in a row
-                        $item.next('.lb-comment').andSelf()
-                          .last().addClass('lb-comment-last')
-                          .prev().removeClass('lb-comment-last');
-
-                        // Increment the parent's comments count
-                        $parent.data('comments', $parent.data('comments') + 1);
-
-                        // Add the comments label to parent item, if needed
-                        if ($parent.data('comments') > 0) {
-                          $commentsLabel = $parent.find('.lb-post-comments-label');
-                          if (!$commentsLabel.length) {
-                            $parent.append(
-                              $commentsLabel = $('<span />', {
-                                'class': 'lb-post-comments-label',
-                                'text': 'Comments'
-                              })
-                            );
+                        if (item.type === 'comment') {
+                          
+                          // Insert comment at the appropriate location, sorted by date
+                          if ($parent.data('comments') > 0) {
+                            $commentsList = $parent.nextUntil(':not(.lb-comment)', '.lb-comment');
+                            $commentsList.each(function (i, el) {
+                              var $el = $(el),
+                                elId = Number($el.attr('id').substr(1));
+                                
+                              // Append comment directly after the latest comment
+                              if (item.id > elId) {
+                                $item.insertBefore($el);
+                                return false;
+                                
+                              } else if (i === $commentsList.length - 1) {
+                                $item.insertAfter($el);
+                                return false;
+                              }
+                            });
+                          // Just insert if it's the first comment
+                          } else {
+                            $item.insertAfter($parent);
                           }
+                        
+                          updateCommentUponAdd($item, $parent);
+                          
+                        } else {
+                          // Append item directly after its parent post
+                          $item.insertAfter($parent); 
                         }
 
                       } else {
-                        // Parent post doesn't exist, so add comment to
-                        // pendingUpdates array for processing in next page
+                        // Parent post doesn't exist, so add item to
+                        // pendingUpdates array for processing later
                         pendingUpdates.push(item);
                       }
-
+                    
+                    // Add item after a given element, if provided 
                     } else if (afterElement && afterElement.length) {
                       $item.insertAfter(afterElement);
 
+                    // Add item to bottom of post container
+                    } else if (addToTop === false) {
+                      $item.appendTo($posts);
+                    
+                    // Add item to top of post container
                     } else {
                       $item.prependTo($posts);
                     }
@@ -512,7 +558,11 @@
                       $posts.scrollTop(scrollTop + height);
                     }
 
-                    $item.fadeIn(400);
+                    //$item.fadeIn(400);
+                    //$item.show();
+                    if (receivedFirstUpdate) {
+                      $item.removeClass('lb-hidden');
+                    }
                   }
                 }
               },
@@ -598,12 +648,54 @@
                *   only shows n items at a time, and remainder goes into pendingUpdates array.
                * @param {Array} items An array of post items from the API to add to the view.
                */
-              addItems = function (items) {
-
+              addItems = function (items, completeCallback) {
+                
                 items = items || [];
 
                 var len = items.length,
-                  start = 0;
+                  start = 0,
+                  self = this,
+                  chunkSize = 10,
+                  chunksTotal = Math.ceil(len / chunkSize),
+                  /* 
+                   * On first update, add from top-down, so can see 
+                   * posts right away. After first update, add from 
+                   * bottom-up as usual. 
+                   */
+                  addToTop = receivedFirstUpdate,
+                  
+                  /*
+                   * Add one item to the DOM
+                   */
+                  addOne = function (i, item) {    
+                    // Add item to the DOM
+                    addItem(item, addToTop);
+  
+                    // Update the begin and end times
+                    if (item.type !== 'comment' && item.date) {
+                      var timestamp = item.date.getTime();
+                      beginTime = Math.min(beginTime, timestamp);
+                      endTime = Math.max(endTime, timestamp);
+                    }
+                  },
+                  
+                  /*
+                   * Add a chunk of items to the DOM at a time, based on 
+                   * chunkSize. Fire off completeCallback when 
+                   * all chunks have been added.
+                   */
+                  addChunk = function () {
+                    
+                    $(items.splice(0, chunkSize)).each($.proxy(addOne, self));
+                    
+                    if (items.length) {
+                      setTimeout(addChunk, 0);
+                      //addChunk();
+                      
+                    } else if (completeCallback) {
+                      completeCallback();
+                    }
+                  };
 
                 // Queue up older updates, if pagination enabled and post
                 // container is empty
@@ -617,18 +709,20 @@
                   }))
                   .click($.proxy(onMoreButtonClicked, this));
                 }
-
-                $(items).each(function (i, item) {
-                  // Add item to the DOM
-                  addItem(item);
-
-                  // Update the begin and end times
-                  if (item.type !== 'comment' && item.date) {
-                    var timestamp = item.date.getTime();
-                    beginTime = Math.min(beginTime, timestamp);
-                    endTime = Math.max(endTime, timestamp);
-                  }
-                });
+                
+                if (!receivedFirstUpdate) {
+                  items.reverse();
+                }
+                setTimeout(addChunk, 0);
+              },
+              
+              addPendingUpdates = function () {
+                var len = pendingUpdates.length;
+                if (len) {
+                  $(pendingUpdates).each(function (i, item) {
+                    addItem(item);
+                  });
+                }
               },
 
               /**
@@ -1091,6 +1185,117 @@
                     $item.data('imagesLoaded', true);
                   }
                 });
+              },
+              
+              onAddItemsComplete = function (data) {
+                var hash = window.location.hash,
+                  newUnreadItems = 0;
+  
+                if (data.updates) {
+                  if (options.postLimit) {
+                    var posts = $posts.find('.lb-post');
+  
+                    if (posts.length > options.postLimit) {
+                      var numberToRemove = posts.length - options.postLimit;
+                      posts.slice(-numberToRemove).remove();
+                    }
+                  }
+  
+                  // Update the slider's range and position
+                  initSlider();
+  
+                  if (receivedFirstUpdate) {
+                    // If container is scrolled, record all updates as new
+                    if ($posts.scrollTop() > 0) {
+                      newUnreadItems = data.updates.length;
+  
+                    // If container isn't scrolled but is showing tag filter view,
+                    // only record new items not in this view as new
+                    } else if (options.tagFilter) {
+                      $.each(data.updates, function (i, item) {
+                        if (!item.tags || (item.tags && $.inArray(options.tagFilter, item.tags) === -1)) {
+                          newUnreadItems += 1;
+                        }
+                      });
+                    }
+                    // Update the unread count
+                    if (newUnreadItems > 0) {
+                      updateUnreadItems(unreadItemCount + newUnreadItems);
+                    }
+                  
+                  // Add pending updates: if first update, AND pendingUpdates exist, AND pagination is disabled
+                  } else if (pendingUpdates.length && pageSize === 0) {
+                    addPendingUpdates();
+                  }
+                }
+  
+                if (data.changes) {
+                  $(data.changes).each(function (i, item) {
+                    updateItem(item);
+                  });
+                }
+  
+                if (data.deletes) {
+                  $(data.deletes).each(function (i, item) {
+                    var $item = $('#p' + item.id),
+                      timestamp,
+                      nextItem;
+  
+                    // Adjust the begin or end time, if this item was the first or last item
+                    if ($item.length && !$item.hasClass('lb-comment')) {
+                      timestamp = $item.data('date');
+  
+                      // Item was first, assign beginTime to prev item's date
+                      if (timestamp === beginTime) {
+                        nextItem = $item.prev(':not(.lb-comment)');
+                        if (nextItem.length) {
+                          beginTime = nextItem.data('date');
+                        }
+                      }
+                      // Item was last, assign endTime to next item's date
+                      if (timestamp === endTime) {
+                        nextItem = $item.next(':not(.lb-comment)');
+                        if (nextItem.length) {
+                          endTime = nextItem.data('date');
+                        }
+                      }
+                      // Update the slider
+                      initSlider();
+                    }
+  
+                    // Remove the item from the DOM
+                    deleteItem(item);
+                  });
+                }
+  
+                // Allow permalinks to individual updates
+                // ie, #p19923
+                if (hash.length) {
+                  var id,
+                    start,
+                    postPosition = hash.indexOf('p'),
+                    $targetItem;
+  
+                  // If first char is a 'p'
+                  if (postPosition === 1) {
+                    start = postPosition + 1;
+                    // Note assumption that the hash ONLY contains an ID
+                    id = hash.substring(start, hash.length);
+  
+                    $targetItem = goToItem(id);
+  
+                    // Scroll post container to top of main window, if permalink was valid
+                    if ($targetItem.length) {
+                      $(window).scrollTop($posts.offset().top);
+                    }
+                  }
+                }
+                
+                setTimeout(function () {
+                  onLoadImages();
+                }, 0);
+  
+                receivedFirstUpdate = true;
               };
 
             /*
@@ -1206,9 +1411,6 @@
             // Bind to API 'update' events
             $this.bind('update', function (event, data) {
               //console.log('update', event, data);
-              var hash = window.location.hash,
-                newUnreadItems = 0;
-
               if (data.updates) {
 
                 if (options.postLimit) {
@@ -1223,104 +1425,12 @@
                 }
 
                 // Add items to the DOM
-                addItems(data.updates);
-
-                if (options.postLimit) {
-                  var posts = $posts.find('.lb-post');
-
-                  if (posts.length > options.postLimit) {
-                    var numberToRemove = posts.length - options.postLimit;
-                    posts.slice(-numberToRemove).remove();
-                  }
-                }
-
-                // Update the slider's range and position
-                initSlider();
-
-                if (receivedFirstUpdate) {
-                  // If container is scrolled, record all updates as new
-                  if ($posts.scrollTop() > 0) {
-                    newUnreadItems = data.updates.length;
-
-                  // If container isn't scrolled but is showing tag filter view,
-                  // only record new items not in this view as new
-                  } else if (options.tagFilter) {
-                    $.each(data.updates, function (i, item) {
-                      if (!item.tags || (item.tags && $.inArray(options.tagFilter, item.tags) === -1)) {
-                        newUnreadItems += 1;
-                      }
-                    });
-                  }
-                  // Update the unread count
-                  if (newUnreadItems > 0) {
-                    updateUnreadItems(unreadItemCount + newUnreadItems);
-                  }
-                }
-              }
-
-              $(data.changes).each(function (i, item) {
-                updateItem(item);
-              });
-
-              if (data.deletes) {
-                $(data.deletes).each(function (i, item) {
-                  var $item = $('#p' + item.id),
-                    timestamp,
-                    nextItem;
-
-                  // Adjust the begin or end time, if this item was the first or last item
-                  if ($item.length && !$item.hasClass('lb-comment')) {
-                    timestamp = $item.data('date');
-
-                    // Item was first, assign beginTime to prev item's date
-                    if (timestamp === beginTime) {
-                      nextItem = $item.prev(':not(.lb-comment)');
-                      if (nextItem.length) {
-                        beginTime = nextItem.data('date');
-                      }
-                    }
-                    // Item was last, assign endTime to next item's date
-                    if (timestamp === endTime) {
-                      nextItem = $item.next(':not(.lb-comment)');
-                      if (nextItem.length) {
-                        endTime = nextItem.data('date');
-                      }
-                    }
-                    // Update the slider
-                    initSlider();
-                  }
-
-                  // Remove the item from the DOM
-                  deleteItem(item);
+                addItems(data.updates, function () { 
+                  onAddItemsComplete(data);
                 });
+              } else {
+                onAddItemsComplete(data);
               }
-
-              // Allow permalinks to individual updates
-              // ie, #p19923
-              if (hash.length) {
-                var id,
-                  start,
-                  postPosition = hash.indexOf('p'),
-                  $targetItem;
-
-                // If first char is a 'p'
-                if (postPosition === 1) {
-                  start = postPosition + 1;
-                  // Note assumption that the hash ONLY contains an ID
-                  id = hash.substring(start, hash.length);
-
-                  $targetItem = goToItem(id);
-
-                  // Scroll post container to top of main window, if permalink was valid
-                  if ($targetItem.length) {
-                    $(window).scrollTop($posts.offset().top);
-                  }
-                }
-              }
-              
-              onLoadImages();
-
-              receivedFirstUpdate = true;
             });
 
             // API fires 'end' event when the set time is reached to stop polling
