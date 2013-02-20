@@ -163,10 +163,12 @@
             placeholderImage.src = options.placeholderImage;
           }
           
-          // Dynamically set dimensions for pending images, based on thumbnailDimensions
+          // Dynamically set dimensions for images, based on thumbnailDimensions
           if (options.thumbnailDimensions) {
-            var imgHeight = options.thumbnailDimensions.height || '';
-            $('<style>.lb .lb-post img.lb-pending { height:' + imgHeight + 'px; }</style>')
+            var imgHeight = options.thumbnailDimensions.height ? 'height:' + options.thumbnailDimensions.height + 'px;' : '',
+              imgWidth = options.thumbnailDimensions.width ? 'width:' + options.thumbnailDimensions.width + 'px;' : '';
+              
+            $('<style id="lb-style">.lb .lb-post img { ' + imgWidth + imgHeight + ' }</style>')
               .appendTo('head');
           }
 
@@ -893,7 +895,8 @@
                     disabled: false
                   });
                   // Update the slider based on latest scroll position
-                  $posts.scroll();
+                  //$posts.scroll();
+                  onContainerScroll(null);
                 }
               },
 
@@ -1071,10 +1074,14 @@
                * haven't already loaded.
                */
               onLoadImages = function (event) {
-                // Exit if event wasn't initiated by user
-                if (event && !event.originalEvent) {
-                  return;
-                }
+                //if (true) {
+                //  return;
+                //}
+                // Exit if scroll event was called directly, and not initiated 
+                // by user, to avoid being called at wrong or too many times
+                //if (event && !event.originalEvent) {
+                //  return;
+                //}
                 
                 $posts.children('.lb-post').each(function (i, item) {
                   var $item = $(item);
