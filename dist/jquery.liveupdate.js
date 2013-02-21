@@ -699,7 +699,7 @@ $.fn.imagesLoaded = function( callback ) {
          * this for resizing; else if thumbnails is false, uses this for setting 
          * max-width and max-height CSS.
          * @type Object
-         **/
+         */
         thumbnailDimensions: {
           height: 100,
           width: null
@@ -716,7 +716,7 @@ $.fn.imagesLoaded = function( callback ) {
         /**
          * Display only the recent n posts
          * @type Number
-         **/
+         */
         postLimit: null,
         /**
          * Set various options for how bloggers are rendered, based on each
@@ -732,7 +732,12 @@ $.fn.imagesLoaded = function( callback ) {
          *
          * @type Object
          */
-        memberSettings: null
+        memberSettings: null,
+        /**
+         * Image URL to use as placeholder image before the original image is loaded.
+         * @type String
+         */
+        placeholderImage: 'http://o.aolcdn.com/js/x.gif'
       },
       /**
        * Simple way to strip html tags
@@ -780,6 +785,21 @@ $.fn.imagesLoaded = function( callback ) {
           if (options.thumbnailExcludeFilter) {
             options.thumbnailExcludeFilter = $.trim(options.thumbnailExcludeFilter);
           }
+          
+          // Preload the placeholder image
+          if (options.placeholderImage) {
+            var placeholderImage = new Image();
+            placeholderImage.src = options.placeholderImage;
+          }
+          
+          // Dynamically set dimensions for images, based on thumbnailDimensions
+          if (options.thumbnailDimensions) {
+            var imgHeight = options.thumbnailDimensions.height ? 'height:' + options.thumbnailDimensions.height + 'px;' : '',
+              imgWidth = options.thumbnailDimensions.width ? 'width:' + options.thumbnailDimensions.width + 'px;' : '';
+              
+            $('<style id="lb-style">.lb .lb-post img { ' + imgWidth + imgHeight + ' }</style>')
+              .appendTo('head');
+          }
 
           // Listen to 'begin' event from API, to initialize and build the widget
           $this.bind('begin', function (event) {
@@ -801,6 +821,7 @@ $.fn.imagesLoaded = function( callback ) {
               $unreadCount,
               unreadItemCount = 0,
               receivedFirstUpdate = false,
+              pauseOnUpdate = false,
 
               /**
                * Create DOM element for post item from the given data item. If
@@ -868,6 +889,9 @@ $.fn.imagesLoaded = function( callback ) {
 
                   timestampString = timestampString + ' - edited';
                 }
+                
+                // Default imagesLoaded to false so knows to load images in post item
+                element.data('imagesLoaded', false);
 
                 if (type === 'text' || type === 'comment') {
                   element.append(
@@ -909,11 +933,12 @@ $.fn.imagesLoaded = function( callback ) {
 
                   element.append(
                     $image = $('<img />', {
-                      // Use the thumbnail version of the image
-                      src: imageUrl,
-                      'data-src': fullImageUrl || '',
-                      alt: (caption) ? stripHtml(caption) : '',
-                      title: 'Click to view larger'
+                      src: options.placeholderImage, // Placeholder image
+                      'data-src': imageUrl || '', // Store url for thumbnail version of the image
+                      'data-full-src': fullImageUrl || '', // Store the url for full sized image
+                      alt: '',
+                      title: 'Click to view larger',
+                      'class': 'lb-pending'
                     }),
                     buildTextElement(caption, 'lb-post-caption')
                   );
@@ -944,8 +969,9 @@ $.fn.imagesLoaded = function( callback ) {
                   // Use a profile image if one has been provided in the settings
                   if (memberSettings.profileImage) {
                     $profileImage = $('<img/>', {
-                      'class': 'lb-profile-image',
-                      src: memberSettings.profileImage,
+                      'class': 'lb-profile-image lb-pending',
+                      src: options.placeholderImage,  // Placeholder image
+                      'data-src': memberSettings.profileImage, // Store url for original image
                       alt: '',
                       title: item.memberName
                     }).appendTo($postAuthorTab);
@@ -1012,7 +1038,9 @@ $.fn.imagesLoaded = function( callback ) {
 
                 if (text) {
                   // Strip out all undesirable tags before they become DOM elements
-                  text = text.replace(/<script[^>]*>.*?<\/script>/ig, '');
+                  // TODO: Decide if we want to prevent local script tags
+                  //  - we do need to allow scripts srcs for embedded tweets, etc.
+                  //text = text.replace(/<script[^>]*>.*?<\/script>/ig, '');
                 }
 
                 // Build element
@@ -1051,61 +1079,109 @@ $.fn.imagesLoaded = function( callback ) {
               /**
                * Add data item into the DOM.
                * @param {Object} item The item to add.
+               * @param {Boolean} addToTop Whether to add item to top of posts, vs. bottom; default is true.
                * @param {Object|null} afterElement The optional jQuery object after which to position the new item.
                */
-              addItem = function (item, afterElement) {
+              addItem = function (item, addToTop, afterElement) {
+                addToTop = addToTop != null ? addToTop : true;
+                
                 var $item = $('#p' + item.id, $posts),
                   $parent = null,
                   height = 0,
                   scrollTop = $posts.scrollTop(),
-                  $commentsLabel;
+                  $commentsLabel,
+                  $commentsList,
+                  
+                  /*
+                   * Update comment and parent's meta data, after adding comment to DOM
+                   */
+                  updateCommentUponAdd = function ($comment, $parentPost) {
+                    // Give comment the timestamp of its parent post, for navigation
+                    $item.data('date', $parentPost.data('date'));
+              
+                    // Add class to last comment in a row
+                    $comment.next('.lb-comment').andSelf()
+                      .last().addClass('lb-comment-last')
+                      .prev().removeClass('lb-comment-last');
+
+                    // Increment the parent's comments count
+                    $parentPost.data('comments', $parentPost.data('comments') + 1);
+
+                    // Add the comments label to parent item, if needed
+                    if ($parentPost.data('comments') > 0) {
+                      $commentsLabel = $parentPost.find('.lb-post-comments-label');
+                      if (!$commentsLabel.length) {
+                        $parentPost.append(
+                          $commentsLabel = $('<span />', {
+                            'class': 'lb-post-comments-label',
+                            'text': 'Comments'
+                          })
+                        );
+                      }
+                    }
+                  };
 
                 if (!$item.length) {
                   $item = buildItem(item);
 
                   if ($item.length) {
-                    $item.hide();
+                    //$item.hide();
+                    if (receivedFirstUpdate) {
+                      $item.addClass('lb-hidden');
+                    }
 
-                    if (item.type === 'comment' && item.p) {
+                    // Add an item after it's parent post, if parent provided
+                    if (item.p) {
                       $parent = $('#p' + item.p, $posts);
 
                       if ($parent.length) {
-                        // Give comment the timestamp of its parent post, for navigation
-                        $item.data('date', $parent.data('date'));
-
-                        // Append comment directly after its parent post
-                        $item.insertAfter($parent);
-
-                        // Add class to last comment in a row
-                        $item.next('.lb-comment').andSelf()
-                          .last().addClass('lb-comment-last')
-                          .prev().removeClass('lb-comment-last');
-
-                        // Increment the parent's comments count
-                        $parent.data('comments', $parent.data('comments') + 1);
-
-                        // Add the comments label to parent item, if needed
-                        if ($parent.data('comments') > 0) {
-                          $commentsLabel = $parent.find('.lb-post-comments-label');
-                          if (!$commentsLabel.length) {
-                            $parent.append(
-                              $commentsLabel = $('<span />', {
-                                'class': 'lb-post-comments-label',
-                                'text': 'Comments'
-                              })
-                            );
+                        if (item.type === 'comment') {
+                          
+                          // Insert comment at the appropriate location, sorted by date
+                          if ($parent.data('comments') > 0) {
+                            $commentsList = $parent.nextUntil(':not(.lb-comment)', '.lb-comment');
+                            $commentsList.each(function (i, el) {
+                              var $el = $(el),
+                                elId = Number($el.attr('id').substr(1));
+                                
+                              // Add comment directly before the latest comment
+                              if (item.id > elId) {
+                                $item.insertBefore($el);
+                                return false;
+                              
+                              // If last comment, and not newer, add after it 
+                              } else if (i === $commentsList.length - 1) {
+                                $item.insertAfter($el);
+                                return false;
+                              }
+                            });
+                          // Just insert if it's the first comment
+                          } else {
+                            $item.insertAfter($parent);
                           }
+                        
+                          updateCommentUponAdd($item, $parent);
+                          
+                        } else {
+                          // For all other types, add directly before its parent
+                          $item.insertBefore($parent); 
                         }
 
                       } else {
-                        // Parent post doesn't exist, so add comment to
-                        // pendingUpdates array for processing in next page
+                        // Parent post doesn't exist, so add item to
+                        // pendingUpdates array for processing later
                         pendingUpdates.push(item);
                       }
-
+                    
+                    // Add item after a given element, if provided 
                     } else if (afterElement && afterElement.length) {
                       $item.insertAfter(afterElement);
 
+                    // Add item to bottom of post container
+                    } else if (addToTop === false) {
+                      $item.appendTo($posts);
+                    
+                    // Add item to top of post container
                     } else {
                       $item.prependTo($posts);
                     }
@@ -1116,7 +1192,11 @@ $.fn.imagesLoaded = function( callback ) {
                       $posts.scrollTop(scrollTop + height);
                     }
 
-                    $item.fadeIn(400);
+                    //$item.fadeIn(400);
+                    //$item.show();
+                    if (receivedFirstUpdate) {
+                      $item.removeClass('lb-hidden');
+                    }
                   }
                 }
               },
@@ -1201,13 +1281,68 @@ $.fn.imagesLoaded = function( callback ) {
                * Add data items from API into the DOM. IF pagination is enabled,
                *   only shows n items at a time, and remainder goes into pendingUpdates array.
                * @param {Array} items An array of post items from the API to add to the view.
+               * @param {Function|null} completeCallback An optional callback to call when complete
                */
-              addItems = function (items) {
-
+              addItems = function (items, completeCallback) {
                 items = items || [];
 
                 var len = items.length,
-                  start = 0;
+                  self = this,
+                  chunkSize = 10,
+                  chunksTotal = Math.ceil(len / chunkSize),
+                  chunkNum = 0,
+                  
+                  /* 
+                   * On first update, add from top-down, so can see 
+                   * posts right away. After first update, add from 
+                   * bottom-up as usual. 
+                   */
+                  addToTop = receivedFirstUpdate,
+                  
+                  /*
+                   * Add one item to the DOM
+                   */
+                  addOne = function (i, item) {    
+                    // Add item to the DOM
+                    addItem(item, addToTop);
+  
+                    // Update the begin and end times
+                    if (item.type !== 'comment' && item.date) {
+                      var timestamp = item.date.getTime();
+                      beginTime = Math.min(beginTime, timestamp);
+                      endTime = Math.max(endTime, timestamp);
+                    }
+                  },
+                  
+                  /*
+                   * Add a chunk of items to the DOM at a time, based on 
+                   * chunkSize. Fire off completeCallback when 
+                   * all chunks have been added.
+                   */
+                  addChunk = function () {
+                    
+                    $(items.splice(0, chunkSize)).each($.proxy(addOne, self));
+                    
+                    /*
+                     * Load images after adding the first chunk, if is first 
+                     * update, so can see content as soon as possible.
+                     */ 
+                    if (chunkNum === 0 && !receivedFirstUpdate) {
+                      onLoadImages();
+                    }
+                    
+                    // Add next chunk
+                    if (items.length) {
+                      setTimeout(addChunk, 0);
+                      //addChunk();
+                    
+                    // No more items left, execute calback  
+                    } else if (completeCallback) {
+                      completeCallback();
+                    }
+                    
+                    chunkNum++;
+                  };
 
                 // Queue up older updates, if pagination enabled and post
                 // container is empty
@@ -1221,18 +1356,27 @@ $.fn.imagesLoaded = function( callback ) {
                   }))
                   .click($.proxy(onMoreButtonClicked, this));
                 }
-
-                $(items).each(function (i, item) {
-                  // Add item to the DOM
-                  addItem(item);
-
-                  // Update the begin and end times
-                  if (item.type !== 'comment' && item.date) {
-                    var timestamp = item.date.getTime();
-                    beginTime = Math.min(beginTime, timestamp);
-                    endTime = Math.max(endTime, timestamp);
-                  }
-                });
+                
+                // If first update, load items top-down, to see content sooner
+                if (!receivedFirstUpdate) {
+                  items.reverse();
+                }
+                
+                // Add first chunk. Executes in setTimeout so loading large 
+                // datasets won't block other UI from loading.
+                setTimeout(addChunk, 0);
+              },
+              
+              /**
+               * Add all pending updates to the DOM
+               */
+              addPendingUpdates = function () {
+                var len = pendingUpdates.length;
+                if (len) {
+                  $(pendingUpdates).each(function (i, item) {
+                    addItem(item);
+                  });
+                }
               },
 
               /**
@@ -1447,6 +1591,23 @@ $.fn.imagesLoaded = function( callback ) {
 
                 updateStatusLabel();
               },
+              
+              /**
+               * Hide the pause button, update status label
+               * @param {Boolean} enabled Whether the status label is enabled; default is null
+               */
+              hidePauseButton = function (enabled) {
+                $('.lb-pause-button', $this).hide();
+                updateStatusLabel(enabled);
+              },
+              
+              /**
+               * Show the pause button, update status label
+               */
+              showPauseButton = function () {
+                $('.lb-pause-button', $this).show();
+                updateStatusLabel();
+              },
 
               /**
                * Start/resume the API, so polls for updates
@@ -1499,7 +1660,7 @@ $.fn.imagesLoaded = function( callback ) {
                     disabled: false
                   });
                   // Update the slider based on latest scroll position
-                  $posts.scroll();
+                  onContainerScroll(null);
                 }
               },
 
@@ -1549,6 +1710,43 @@ $.fn.imagesLoaded = function( callback ) {
                 });
 
                 return $topItem;
+              },
+              
+              /**
+               * Check whether a post item is visible in the scroll container.
+               * 
+               * @param {Element} item The element for the post item
+               * @param {Boolean} full Whether to require an item's full 
+               *   height to check if visible, versus any part of it; default is false
+               * @param {Number} distance The distance in pixels of an item 
+               *   to check if visible; only useful if full is false; default is 0
+               * @returns {Boolean} Whether the item is considered visible
+               */
+              isItemVisible = function (item, full, distance) {
+                item = $(item);
+                full = full != null ? full : false;
+                distance = distance != null ? distance : 0;
+                
+                var containerHeight = $posts.height(),
+                  height = item.height(),
+                  positionTop = item.position().top,
+                  positionBottom = positionTop + height;
+                  
+                if (full === true) {
+                  distance = height;
+                }
+                /*
+                console.log({
+                  id: item.attr('id'),
+                  height: height,
+                  positionTop: positionTop,
+                  positionBottom: positionBottom,
+                  containerHeight: containerHeight,
+                  distance: distance
+                });
+                */
+               
+                return (positionBottom > distance && positionTop < (containerHeight - distance));
               },
 
               /**
@@ -1614,7 +1812,176 @@ $.fn.imagesLoaded = function( callback ) {
                 // which scrolls the page
                 window.location.hash = '_';
                 $this.liveUpdateApi('reset');
+                $this.unbind('end update');
                 $this.trigger('begin');
+              },
+              
+              /**
+               * Load all images under a DOM container, by setting their 'src' 
+               * attributes to the 'data-src' value.
+               * 
+               * @param {jQuery} container Optional DOM element to serach under 
+               *   for images; defaults to .lb-post-container
+               */
+              loadImages = function (container) {
+                container = $(container || $posts);
+                
+                container.find('img[data-src]').each(function (i, img) {
+                  var $img = $(img);
+                  $img.attr('src', $img.attr('data-src'))
+                    .removeAttr('data-src')
+                    .removeClass('lb-pending');
+                });
+              },
+              
+              /**
+               * Iterate over all post items, and load their images, if they 
+               * haven't already loaded.
+               */
+              onLoadImages = function (event) {
+                var lastVisible = false;
+                
+                $posts.children('.lb-post').each(function (i, item) {
+                  var $item = $(item);
+                  
+                  if (!$item.data('imagesLoaded')) {
+                    // Load images if item is visible
+                    if (isItemVisible($item, false, -500)) {
+                      loadImages($item);
+                      $item.data('imagesLoaded', true);
+                      lastVisible = true;
+                    
+                    // Exit loop if encounter first invisible item  
+                    } else if (lastVisible) {
+                      return false;
+                    }
+                  }
+                });
+              },
+              
+              /**
+               * Callback executed after all items have been added to DOM.
+               * Processes new items in DOM, and acts on change and delete events.
+               * Once completed, then loads images.
+               * 
+               * @param {Object} data The data sent from the server
+               */
+              onAddItemsComplete = function (data) {
+                var hash = window.location.hash,
+                  newUnreadItems = 0;
+  
+                if (data.updates) {
+                  if (options.postLimit) {
+                    var posts = $posts.find('.lb-post');
+  
+                    if (posts.length > options.postLimit) {
+                      var numberToRemove = posts.length - options.postLimit;
+                      posts.slice(-numberToRemove).remove();
+                    }
+                  }
+  
+                  // Update the slider's range and position
+                  initSlider();
+  
+                  if (receivedFirstUpdate) {
+                    // If container is scrolled, record all updates as new
+                    if ($posts.scrollTop() > 0) {
+                      newUnreadItems = data.updates.length;
+  
+                    // If container isn't scrolled but is showing tag filter view,
+                    // only record new items not in this view as new
+                    } else if (options.tagFilter) {
+                      $.each(data.updates, function (i, item) {
+                        if (!item.tags || (item.tags && $.inArray(options.tagFilter, item.tags) === -1)) {
+                          newUnreadItems += 1;
+                        }
+                      });
+                    }
+                    // Update the unread count
+                    if (newUnreadItems > 0) {
+                      updateUnreadItems(unreadItemCount + newUnreadItems);
+                    }
+                  
+                  // Add pending updates: if first update, AND pendingUpdates exist, AND pagination is disabled
+                  } else if (pendingUpdates.length && pageSize === 0) {
+                    addPendingUpdates();
+                  }
+                }
+  
+                if (data.changes) {
+                  $(data.changes).each(function (i, item) {
+                    updateItem(item);
+                  });
+                }
+  
+                if (data.deletes) {
+                  $(data.deletes).each(function (i, item) {
+                    var $item = $('#p' + item.id),
+                      timestamp,
+                      nextItem;
+  
+                    // Adjust the begin or end time, if this item was the first or last item
+                    if ($item.length && !$item.hasClass('lb-comment')) {
+                      timestamp = $item.data('date');
+  
+                      // Item was first, assign beginTime to prev item's date
+                      if (timestamp === beginTime) {
+                        nextItem = $item.prev(':not(.lb-comment)');
+                        if (nextItem.length) {
+                          beginTime = nextItem.data('date');
+                        }
+                      }
+                      // Item was last, assign endTime to next item's date
+                      if (timestamp === endTime) {
+                        nextItem = $item.next(':not(.lb-comment)');
+                        if (nextItem.length) {
+                          endTime = nextItem.data('date');
+                        }
+                      }
+                      // Update the slider
+                      initSlider();
+                    }
+  
+                    // Remove the item from the DOM
+                    deleteItem(item);
+                  });
+                }
+  
+                // Allow permalinks to individual updates
+                // ie, #p19923
+                if (hash.length) {
+                  var id,
+                    startPosition,
+                    postPosition = hash.indexOf('p'),
+                    $targetItem;
+  
+                  // If first char is a 'p'
+                  if (postPosition === 1) {
+                    startPosition = postPosition + 1;
+                    // Note assumption that the hash ONLY contains an ID
+                    id = hash.substring(startPosition, hash.length);
+  
+                    $targetItem = goToItem(id);
+  
+                    // Scroll post container to top of main window, if permalink was valid
+                    if ($targetItem.length) {
+                      $(window).scrollTop($posts.offset().top);
+                    }
+                  }
+                }
+                
+                setTimeout(function () {
+                  onLoadImages();
+                }, 0);
+  
+                receivedFirstUpdate = true;
+                
+                // Start polling again, if previously marked to pausedOnUpdate
+                if (paused && pauseOnUpdate) {
+                  pauseOnUpdate = false;
+                  start();
+                  showPauseButton();
+                }
               };
 
             /*
@@ -1720,7 +2087,8 @@ $.fn.imagesLoaded = function( callback ) {
               'class': 'lb-post-container'
             })
             .appendTo($this)
-            .scroll($.throttle(250, onContainerScroll));
+            .scroll($.throttle(250, onContainerScroll))
+            .scroll($.debounce(100, onLoadImages));
 
             if (options.height && options.height > 0) {
               $posts.height(options.height);
@@ -1728,10 +2096,15 @@ $.fn.imagesLoaded = function( callback ) {
 
             // Bind to API 'update' events
             $this.bind('update', function (event, data) {
+              
+              // If is first update, and not paused, temporarily stop polling
+              if (!receivedFirstUpdate && !paused) {
+                pauseOnUpdate = true;
+                stop();
+                hidePauseButton();
+              }
+              
               //console.log('update', event, data);
-              var hash = window.location.hash,
-                newUnreadItems = 0;
-
               if (data.updates) {
 
                 if (options.postLimit) {
@@ -1746,114 +2119,22 @@ $.fn.imagesLoaded = function( callback ) {
                 }
 
                 // Add items to the DOM
-                addItems(data.updates);
-
-                if (options.postLimit) {
-                  var posts = $posts.find('.lb-post');
-
-                  if (posts.length > options.postLimit) {
-                    var numberToRemove = posts.length - options.postLimit;
-                    posts.slice(-numberToRemove).remove();
-                  }
-                }
-
-                // Update the slider's range and position
-                initSlider();
-
-                if (receivedFirstUpdate) {
-                  // If container is scrolled, record all updates as new
-                  if ($posts.scrollTop() > 0) {
-                    newUnreadItems = data.updates.length;
-
-                  // If container isn't scrolled but is showing tag filter view,
-                  // only record new items not in this view as new
-                  } else if (options.tagFilter) {
-                    $.each(data.updates, function (i, item) {
-                      if (!item.tags || (item.tags && $.inArray(options.tagFilter, item.tags) === -1)) {
-                        newUnreadItems += 1;
-                      }
-                    });
-                  }
-                  // Update the unread count
-                  if (newUnreadItems > 0) {
-                    updateUnreadItems(unreadItemCount + newUnreadItems);
-                  }
-                }
-              }
-
-              $(data.changes).each(function (i, item) {
-                updateItem(item);
-              });
-
-              if (data.deletes) {
-                $(data.deletes).each(function (i, item) {
-                  var $item = $('#p' + item.id),
-                    timestamp,
-                    nextItem;
-
-                  // Adjust the begin or end time, if this item was the first or last item
-                  if ($item.length && !$item.hasClass('lb-comment')) {
-                    timestamp = $item.data('date');
-
-                    // Item was first, assign beginTime to prev item's date
-                    if (timestamp === beginTime) {
-                      nextItem = $item.prev(':not(.lb-comment)');
-                      if (nextItem.length) {
-                        beginTime = nextItem.data('date');
-                      }
-                    }
-                    // Item was last, assign endTime to next item's date
-                    if (timestamp === endTime) {
-                      nextItem = $item.next(':not(.lb-comment)');
-                      if (nextItem.length) {
-                        endTime = nextItem.data('date');
-                      }
-                    }
-                    // Update the slider
-                    initSlider();
-                  }
-
-                  // Remove the item from the DOM
-                  deleteItem(item);
+                addItems(data.updates, function () { 
+                  onAddItemsComplete(data);
                 });
+              } else {
+                onAddItemsComplete(data);
               }
-
-              // Allow permalinks to individual updates
-              // ie, #p19923
-              if (hash.length) {
-                var id,
-                  start,
-                  postPosition = hash.indexOf('p'),
-                  $targetItem;
-
-                // If first char is a 'p'
-                if (postPosition === 1) {
-                  start = postPosition + 1;
-                  // Note assumption that the hash ONLY contains an ID
-                  id = hash.substring(start, hash.length);
-
-                  $targetItem = goToItem(id);
-
-                  // Scroll post container to top of main window, if permalink was valid
-                  if ($targetItem.length) {
-                    $(window).scrollTop($posts.offset().top);
-                  }
-                }
-              }
-
-              receivedFirstUpdate = true;
             });
 
             // API fires 'end' event when the set time is reached to stop polling
             $this.bind('end', function (event) {
-              $('.lb-pause-button', $this).hide();
-              updateStatusLabel(false);
+              hidePauseButton(false);
             });
 
             // If not alive, or already reached end time
             if (options.alive === false || (options.end && options.end <= new Date())) {
-              $('.lb-pause-button', $this).hide();
-              updateStatusLabel(false);
+              hidePauseButton(false);
 
             // else is alive and kickin'
             } else {
@@ -1877,7 +2158,7 @@ $.fn.imagesLoaded = function( callback ) {
 
           $this.delegate('img:not(.lb-profile-image)', 'click', function (event) {
             var $currentTarget = $(event.currentTarget),
-              fullImageUrl = $currentTarget.attr('data-src'),
+              fullImageUrl = $currentTarget.attr('data-full-src'),
               imgSrc = (fullImageUrl) ? fullImageUrl : $currentTarget.attr('src'),
               $loadingContainer = $('<div />', {
                 'class': 'lb-img-loading'
