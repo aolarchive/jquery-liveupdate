@@ -306,7 +306,7 @@
                       src: options.placeholderImage, // Placeholder image
                       'data-src': imageUrl || '', // Store url for thumbnail version of the image
                       'data-full-src': fullImageUrl || '', // Store the url for full sized image
-                      alt: (caption) ? stripHtml(caption) : '',
+                      alt: '',
                       title: 'Click to view larger',
                       'class': 'lb-pending'
                     }),
