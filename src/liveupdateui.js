@@ -657,6 +657,8 @@
                   self = this,
                   chunkSize = 10,
                   chunksTotal = Math.ceil(len / chunkSize),
+                  chunkNum = 0,
+                  
                   /* 
                    * On first update, add from top-down, so can see 
                    * posts right away. After first update, add from 
@@ -688,13 +690,25 @@
                     
                     $(items.splice(0, chunkSize)).each($.proxy(addOne, self));
                     
+                    /*
+                     * Load images after adding the first chunk, if is first 
+                     * update, so can see content as soon as possible.
+                     */ 
+                    if (chunkNum === 0 && !receivedFirstUpdate) {
+                      onLoadImages();
+                    }
+                    
+                    // Add next chunk
                     if (items.length) {
                       setTimeout(addChunk, 0);
                       //addChunk();
-                      
+                    
+                    // No more items left, execute calback  
                     } else if (completeCallback) {
                       completeCallback();
                     }
+                    
+                    chunkNum++;
                   };
 
                 // Queue up older updates, if pagination enabled and post
@@ -710,9 +724,14 @@
                   .click($.proxy(onMoreButtonClicked, this));
                 }
                 
+                
+                // If first update, load items top-down, to see content sooner
                 if (!receivedFirstUpdate) {
                   items.reverse();
                 }
+                
+                // Add first chunk. Executes in setTimeout so loading large 
+                // datasets won't block other UI from loading.
                 setTimeout(addChunk, 0);
               },
               

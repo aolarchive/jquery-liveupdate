@@ -49,7 +49,7 @@
               @include opacity(0.5);
             }
             
-            @include transition(opacity 0.5s);
+            @include transition(opacity 0.3s);
         }
 
         .lb-img-loading {
