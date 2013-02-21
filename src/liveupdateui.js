@@ -453,6 +453,7 @@
                */
               addItem = function (item, addToTop, afterElement) {
                 addToTop = addToTop != null ? addToTop : true;
+                
                 var $item = $('#p' + item.id, $posts),
                   $parent = null,
                   height = 0,
@@ -512,11 +513,12 @@
                               var $el = $(el),
                                 elId = Number($el.attr('id').substr(1));
                                 
-                              // Append comment directly after the latest comment
+                              // Add comment directly before the latest comment
                               if (item.id > elId) {
                                 $item.insertBefore($el);
                                 return false;
-                                
+                              
+                              // If last comment, and not newer, add after it 
                               } else if (i === $commentsList.length - 1) {
                                 $item.insertAfter($el);
                                 return false;
@@ -651,7 +653,6 @@
                * @param {Function|null} completeCallback An optional callback to call when complete
                */
               addItems = function (items, completeCallback) {
-                
                 items = items || [];
 
                 var len = items.length,
@@ -724,7 +725,6 @@
                   }))
                   .click($.proxy(onMoreButtonClicked, this));
                 }
-                
                 
                 // If first update, load items top-down, to see content sooner
                 if (!receivedFirstUpdate) {
@@ -1029,7 +1029,6 @@
                     disabled: false
                   });
                   // Update the slider based on latest scroll position
-                  //$posts.scroll();
                   onContainerScroll(null);
                 }
               },
@@ -1209,14 +1208,6 @@
                * haven't already loaded.
                */
               onLoadImages = function (event) {
-                //if (true) {
-                //  return;
-                //}
-                // Exit if scroll event was called directly, and not initiated 
-                // by user, to avoid being called at wrong or too many times
-                //if (event && !event.originalEvent) {
-                //  return;
-                //}
                 var lastVisible = false;
                 
                 $posts.children('.lb-post').each(function (i, item) {
