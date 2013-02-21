@@ -409,7 +409,9 @@
 
                 if (text) {
                   // Strip out all undesirable tags before they become DOM elements
-                  text = text.replace(/<script[^>]*>.*?<\/script>/ig, '');
+                  // TODO: Decide if we want to prevent local script tags
+                  //  - we do need to allow scripts srcs for embedded tweets, etc.
+                  //text = text.replace(/<script[^>]*>.*?<\/script>/ig, '');
                 }
 
                 // Build element
