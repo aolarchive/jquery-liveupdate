@@ -509,6 +509,9 @@
 /* Styles for IE 6 and below */
 * html {
     .lb {
+        .lb-post {
+            zoom: 1;
+        }
         .lb-toolbar {
             padding-bottom: 15px;
         }

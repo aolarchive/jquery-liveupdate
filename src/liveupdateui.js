@@ -192,6 +192,7 @@
               $unreadCount,
               unreadItemCount = 0,
               receivedFirstUpdate = false,
+              pauseOnUpdate = false,
 
               /**
                * Create DOM element for post item from the given data item. If
@@ -647,13 +648,13 @@
                * Add data items from API into the DOM. IF pagination is enabled,
                *   only shows n items at a time, and remainder goes into pendingUpdates array.
                * @param {Array} items An array of post items from the API to add to the view.
+               * @param {Function|null} completeCallback An optional callback to call when complete
                */
               addItems = function (items, completeCallback) {
                 
                 items = items || [];
 
                 var len = items.length,
-                  start = 0,
                   self = this,
                   chunkSize = 10,
                   chunksTotal = Math.ceil(len / chunkSize),
@@ -735,6 +736,9 @@
                 setTimeout(addChunk, 0);
               },
               
+              /**
+               * Add all pending updates to the DOM
+               */
               addPendingUpdates = function () {
                 var len = pendingUpdates.length;
                 if (len) {
@@ -956,6 +960,23 @@
 
                 updateStatusLabel();
               },
+              
+              /**
+               * Hide the pause button, update status label
+               * @param {Boolean} enabled Whether the status label is enabled; default is null
+               */
+              hidePauseButton = function (enabled) {
+                $('.lb-pause-button', $this).hide();
+                updateStatusLabel(enabled);
+              },
+              
+              /**
+               * Show the pause button, update status label
+               */
+              showPauseButton = function () {
+                $('.lb-pause-button', $this).show();
+                updateStatusLabel();
+              },
 
               /**
                * Start/resume the API, so polls for updates
@@ -1161,6 +1182,7 @@
                 // which scrolls the page
                 window.location.hash = '_';
                 $this.liveUpdateApi('reset');
+                $this.unbind('end update');
                 $this.trigger('begin');
               },
               
@@ -1215,6 +1237,13 @@
                 });
               },
               
+              /**
+               * Callback executed after all items have been added to DOM.
+               * Processes new items in DOM, and acts on change and delete events.
+               * Once completed, then loads images.
+               * 
+               * @param {Object} data The data sent from the server
+               */
               onAddItemsComplete = function (data) {
                 var hash = window.location.hash,
                   newUnreadItems = 0;
@@ -1300,15 +1329,15 @@
                 // ie, #p19923
                 if (hash.length) {
                   var id,
-                    start,
+                    startPosition,
                     postPosition = hash.indexOf('p'),
                     $targetItem;
   
                   // If first char is a 'p'
                   if (postPosition === 1) {
-                    start = postPosition + 1;
+                    startPosition = postPosition + 1;
                     // Note assumption that the hash ONLY contains an ID
-                    id = hash.substring(start, hash.length);
+                    id = hash.substring(startPosition, hash.length);
   
                     $targetItem = goToItem(id);
   
@@ -1324,6 +1353,13 @@
                 }, 0);
   
                 receivedFirstUpdate = true;
+                
+                // Start polling again, if previously marked to pausedOnUpdate
+                if (paused && pauseOnUpdate) {
+                  pauseOnUpdate = false;
+                  start();
+                  showPauseButton();
+                }
               };
 
             /*
@@ -1438,6 +1474,14 @@
 
             // Bind to API 'update' events
             $this.bind('update', function (event, data) {
+              
+              // If is first update, and not paused, temporarily stop polling
+              if (!receivedFirstUpdate && !paused) {
+                pauseOnUpdate = true;
+                stop();
+                hidePauseButton();
+              }
+              
               //console.log('update', event, data);
               if (data.updates) {
 
@@ -1463,14 +1507,12 @@
 
             // API fires 'end' event when the set time is reached to stop polling
             $this.bind('end', function (event) {
-              $('.lb-pause-button', $this).hide();
-              updateStatusLabel(false);
+              hidePauseButton(false);
             });
 
             // If not alive, or already reached end time
             if (options.alive === false || (options.end && options.end <= new Date())) {
-              $('.lb-pause-button', $this).hide();
-              updateStatusLabel(false);
+              hidePauseButton(false);
 
             // else is alive and kickin'
             } else {
