@@ -529,8 +529,8 @@
                           updateCommentUponAdd($item, $parent);
                           
                         } else {
-                          // Append item directly after its parent post
-                          $item.insertAfter($parent); 
+                          // For all other types, add directly before its parent
+                          $item.insertBefore($parent); 
                         }
 
                       } else {
