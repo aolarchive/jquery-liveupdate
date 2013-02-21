@@ -1195,13 +1195,22 @@
                 //if (event && !event.originalEvent) {
                 //  return;
                 //}
+                var lastVisible = false;
                 
                 $posts.children('.lb-post').each(function (i, item) {
                   var $item = $(item);
                   
-                  if (!$item.data('imagesLoaded') && isItemVisible($item, false, -500)) {
-                    loadImages($item);
-                    $item.data('imagesLoaded', true);
+                  if (!$item.data('imagesLoaded')) {
+                    // Load images if item is visible
+                    if (isItemVisible($item, false, -500)) {
+                      loadImages($item);
+                      $item.data('imagesLoaded', true);
+                      lastVisible = true;
+                    
+                    // Exit loop if encounter first invisible item  
+                    } else if (lastVisible) {
+                      return false;
+                    }
                   }
                 });
               },
@@ -1421,7 +1430,7 @@
             })
             .appendTo($this)
             .scroll($.throttle(250, onContainerScroll))
-            .scroll($.throttle(300, onLoadImages));
+            .scroll($.debounce(100, onLoadImages));
 
             if (options.height && options.height > 0) {
               $posts.height(options.height);
