@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+    <head>
+        <title>LiveUpdate</title>
+        <link rel="stylesheet" href="../assets/dev/css/aol.liveupdate.css" />
+        <style>
+            body {
+                padding: 20px;
+            }
+            .lb .lb-post-container {
+                border-bottom: 2px solid #AAAAAA;
+            }
+        </style>
+    </head>
+    <body>
+	    <div id="myLiveBlog">
+          <p>This live blog will begin shortly: stay tuned!</p>
+	    </div>
+
+	    <script src="../libs/jquery/jquery.js"></script>
+	    <script src="../dist/jquery.liveupdate.js"></script>
+	    <script src="../test/jquery.liveupdate-simulator.js"></script>
+
+	    <script>
+	        $(document).ready(function () {
+              var $myLiveBlog = $('#myLiveBlog')
+                /*
+                .bind('begin', function (event) {
+                  console.log('begin!');
+                })
+                .bind('end', function (event) {
+                  console.log('end');
+                })
+                .bind('status', function (event) {
+                  console.log('status: '+event.status);
+                })
+                */
+                .liveUpdateUi({
+                  // This is an example post on the liveupdater blog
+                  postId: '20452896',
+                  //postId: '20339589',
+                  url: 'http://liveupdater.aol.com/',
+                  toolbarEnabled: true,
+                  tweetButtons: true,
+                  memberSettings: {
+                    '4469107': { // Nate
+                      featured: true,
+                      profileImage: 'http://en.gravatar.com/userimage/433399/872205de032651c459a25f6bed28cfb2.jpeg'
+                    },
+                    '4974922': { // Jeremy
+                      featured: false,
+                      profileImage: 'http://www.gravatar.com/avatar/dfebe4ff064d29d0213f5b0b378f22f8.png?s=50'
+                    }
+                  },
+                  //thumbnails: false,
+                  //alive: true,
+                  //begin: new Date('9/21/2012 15:27:00 GMT-0400'),
+                  //end: new Date('9/21/2012 15:30 GMT-0400'),
+                  height: 700
+                  //,fetch: $.liveBlogLiteSimulator('fetchOne')
+                });
+
+	        });
+	    </script>
+    </body>
+</html>
