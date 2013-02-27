@@ -29,6 +29,7 @@
             bottom: 0;
             top: 0;
         }
+        @include transition(opacity 0.4s);
 
         img {
             cursor: pointer;
@@ -42,13 +43,13 @@
             border: 1px solid #CCCCCC;
             
             &.lb-pending {
-              width: 50px;
-              height: 50px;
+              min-width: 50px;
+              min-height: 50px;
               background-color: #DDDDDD;
               @include opacity(0.5);
             }
             
-            @include transition(opacity 0.5s);
+            @include transition(opacity 0.3s);
         }
 
         .lb-img-loading {
@@ -180,6 +181,7 @@
         max-height: 50px;
         
         &.lb-pending {
+          max-width: 50px;
           background-color: #BBBBBB;
         }
       }
@@ -425,6 +427,11 @@
     .highlight {
         /*background-color: red;*/
     }
+    
+    .lb-hidden {
+      display: none;
+      @include opacity(0.1);
+    }
 }
 
 .ui-dialog {
@@ -502,6 +509,9 @@
 /* Styles for IE 6 and below */
 * html {
     .lb {
+        .lb-post {
+            zoom: 1;
+        }
         .lb-toolbar {
             padding-bottom: 15px;
         }
