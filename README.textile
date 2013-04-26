@@ -30,7 +30,7 @@ h3. Files
 
 The plugins' JS and CSS are hosted as a bundle on AOL's global origin server.
 
-JS: "http://o.aolcdn.com/os/aol/liveupdate/jquery.liveudpate.min.js":http://o.aolcdn.com/os/aol/liveupdate/jquery.liveupdate.min.js
+JS: "http://o.aolcdn.com/os/aol/liveupdate/jquery.liveupdate.min.js":http://o.aolcdn.com/os/aol/liveupdate/jquery.liveupdate.min.js
 CSS: "http://o.aolcdn.com/os/aol/liveupdate/aol.liveupdate.css":http://o.aolcdn.com/os/aol/liveupdate/aol.liveupdate.css
 
 Include them on your page.
@@ -97,7 +97,7 @@ h3. Available Options
 |thumbnailDimensions|object|{ height:100, width:null }|Dimension restrictions for thumbnail images. If dims is true, uses this for resizing; else if thumbnails is false, uses this for setting max-width and max-height CSS.|
 |thumbnailExcludeFilter|string|null|Filter of which files to exclude from thumbnail generation. Should be a comma-separated list of file patterns. Only applicable when thumbnails is true. Ex: '.gif'|
 |postLimit|number|null|Display only the recent n posts.|
-|memberSettings|object|null|Set various options for how bloggers are rendered, based on each memberId sent from the server. Ex: 
+|memberSettings|object|null|Set various options for how bloggers are rendered, based on each memberId sent from the server. Ex:
 {
   '987654321': {
     profileImage: 'http://www.gravatar.com/avatar/some-hash.png',
