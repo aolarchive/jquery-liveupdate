@@ -8,17 +8,16 @@ module.exports = function (grunt) {
       base: '.'
     },
     pkg: grunt.file.readJSON('jquery-liveupdate.json'),
-    meta: {
-      banner: '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
-        '<%= grunt.template.today("yyyy-mm-dd, h:MMTT Z") %>\n' +
-        '<%= pkg.homepage ? "* " + pkg.homepage + "\n" : "" %>' +
-        '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
-        ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */'
-    },
+    banner: '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
+			'<%= grunt.template.today("yyyy-mm-dd, h:MMTT Z") %>\n' +
+			'<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
+			'* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
+			' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
+		
     concat: {
 			options: {
 				banner: '<%= banner %>',
-				stripBanners: true
+				stripBanners: false
 			},
       dist: {
         src: [
