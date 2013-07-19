@@ -7,7 +7,7 @@ module.exports = function (grunt) {
       port: 8000,
       base: '.'
     },
-    pkg: '<json:jquery-liveupdate.json>',
+    pkg: grunt.file.readJSON('jquery-liveupdate.json'),
     meta: {
       banner: '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
         '<%= grunt.template.today("yyyy-mm-dd, h:MMTT Z") %>\n' +
@@ -16,6 +16,10 @@ module.exports = function (grunt) {
         ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */'
     },
     concat: {
+			options: {
+				banner: '<%= banner %>',
+				stripBanners: true
+			},
       dist: {
         src: [
           // jQuery UI
@@ -44,13 +48,16 @@ module.exports = function (grunt) {
         dest: 'dist/<%= pkg.name %>-noui.js'
       }
     },
-    min: {
+    uglify: {
+			options: {
+				banner: '<%= banner %>'
+			},
       bundle: {
-        src: ['<banner:meta.banner>', '<config:concat.dist.dest>'],
+        src: '<%= concat.dist.dest %>',
         dest: 'dist/<%= pkg.name %>.min.js'
       },
       bundleNoUi: {
-        src: ['<banner:meta.banner>', '<config:concat.distNoUi.dest>'],
+        src: '<%= concat.distNoUi.dest %>',
         dest: 'dist/<%= pkg.name %>-noui.min.js'
       },
       api: {
@@ -62,71 +69,69 @@ module.exports = function (grunt) {
         dest: 'dist/jquery.liveupdateui.min.js'
       }
     },
-    qunit: {
-      files: ['test/**/*.html']
-    },
-    lint: {
-      files: ['grunt.js', 'src/**/*.js', 'test/**/*.js']
-    },
     compass: {
       dev: {
-        src: 'assets/scss',
-        dest: 'assets/dev/css',
-        linecomments: true,
-        forcecompile: true,
-        debugsass: true,
-        relativeassets: true,
-        images: 'assets/resources/images',
-        require: 'animation'
+        options: {
+					sassDir: 'assets/scss',
+					cssDir: 'assets/dev/css',
+					imagesDir: 'assets/resources/images',
+					debugInfo: true,
+					relativeAssets: true,
+					require: 'animation'
+				}
       },
       prod: {
-        src: 'assets/scss',
-        dest: 'assets/prod/css',
-        outputstyle: 'compressed',
-        linecomments: false,
-        forcecompile: true,
-        debugsass: false,
-        relativeassets: true,
-        images: 'assets/resources/images',
-        require: 'animation'
+        options: {
+					sassDir: 'assets/scss',
+					cssDir: 'assets/prod/css',
+					imagesDir: 'assets/resources/images',
+					debugInfo: false,
+					relativeAssets: true,
+					outputStyle: 'compressed',
+					noLineComments: true,
+					require: 'animation'
+				}
       }
     },
     watch: {
-      files: ['<config:lint.files>', 'assets/scss/*.scss', 'assets/resources/*.scss'],
-      tasks: 'default'
+      gruntfile: {
+				files: '<%= jshint.gruntfile.src %>',
+				tasks: ['jshint:gruntfile']
+			},
+			js: {
+				files: '<%= jshint.js.src %>',
+				tasks: ['jshint:js', 'concat:dist']
+			},
+			scss: {
+				files: ['<%= compass.dev.options.sassDir %>/**/*.scss', 'assets/resources/*.scss'],
+				tasks: ['compass:dev']
+			}
     },
     jshint: {
-      // Specifying a jshint file will be possible in Grunt soon
       options: {
-        "curly": true,
-        "eqeqeq": true,
-        "immed": true,
-        "latedef": true,
-        "newcap": true,
-        "noarg": true,
-        "sub": true,
-        "undef": true,
-        "boss": true,
-        "eqnull": true,
-        "browser": true,
-        "white": true,
-        "devel": true,
-        "indent": 2,
-        "jquery": true,
-        "predef": "twttr"
-      },
-      globals: {
-        jQuery: true,
-        twttr: true
-      }
-    },
-    uglify: {}
+				jshintrc: '.jshintrc'
+			},
+			gruntfile: {
+				src: 'Gruntfile.js'
+			},
+			js: {
+				src: 'src/**/*.js'
+			}
+    }
   });
 
-  grunt.loadNpmTasks('grunt-compass');
+  // These plugins provide necessary tasks.
+	grunt.loadNpmTasks('grunt-contrib-concat');
+	grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks('grunt-contrib-nodeunit');
+	grunt.loadNpmTasks('grunt-contrib-jshint');
+	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-contrib-compass');
+	grunt.loadNpmTasks('grunt-contrib-connect');
+	grunt.loadNpmTasks('grunt-contrib-copy');
 
   // Default task.
-  grunt.registerTask('default', 'lint qunit concat min compass:dev compass:prod');
+  grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'compass:dev', 'compass:prod']);
 
   grunt.registerTask("watch-serve", "server watch");
 

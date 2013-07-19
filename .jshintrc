@@ -14,5 +14,7 @@
     "devel": true,
     "indent": 2,
     "jquery": true,
-    "predef": "twttr"
+    "predef": [
+    	"twttr"
+    ]
 }
