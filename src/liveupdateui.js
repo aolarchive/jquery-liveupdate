@@ -129,8 +129,9 @@
 
           var options = $.extend(true, {}, defaultOptions, customOptions),
             scrolling = false,
-            hash = window.location.hash;
-
+            hash = window.location.hash,
+            isIE6 = !!window.ActiveXObject && !window.XMLHttpRequest;
+					
           // Check the hash for the presence of a tag filter
           // Only one tag may be filtered at a time (currently)
           if (hash.length) {
@@ -1614,7 +1615,7 @@
           });
 
           // If IE 6 (or lower... oh dear)
-          if ($.browser.msie && parseInt($.browser.version, 10) <= 6) {
+          if (isIE6) {
             // Add .lb-hover class upon hover
             $this.delegate('.lb-button', 'hover', function (event) {
               $(this).toggleClass('lb-hover');
