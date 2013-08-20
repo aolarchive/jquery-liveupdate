@@ -26,6 +26,12 @@
          */
         timelineEnabled: true,
         /**
+         * Whether to show tags UI with each post.
+         * @type Boolean
+         * @default true
+         */
+        tagsEnabled: true,
+        /**
          * Number of items to show for pagination. If 0 or not a positive integer, pagination is disabled.
          * @type Number
          * @default 0
@@ -360,7 +366,7 @@
                   }
                 }
 
-                if (item.tags && item.tags.length) {
+                if (options.tagsEnabled && item.tags && item.tags.length) {
                   var tagsList = $('<ul />', {
                     'class': 'lb-post-tags'
                   }).appendTo($postInfo);
