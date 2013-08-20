@@ -32,6 +32,18 @@
          */
         tagsEnabled: true,
         /**
+         * Whether to show the post timestamp UI.
+         * @type Boolean
+         * @default true
+         */
+        timestampEnabled: true,
+        /**
+         * Whether to show the post byline UI.
+         * @type Boolean
+         * @default true
+         */
+        bylineEnabled: true,
+        /**
          * Number of items to show for pagination. If 0 or not a positive integer, pagination is disabled.
          * @type Number
          * @default 0
@@ -218,7 +230,7 @@
                   tags = item.tags,
                   timestamp = item.date,
                   memberId = item.memberId,
-                  timestampString,
+                  timestampString = '',
                   imageUrl,
                   fullImageUrl,
                   $image,
@@ -235,10 +247,12 @@
                   }, options.memberSettings && options.memberSettings[memberId]);
 
                 // Construct the timestamp
-                timestampString = '<a href="#p' + id + '">' + getFormattedDateTime(timestamp) + '</a>';
+                if (options.timestampEnabled) {
+									timestampString = '<a href="#p' + id + '">' + getFormattedDateTime(timestamp) + '</a>';
+                }
 
                 // If this author is not featured, add the credit to the timestamp
-                if (!memberSettings.featured) {
+                if (options.bylineEnabled && !memberSettings.featured) {
                   timestampString += ' by <span class="lb-blogger-name">' + item.memberName + '</span>';
                 }
 
@@ -265,7 +279,9 @@
                   element.empty()
                     .addClass('lb-edited');
 
-                  timestampString = timestampString + ' - edited';
+									if (timestampString !== '') {
+										timestampString = timestampString + ' - edited';
+									}
                 }
                 
                 // Default imagesLoaded to false so knows to load images in post item
@@ -331,13 +347,16 @@
                   $postInfo = $('<span />', {
                     'class': 'lb-post-info'
                   })
-                  .append(
+                );
+                
+                if (timestampString && timestampString !== '') {
+                  $postInfo.append(
                     $('<span />', {
                       html: timestampString,
                       'class': 'lb-post-timestamp'
                     })
-                  )
-                );
+                  );
+                }
 
                 if (memberSettings.profileImage || memberSettings.featured) {
                   $postAuthorTab = $('<span/>', {
@@ -379,6 +398,10 @@
                       })
                     );
                   });
+                }
+                
+                if ($postInfo.is(':empty')) {
+									$postInfo.addClass('lb-empty');
                 }
 
                 if (options.tweetButtons) {

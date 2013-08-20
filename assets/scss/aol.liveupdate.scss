@@ -159,6 +159,14 @@
             right: ($tweetButtonWidth + $leftPadding) * -1;
         }
     }
+    
+    .lb-post-info.lb-empty {
+    	.twitter-share-button {
+    		right: auto;
+    		@include inline-block();
+    		position: relative;
+    	}
+    }
 
     .lb-post-author-tab {
       float: left;
