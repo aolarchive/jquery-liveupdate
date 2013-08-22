@@ -28,8 +28,10 @@ module.exports = function (grunt) {
           // Specific jQuery plugins
           'libs/jquery/jquery.ba-throttle-debounce.min.js',
           'libs/jquery/imagesloaded/jquery.imagesloaded.js',
-          // All our own JavaScript files
-          'src/**/*.js'
+          // Our own JavaScript files
+          'src/liveupdateapi.js',
+          'src/liveupdateui.js',
+          'src/shim.js'
         ],
         dest: 'dist/<%= pkg.name %>.js'
       },
@@ -41,10 +43,35 @@ module.exports = function (grunt) {
           // Specific jQuery plugins
           'libs/jquery/jquery.ba-throttle-debounce.min.js',
           'libs/jquery/imagesloaded/jquery.imagesloaded.js',
-          // All our own JavaScript files
-          'src/**/*.js'
+          // Our own JavaScript files
+          'src/liveupdateapi.js',
+          'src/liveupdateui.js',
+          'src/shim.js'
         ],
         dest: 'dist/<%= pkg.name %>-noui.js'
+      },
+      // UAC ad container
+      uac: {
+        src: [
+          // All AOL plugins
+          'libs/aol/**/*.js',
+          // Specific jQuery plugins
+          'libs/jquery/jquery.ba-throttle-debounce.min.js',
+          'libs/jquery/imagesloaded/jquery.imagesloaded.js',
+          // Our own JavaScript files
+          'src/liveupdateapi.js',
+          'src/liveupdateui.js',
+          'src/shim.js',
+          'src/liveupdate-uac.js'
+        ],
+        dest: 'dist/<%= pkg.name %>-uac.js'
+      },
+      uacCss: {
+        src: [
+          'assets/prod/css/aol.liveupdate.css',
+          'assets/prod/css/aol.liveupdate.uac.css'
+        ],
+        dest: 'assets/prod/css/aol.liveupdate.uac-full.css'
       }
     },
     uglify: {
@@ -66,6 +93,10 @@ module.exports = function (grunt) {
       ui: {
         src: ['src/liveupdateui.js'],
         dest: 'dist/jquery.liveupdateui.min.js'
+      },
+      uac: {
+        src: ['src/liveupdate-uac.js'],
+        dest: 'dist/jquery.liveupdate-uac.min.js'
       }
     },
     compass: {
@@ -99,7 +130,7 @@ module.exports = function (grunt) {
 			},
 			js: {
 				files: '<%= jshint.js.src %>',
-				tasks: ['jshint:js', 'concat:dist']
+				tasks: ['jshint:js', 'concat:dist', 'concat:uac']
 			},
 			scss: {
 				files: ['<%= compass.dev.options.sassDir %>/**/*.scss', 'assets/resources/*.scss'],
@@ -130,7 +161,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-copy');
 
   // Default task.
-  grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'compass:dev', 'compass:prod']);
+  grunt.registerTask('default', ['jshint', 'compass:dev', 'compass:prod', 'concat', 'uglify']);
 
   grunt.registerTask("watch-serve", "server watch");
 
