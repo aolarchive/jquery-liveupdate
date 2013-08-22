@@ -1,4 +1,4 @@
-/*! Live Update - v0.2.1 - 2013-08-22, 5:18PM EDT
+/*! Live Update - v0.2.1 - 2013-08-22, 5:26PM EDT
 * https://github.com/aol/jquery-liveupdate
 * Copyright (c) 2013 Nate Eagle and Jeremy Jannotta; Licensed BSD */
 /*! Get Dynamic Image Src - v0.1.0 - 2012-10-09

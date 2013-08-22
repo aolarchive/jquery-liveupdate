@@ -1,0 +1,21 @@
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.uac\.scss}line{font-family:\000033}}
+#uacLiveBlog.lb {
+  padding: 0;
+  border: 1px solid #CCCCCC;
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.uac\.scss}line{font-family:\000039}}
+#uacLiveBlog.lb .lb-post-container {
+  margin: 0;
+  overflow-y: hidden;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.uac\.scss}line{font-family:\0000314}}
+#uacLiveBlog.lb .lb-post {
+  padding-left: 10px;
+  padding-right: 10px;
+}
