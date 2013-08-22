@@ -126,7 +126,13 @@
          * Image URL to use as placeholder image before the original image is loaded.
          * @type String
          */
-        placeholderImage: 'http://o.aolcdn.com/js/x.gif'
+        placeholderImage: 'http://o.aolcdn.com/js/x.gif',
+        /**
+         * Whether to show the full sized image upon clicking of a thumbnail.
+         * @type Boolean
+         * @default true
+         */
+        imageExpandEnabled: true
       },
       /**
        * Simple way to strip html tags
@@ -336,6 +342,8 @@
                     }),
                     buildTextElement(caption, 'lb-post-caption')
                   );
+                  
+                  $image.toggleClass('lb-clickable', options.imageExpandEnabled);
                   
                   if (options.thumbnailDimensions && (!options.thumbnails || imageUrl === data)) {
                     $image.css('max-width', options.thumbnailDimensions.width || null);
@@ -1557,7 +1565,7 @@
             //$this.find('.lb-post-container').scrollTop('0');
           });
 
-          $this.delegate('img:not(.lb-profile-image)', 'click', function (event) {
+          $this.delegate('img:not(.lb-profile-image).lb-clickable', 'click', function (event) {
             var $currentTarget = $(event.currentTarget),
               fullImageUrl = $currentTarget.attr('data-full-src'),
               imgSrc = (fullImageUrl) ? fullImageUrl : $currentTarget.attr('src'),

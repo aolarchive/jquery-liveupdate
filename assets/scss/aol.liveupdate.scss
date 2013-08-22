@@ -32,7 +32,7 @@
         @include transition(opacity 0.4s);
 
         img {
-            cursor: pointer;
+            cursor: default;
             float: left;
             height: auto;
             width: auto;
@@ -50,6 +50,10 @@
             }
             
             @include transition(opacity 0.3s);
+            
+            &.lb-clickable {
+            	cursor: pointer;
+            }
         }
 
         .lb-img-loading {
