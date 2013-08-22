@@ -1,4 +1,4 @@
-/*! Live Update - v0.2.1 - 2013-08-22, 4:46PM EDT
+/*! Live Update - v0.2.1 - 2013-08-22, 5:18PM EDT
 * https://github.com/aol/jquery-liveupdate
 * Copyright (c) 2013 Nate Eagle and Jeremy Jannotta; Licensed BSD */
 /*! jQuery UI - v1.8.24 - 2012-09-28
@@ -758,7 +758,13 @@ $.fn.imagesLoaded = function( callback ) {
          * Image URL to use as placeholder image before the original image is loaded.
          * @type String
          */
-        placeholderImage: 'http://o.aolcdn.com/js/x.gif'
+        placeholderImage: 'http://o.aolcdn.com/js/x.gif',
+        /**
+         * Whether to show the full sized image upon clicking of a thumbnail.
+         * @type Boolean
+         * @default true
+         */
+        imageExpandEnabled: true
       },
       /**
        * Simple way to strip html tags
@@ -968,6 +974,8 @@ $.fn.imagesLoaded = function( callback ) {
                     }),
                     buildTextElement(caption, 'lb-post-caption')
                   );
+                  
+                  $image.toggleClass('lb-clickable', options.imageExpandEnabled);
                   
                   if (options.thumbnailDimensions && (!options.thumbnails || imageUrl === data)) {
                     $image.css('max-width', options.thumbnailDimensions.width || null);
@@ -2189,7 +2197,7 @@ $.fn.imagesLoaded = function( callback ) {
             //$this.find('.lb-post-container').scrollTop('0');
           });
 
-          $this.delegate('img:not(.lb-profile-image)', 'click', function (event) {
+          $this.delegate('img:not(.lb-profile-image).lb-clickable', 'click', function (event) {
             var $currentTarget = $(event.currentTarget),
               fullImageUrl = $currentTarget.attr('data-full-src'),
               imgSrc = (fullImageUrl) ? fullImageUrl : $currentTarget.attr('src'),
