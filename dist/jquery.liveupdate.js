@@ -1,4 +1,4 @@
-/*! Live Update - v0.2 - 2013-07-19, 2:30PM EDT
+/*! Live Update - v0.2.1 - 2013-08-22, 4:46PM EDT
 * https://github.com/aol/jquery-liveupdate
 * Copyright (c) 2013 Nate Eagle and Jeremy Jannotta; Licensed BSD */
 /*! jQuery UI - v1.8.24 - 2012-09-28
@@ -658,6 +658,24 @@ $.fn.imagesLoaded = function( callback ) {
          */
         timelineEnabled: true,
         /**
+         * Whether to show tags UI with each post.
+         * @type Boolean
+         * @default true
+         */
+        tagsEnabled: true,
+        /**
+         * Whether to show the post timestamp UI.
+         * @type Boolean
+         * @default true
+         */
+        timestampEnabled: true,
+        /**
+         * Whether to show the post byline UI.
+         * @type Boolean
+         * @default true
+         */
+        bylineEnabled: true,
+        /**
          * Number of items to show for pagination. If 0 or not a positive integer, pagination is disabled.
          * @type Number
          * @default 0
@@ -761,8 +779,9 @@ $.fn.imagesLoaded = function( callback ) {
 
           var options = $.extend(true, {}, defaultOptions, customOptions),
             scrolling = false,
-            hash = window.location.hash;
-
+            hash = window.location.hash,
+            isIE6 = !!window.ActiveXObject && !window.XMLHttpRequest;
+					
           // Check the hash for the presence of a tag filter
           // Only one tag may be filtered at a time (currently)
           if (hash.length) {
@@ -843,7 +862,7 @@ $.fn.imagesLoaded = function( callback ) {
                   tags = item.tags,
                   timestamp = item.date,
                   memberId = item.memberId,
-                  timestampString,
+                  timestampString = '',
                   imageUrl,
                   fullImageUrl,
                   $image,
@@ -860,10 +879,12 @@ $.fn.imagesLoaded = function( callback ) {
                   }, options.memberSettings && options.memberSettings[memberId]);
 
                 // Construct the timestamp
-                timestampString = '<a href="#p' + id + '">' + getFormattedDateTime(timestamp) + '</a>';
+                if (options.timestampEnabled) {
+									timestampString = '<a href="#p' + id + '">' + getFormattedDateTime(timestamp) + '</a>';
+                }
 
                 // If this author is not featured, add the credit to the timestamp
-                if (!memberSettings.featured) {
+                if (options.bylineEnabled && !memberSettings.featured) {
                   timestampString += ' by <span class="lb-blogger-name">' + item.memberName + '</span>';
                 }
 
@@ -890,7 +911,9 @@ $.fn.imagesLoaded = function( callback ) {
                   element.empty()
                     .addClass('lb-edited');
 
-                  timestampString = timestampString + ' - edited';
+									if (timestampString !== '') {
+										timestampString = timestampString + ' - edited';
+									}
                 }
                 
                 // Default imagesLoaded to false so knows to load images in post item
@@ -956,13 +979,16 @@ $.fn.imagesLoaded = function( callback ) {
                   $postInfo = $('<span />', {
                     'class': 'lb-post-info'
                   })
-                  .append(
+                );
+                
+                if (timestampString && timestampString !== '') {
+                  $postInfo.append(
                     $('<span />', {
                       html: timestampString,
                       'class': 'lb-post-timestamp'
                     })
-                  )
-                );
+                  );
+                }
 
                 if (memberSettings.profileImage || memberSettings.featured) {
                   $postAuthorTab = $('<span/>', {
@@ -991,7 +1017,7 @@ $.fn.imagesLoaded = function( callback ) {
                   }
                 }
 
-                if (item.tags && item.tags.length) {
+                if (options.tagsEnabled && item.tags && item.tags.length) {
                   var tagsList = $('<ul />', {
                     'class': 'lb-post-tags'
                   }).appendTo($postInfo);
@@ -1004,6 +1030,10 @@ $.fn.imagesLoaded = function( callback ) {
                       })
                     );
                   });
+                }
+                
+                if ($postInfo.is(':empty')) {
+									$postInfo.addClass('lb-empty');
                 }
 
                 if (options.tweetButtons) {
@@ -2246,7 +2276,7 @@ $.fn.imagesLoaded = function( callback ) {
           });
 
           // If IE 6 (or lower... oh dear)
-          if ($.browser.msie && parseInt($.browser.version, 10) <= 6) {
+          if (isIE6) {
             // Add .lb-hover class upon hover
             $this.delegate('.lb-button', 'hover', function (event) {
               $(this).toggleClass('lb-hover');
@@ -2300,4 +2330,30 @@ $.fn.imagesLoaded = function( callback ) {
 
   };
 
+}(jQuery));
+
+/**
+ * Add some missing behavior, mainly for IE support.
+ * 
+ * This is needed while our minimum required jQuery version is 1.5.2, 
+ * which itself requires older libraries like jQUeryUI 1.8.x, which uses 
+ * deprecated or removed items.
+ * 
+ * And we can't use the jquery-migrate plugin as it requires jq 1.6+.
+ * 
+ * @todo Remove this shim once our minimum required jq version is 1.6+
+ */
+(function ($) {
+	
+	var uaMatch = null;
+	
+	// Add some missing $.browser properties for IE detection.
+	if (!$.browser) {
+		uaMatch = /msie ([\w.]+)/.exec(navigator.userAgent.toLowerCase()) || [];
+		
+		$.browser = {};
+		$.browser.msie = uaMatch.length ? true : false;
+		$.browser.version = $.browser.msie ? parseFloat(uaMatch[1], 10) : null;
+	}
+	
 }(jQuery));
