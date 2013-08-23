@@ -88,7 +88,7 @@ module.exports = function (grunt) {
         dest: 'dist/jquery.liveupdateui.min.js'
       },
       uac: {
-        src: ['src/liveupdate-uac.js'],
+        src: ['<%= concat.uac.dest %>'],
         dest: 'dist/jquery.liveupdate-uac.min.js'
       }
     },
