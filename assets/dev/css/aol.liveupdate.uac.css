@@ -8,14 +8,38 @@
   *vertical-align: auto;
   zoom: 1;
   *display: inline;
+  font-size: 13px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.uac\.scss}line{font-family:\000039}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.uac\.scss}line{font-family:\0000310}}
 #uacLiveBlog.lb .lb-post-container {
   margin: 0;
   overflow-y: hidden;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.uac\.scss}line{font-family:\0000314}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.uac\.scss}line{font-family:\0000315}}
 #uacLiveBlog.lb .lb-post {
-  padding-left: 10px;
   padding-right: 10px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.uac\.scss}line{font-family:\0000320}}
+#uacLiveBlog.lb .lb-post img {
+  margin-left: 10px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.uac\.scss}line{font-family:\0000326}}
+#uacLiveBlog.lb .lb-post.lb-comment {
+  padding-left: 50px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.uac\.scss}line{font-family:\0000329}}
+#uacLiveBlog.lb .lb-post.lb-comment .lb-post-text {
+  padding-left: 0px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.uac\.scss}line{font-family:\0000332}}
+#uacLiveBlog.lb .lb-post.lb-comment .lb-post-info {
+  padding-left: 0px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.uac\.scss}line{font-family:\0000338}}
+#uacLiveBlog.lb .lb-post-text {
+  padding-left: 10px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/jeremyjannotta\/Documents\/dev\/git\/aol\/jquery-liveupdate\/assets\/scss\/aol\.liveupdate\.uac\.scss}line{font-family:\0000342}}
+#uacLiveBlog.lb .lb-post-info {
+  padding-left: 10px;
 }

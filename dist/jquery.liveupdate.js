@@ -1,4 +1,4 @@
-/*! Live Update - v0.2.1 - 2013-08-22, 5:37PM EDT
+/*! Live Update - v0.2.1 - 2013-08-23, 4:30PM EDT
 * https://github.com/aol/jquery-liveupdate
 * Copyright (c) 2013 Nate Eagle and Jeremy Jannotta; Licensed BSD */
 /*! jQuery UI - v1.8.24 - 2012-09-28

@@ -2,10 +2,12 @@
 	
 	$(document).ready(function () {
 		
-		var config = window._lbconfig || {};
+		var config = window._lbconfig || {},
 		
-		var $adLiveBlog = $('#uacLiveBlog')
-			.width(Math.max(200, config.width))
+			$uacLiveBlog = $('#uacLiveBlog')
+			
+			.width(Math.max(100, config.width))
+			
 			.liveUpdateUi({
 				postId: config.postId,
 				url: config.updateUrl,
@@ -14,15 +16,15 @@
 				tagsEnabled: false,
 				imageExpandEnabled: false,
 				thumbnailDimensions: {
-          height: 100,
-          width: 100
-        },
+					height: 100,
+					width: 100
+				},
 				postLimit: 3,
 				pollInterval: 5,
 				linkParams: config.trackingCode,
-				height: Math.max(200, config.height)
+				height: Math.max(100, config.height)
 			});
-
+			
 	});
 
 }(jQuery));

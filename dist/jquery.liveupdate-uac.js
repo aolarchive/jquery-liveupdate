@@ -1,4 +1,4 @@
-/*! Live Update - v0.2.1 - 2013-08-22, 5:37PM EDT
+/*! Live Update - v0.2.1 - 2013-08-23, 4:30PM EDT
 * https://github.com/aol/jquery-liveupdate
 * Copyright (c) 2013 Nate Eagle and Jeremy Jannotta; Licensed BSD */
 /*! Get Dynamic Image Src - v0.1.0 - 2012-10-09
@@ -2336,10 +2336,12 @@ $.fn.imagesLoaded = function( callback ) {
 	
 	$(document).ready(function () {
 		
-		var config = window._lbconfig || {};
+		var config = window._lbconfig || {},
 		
-		var $adLiveBlog = $('#uacLiveBlog')
-			.width(Math.max(200, config.width))
+			$uacLiveBlog = $('#uacLiveBlog')
+			
+			.width(Math.max(100, config.width))
+			
 			.liveUpdateUi({
 				postId: config.postId,
 				url: config.updateUrl,
@@ -2347,12 +2349,16 @@ $.fn.imagesLoaded = function( callback ) {
 				tweetButtons: false,
 				tagsEnabled: false,
 				imageExpandEnabled: false,
+				thumbnailDimensions: {
+					height: 100,
+					width: 100
+				},
 				postLimit: 3,
 				pollInterval: 5,
 				linkParams: config.trackingCode,
-				height: Math.max(200, config.height)
+				height: Math.max(100, config.height)
 			});
-
+			
 	});
 
 }(jQuery));

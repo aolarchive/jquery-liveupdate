@@ -65,13 +65,6 @@ module.exports = function (grunt) {
           'src/liveupdate-uac.js'
         ],
         dest: 'dist/<%= pkg.name %>-uac.js'
-      },
-      uacCss: {
-        src: [
-          'assets/prod/css/aol.liveupdate.css',
-          'assets/prod/css/aol.liveupdate.uac.css'
-        ],
-        dest: 'assets/prod/css/aol.liveupdate.uac-full.css'
       }
     },
     uglify: {
