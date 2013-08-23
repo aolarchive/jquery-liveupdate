@@ -13,6 +13,10 @@
 				tweetButtons: false,
 				tagsEnabled: false,
 				imageExpandEnabled: false,
+				thumbnailDimensions: {
+          height: 100,
+          width: 100
+        },
 				postLimit: 3,
 				pollInterval: 5,
 				linkParams: config.trackingCode,

@@ -5,6 +5,7 @@
 	padding: 0;
 	border: 1px solid #CCCCCC;
 	@include inline-block();
+	font-size: 13px;
 
 	.lb-post-container {
 		margin: 0;
@@ -13,9 +14,33 @@
 	
 	.lb-post {
 		padding: {
-			left: 10px;
 			right: 10px;
 		}
+		
+		img {
+			margin: {
+				left: 10px;
+			}
+		}
+		
+		&.lb-comment {
+			padding-left: 50px;
+			
+			.lb-post-text {
+				padding-left: 0px;
+			}
+			.lb-post-info {
+				padding-left: 0px;
+			}
+		}
+	}
+	
+	.lb-post-text {
+		padding-left: 10px;
+	}
+	
+	.lb-post-info {
+		padding-left: 10px;
 	}
 		
 }
