@@ -1,4 +1,4 @@
-/*! Live Update - v0.2.1 - 2013-08-23, 4:30PM EDT
+/*! Live Update - v0.2.1 - 2013-08-28, 1:56PM EDT
 * https://github.com/aol/jquery-liveupdate
 * Copyright (c) 2013 Nate Eagle and Jeremy Jannotta; Licensed BSD */
 /*! jQuery UI - v1.8.24 - 2012-09-28
@@ -675,6 +675,18 @@ $.fn.imagesLoaded = function( callback ) {
          * @default true
          */
         bylineEnabled: true,
+        /**
+         * Whether to show comment posts in the post list.
+         * @type Boolean
+         * @default true
+         */
+        commentPostsEnabled: true,
+        /**
+         * Whether to show image posts in the post list.
+         * @type Boolean
+         * @default true
+         */
+        imagePostsEnabled: true,
         /**
          * Number of items to show for pagination. If 0 or not a positive integer, pagination is disabled.
          * @type Number
@@ -2148,6 +2160,19 @@ $.fn.imagesLoaded = function( callback ) {
               //console.log('update', event, data);
               if (data.updates) {
 
+								// Filter out comment or image posts, if disabled
+								if (!options.commentPostsEnabled || !options.imagePostsEnabled) {
+									data.updates = $.grep(data.updates, function (item, i) {
+										if (item.type === 'comment' && !options.commentPostsEnabled) {
+											return false;
+										} else if (item.type === 'image' && !options.imagePostsEnabled) {
+											return false;
+										} else {
+											return true;
+										}
+									});
+								}
+								
                 if (options.postLimit) {
                   if (options.postLimit < data.updates.length) {
                     data.updates.splice(0, data.updates.length - options.postLimit);
